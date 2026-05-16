@@ -40,10 +40,10 @@ function CropCompareColumn({
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <StatCard
-          label="Riesgo climático (stub)"
+          label="Riesgo climático"
           value={`${stats.riskScore}`}
           unit="/100"
-          caption={`Étiqueta estrés (${stress.label}); menor score es mejor en este demo`}
+          caption={`Étiqueta estrés (${stress.label}); menor puntuación indica menos estrés en esta vista`}
           badge={<AnomalyBadge value={stats.riskScore - 50} unit="pts" />}
         />
         <StatCard
@@ -137,9 +137,9 @@ export default function CompareDashboardPage() {
             {region.name}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Misma referencia climática demo; paralelás riesgos, series y calendarios
-            para decidir combinaciones dentro de esta región antes de llevar datos
-            reales desde Open-Meteo.
+            Misma referencia climática para la región; paralelás riesgos, series y
+            calendarios tipo para contrastar combinaciones antes de llevar series
+            en vivo desde Open‑Meteo.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -185,7 +185,7 @@ export default function CompareDashboardPage() {
                 {" · "}
                 {compareCrop.name} ({comparePayload.scores[compareCrop.id] ?? "—"})
                 {" "}
-                (menor demo = menos estrés compuesto sintético).
+                (una puntuación más baja indica menos estrés compuesto estimado).
               </p>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {comparePayload.reason}

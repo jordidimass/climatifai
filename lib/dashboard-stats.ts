@@ -1,5 +1,5 @@
 /**
- * Deterministic demo analytics keyed by region + crop — until live APIs plug in.
+ * Deterministic regional + crop scaffolding until observational/production APIs attach.
  */
 
 export function deriveStats(regionId: string, cropId: string) {
@@ -13,7 +13,7 @@ export function deriveStats(regionId: string, cropId: string) {
   const gdd = Math.round(1100 + wave(3) * 320);
   const heatStress = Math.round(14 + wave(4) * 22);
 
-  /** Rough composite risk 0–100 for pairing views (stub). */
+  /** Rough composite risk 0–100 for pairing views (scaffolding). */
   const riskScore = Math.min(
     100,
     Math.round(
@@ -27,7 +27,7 @@ export function deriveStats(regionId: string, cropId: string) {
   return { tempDelta, precipDelta, gdd, heatStress, riskScore };
 }
 
-/** Label for demo risk tiers (riskScore 0–100, lower better). */
+/** Label tiers for scaffolding risk composite (riskScore 0–100; lower indicates less modeled stress). */
 export function riskStressLabel(score: number): {
   label: string;
   tone: "low" | "moderate" | "high";

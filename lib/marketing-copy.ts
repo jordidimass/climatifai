@@ -19,6 +19,7 @@ export type MarketingCopy = {
     line1: string;
     line2: string;
     body: string;
+    primaryCta: string;
     cardEyebrow: string;
     cardTitle: string;
     cardBody: string;
@@ -28,12 +29,7 @@ export type MarketingCopy = {
     firesTitle: string;
     firesSub: string;
     seeFeatures: string;
-    readout: {
-      tempAnomaly: string;
-      precipDelta: string;
-      gdd: string;
-      heatDays: string;
-    };
+    statsStrip: readonly [string, string, string, string];
   };
   features: {
     sectionEyebrow: string;
@@ -59,6 +55,8 @@ export type MarketingCopy = {
   };
   footer: {
     blurb: string;
+    dataSourcesEyebrow: string;
+    dataSourcesBody: string;
     columnProduct: string;
     columnCompany: string;
     linkAnalyze: string;
@@ -89,10 +87,11 @@ const es: MarketingCopy = {
   },
   hero: {
     eyebrow: "Inteligencia climática agrícola · v0.1",
-    line1: "Lee el clima.",
-    line2: "Siembra mejor.",
+    line1: "El clima cambió.",
+    line2: "Tu calendario de siembra no.",
     body:
-      "Compara cien años de clima con lo que viene para los cultivos y regiones que trabajas. Hecho para productores, agrónomos y cooperativas de Latinoamérica.",
+      "Compara datos climáticos históricos, actuales y proyecciones CMIP6 para tomar mejores decisiones agrícolas en LATAM.",
+    primaryCta: "Explorar mi región",
     cardEyebrow: "Habla AI",
     cardTitle: "Describe tu cosecha en lenguaje natural",
     cardBody:
@@ -103,29 +102,29 @@ const es: MarketingCopy = {
     firesTitle: "Mapa de incendios",
     firesSub: "Beta · capas satelitales próximamente",
     seeFeatures: "Ver capacidades",
-    readout: {
-      tempAnomaly: "Anomalía térmica",
-      precipDelta: "Δ precip. vs. 1991–2020",
-      gdd: "Grados-día",
-      heatDays: "Días de calor",
-    },
+    statsStrip: [
+      "15+ fuentes de datos",
+      "14 cultivos",
+      "8+ países LATAM",
+      "Proyecciones a 2030",
+    ] as const,
   },
   features: {
-    sectionEyebrow: "Por qué Climatifai",
-    sectionTitleBefore: "La señal,",
-    sectionTitleItalic: "no el ruido.",
-    f1eyebrow: "Patrones históricos",
-    f1title: "Un siglo de contexto.",
+    sectionEyebrow: "Tu flujo",
+    sectionTitleBefore: "Compara.",
+    sectionTitleItalic: "Predice. Actúa.",
+    f1eyebrow: "Compara",
+    f1title: "Histórico vs actual vs CMIP6",
     f1body:
-      "Consulta datos de observación homogeneizados por región y mes. Entiende la línea base de la que el clima se está alejando.",
-    f2eyebrow: "Escenarios proyectados",
-    f2title: "El mañana, en varios caminos.",
+      "Por región, contrastá línea base, condiciones actuales y trayectorias proyectadas (CMIP6) para planificar temporada con contexto climático.",
+    f2eyebrow: "Predice",
+    f2title: "Score de riesgo 0–100",
     f2body:
-      "Compara proyecciones entre escenarios SSP. Planifica riego, selección varietal y ventanas de cosecha frente a lo que viene.",
-    f3eyebrow: "Lecturas por cultivo",
-    f3title: "Agronomía, no solo clima.",
+      "Priorizá estrés cuando las desviaciones climáticas del modelo sugieren temporada más exigente — listo para conectar métricas en tiempo real.",
+    f3eyebrow: "Actúa",
+    f3title: "IA sobre tus datos cargados",
     f3body:
-      "GDD, días de estrés térmico y riesgo de sequía calculados para tus cultivos reales, no para una curva genérica de temperatura.",
+      "Hallazgos en español usando región + cultivo (y modo comparación): conversá con modelo asistido antes de llevar recomendaciones a campo.",
   },
   cta: {
     eyebrow: "Para cooperativas y empresas",
@@ -139,6 +138,9 @@ const es: MarketingCopy = {
   footer: {
     blurb:
       "Inteligencia climática para quienes alimentan al mundo. Hecho para productores, agrónomos y cooperativas de Latinoamérica.",
+    dataSourcesEyebrow: "Fuentes y referencias",
+    dataSourcesBody:
+      "Ejemplos citados por el proyecto: Open-Meteo · NASA FIRMS · FAO GAEZ · SoilGrids ISRIC · CHIRPS · Claude AI. Integraciones reales y licencias pueden variar.",
     columnProduct: "Producto",
     columnCompany: "Compañía",
     linkAnalyze: "Analizar siembra",
@@ -169,10 +171,11 @@ const en: MarketingCopy = {
   },
   hero: {
     eyebrow: "Agricultural climate intelligence · v0.1",
-    line1: "Read the sky.",
-    line2: "Sow smarter.",
+    line1: "The climate has changed.",
+    line2: "Your planting calendar hasn't.",
     body:
-      "Contrast a century of climate with what's ahead for the crops and regions you work — built for growers, agronomists and co‑ops across Latin America.",
+      "Contrast historical and current climate data with CMIP6 projections to make sharper agronomic decisions across Latin America.",
+    primaryCta: "Explore my region",
     cardEyebrow: "Talk to AI",
     cardTitle: "Describe goals in plain language",
     cardBody:
@@ -183,29 +186,29 @@ const en: MarketingCopy = {
     firesTitle: "Wildfire beta map",
     firesSub: "More satellite overlays soon",
     seeFeatures: "See capabilities",
-    readout: {
-      tempAnomaly: "Thermal anomaly",
-      precipDelta: "Δ precip vs. 1991–2020 baseline",
-      gdd: "Growing‑degree days",
-      heatDays: "Hot days",
-    },
+    statsStrip: [
+      "15+ data sources",
+      "14 crops",
+      "8+ LATAM markets",
+      "Projections to 2030",
+    ] as const,
   },
   features: {
-    sectionEyebrow: "Why Climatifai",
-    sectionTitleBefore: "Signal first,",
-    sectionTitleItalic: "not noise.",
-    f1eyebrow: "Historical patterns",
-    f1title: "A century of context.",
+    sectionEyebrow: "Your flow",
+    sectionTitleBefore: "Compare.",
+    sectionTitleItalic: "Predict. Act.",
+    f1eyebrow: "Compare",
+    f1title: "Historical vs now vs CMIP6",
     f1body:
-      "Regionalized observation series help you anchor how far today's climate has drifted from the baseline you assumed.",
-    f2eyebrow: "Projected pathways",
-    f2title: "Several futures side by side.",
+      "Per region: baseline observational cues, today's envelope, and CMIP6-style projected pathways — one grid for growers and advisors.",
+    f2eyebrow: "Predict",
+    f2title: "0–100 risk score",
     f2body:
-      "Layer SSP envelopes to rehearse irrigation, variety choice and harvest windows against hotter or drier decades.",
-    f3eyebrow: "Crop-native signals",
-    f3title: "Agronomy, not curves alone.",
+      "A composite stress cue when climatic deviations spike in this layer — engineered to swap in production-grade anomaly feeds.",
+    f3eyebrow: "Act",
+    f3title: "AI grounded in your selections",
     f3body:
-      "Thermal stress days, cumulative heat and water cues follow real varieties — not anonymous temperature swings.",
+      "Guided chats in Spanish/English respect the region & crop you picked (comparison mode optional) — still validate locally before acting.",
   },
   cta: {
     eyebrow: "For co‑ops & enterprises",
@@ -219,6 +222,9 @@ const en: MarketingCopy = {
   footer: {
     blurb:
       "Decision intelligence for growers, agronomists and co‑operative teams stewarding farmland across LATAM.",
+    dataSourcesEyebrow: "Data & references",
+    dataSourcesBody:
+      "Examples flagged in-scope: Open-Meteo · NASA FIRMS · FAO GAEZ · SoilGrids ISRIC · CHIRPS · Claude AI. Final integrations/licensing may differ.",
     columnProduct: "Product",
     columnCompany: "Company",
     linkAnalyze: "Analyze sowing",
@@ -229,7 +235,7 @@ const en: MarketingCopy = {
     linkContact: "Contact",
     linkPrivacy: "Privacy",
     copyrightSuffix: "· Climatifai",
-    versionStub: "v0.1 · demo shell",
+    versionStub: "v0.1 · early build",
   },
 };
 

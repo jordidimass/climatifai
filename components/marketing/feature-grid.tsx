@@ -1,6 +1,6 @@
 "use client";
 
-import { Compass, LineChart, Sparkles } from "lucide-react";
+import { GitCompare, Gauge, Sparkles } from "lucide-react";
 
 import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 
@@ -8,13 +8,13 @@ export function FeatureGrid() {
   const { m } = useMarketingCopy();
   const feats = [
     {
-      icon: Compass,
+      icon: GitCompare,
       eyebrow: m.features.f1eyebrow,
       title: m.features.f1title,
       body: m.features.f1body,
     },
     {
-      icon: LineChart,
+      icon: Gauge,
       eyebrow: m.features.f2eyebrow,
       title: m.features.f2title,
       body: m.features.f2body,

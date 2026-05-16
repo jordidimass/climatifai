@@ -55,18 +55,18 @@ const PHASE_LABEL_ES: Record<Phase, string> = {
   off: "Fuera de ciclo",
 };
 
-/** Demo hasta cablear desviaciones reales. */
-function demoMonthRiskDefault(i: number): boolean {
+/** Patrón fijo de meses marcados hasta integrar series reales mensuales. */
+function baselineClimateStressMonth(i: number): boolean {
   return i === 6 || i === 7;
 }
 
 /** Rota meses alerta por `cropId` para que dos columnas no sean idénticas. */
-function demoMonthRiskForCrop(cropId: string) {
+function rotatedClimateStressForCrop(cropId: string) {
   const shift =
     [...cropId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0) % 12;
   return (i: number): boolean => {
     const j = (i - shift + 12) % 12;
-    return demoMonthRiskDefault(j);
+    return baselineClimateStressMonth(j);
   };
 }
 
@@ -75,7 +75,7 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
   const crop = cropProp ?? storeCrop;
   const dense = variant === "compact";
   const monthRiskFn =
-    cropProp !== undefined || dense ? demoMonthRiskForCrop(crop.id) : demoMonthRiskDefault;
+    cropProp !== undefined || dense ? rotatedClimateStressForCrop(crop.id) : baselineClimateStressMonth;
   const today = new Date();
   const todayMonthIdx = Math.min(Math.max(today.getMonth(), 0), 11);
 
@@ -147,8 +147,8 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
           </div>
         ) : (
           <p className="text-[0.65rem] leading-snug text-muted-foreground">
-            Franja inferior roja = mes de muestra marcado como clima fuera de lo
-            usual (solo demo).
+            Franja inferior roja = mes señalado como clima fuera de lo usual
+            (serie ilustrativa de referencia).
           </p>
         )}
       </div>

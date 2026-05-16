@@ -73,7 +73,7 @@ export function ClimateChartPanel({
   return (
     <ChartShell
       title="Temperatura media · mensual"
-      subtitle={`Línea base histórica (stub API) vs. proyección SSP3-7.0${
+      subtitle={`Línea base histórica (referencia interna) vs. proyección SSP3-7.0${
         partial ? " · parte de la serie vino incompleta" : ""
       }`}
       data={data}

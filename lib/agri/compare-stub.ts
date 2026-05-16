@@ -10,8 +10,7 @@ export type AgriCompareResult = {
 };
 
 /**
- * MVP compare logic aligned with deterministic demo metrics.
- * Later wire to upstream `POST /agri/compare` (CVA-58).
+ * Comparación lado a lado con métricas deterministas region+cultivo; sustituir por `POST /agri/compare`.
  */
 export function compareTwoCropsStub(
   regionId: string,

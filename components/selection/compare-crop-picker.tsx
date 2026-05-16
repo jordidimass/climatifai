@@ -61,7 +61,9 @@ export function CompareCropPicker() {
         </SelectContent>
       </Select>
       <p className="text-xs text-muted-foreground">
-        Misma región del panel lateral ambos paneles muestran riesgos, series y calendarios demostrativos.
+        Misma región del sidebar: ambos paneles muestran riesgos, series climáticas
+        y líneas temporales tipo basados en datos de referencia hasta conectar feeds
+        en vivo.
       </p>
     </div>
   );

@@ -34,6 +34,16 @@ export function SiteFooter() {
           ]}
         />
       </div>
+
+      <div className="border-t border-border/60 bg-muted/15">
+        <div className="mx-auto max-w-7xl px-6 py-8 md:py-10">
+          <p className="eyebrow mb-2 text-foreground/80">{f.dataSourcesEyebrow}</p>
+          <p className="max-w-4xl text-xs leading-relaxed text-muted-foreground md:text-[0.8125rem]">
+            {f.dataSourcesBody}
+          </p>
+        </div>
+      </div>
+
       <div className="border-t border-border/60">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 text-xs text-muted-foreground">
           <span className="eyebrow !text-[0.65rem]">
