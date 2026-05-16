@@ -1,26 +1,257 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* ───────────────────────────────────────────────────────────────
+   Climatifai · Atmospheric / Climate-Cinematic design system
+   All design decisions live as CSS variables. Components reference
+   tokens — never raw colors. Light = "soft dawn", Dark = "night sky".
+   ─────────────────────────────────────────────────────────────── */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-anomaly-warm: var(--anomaly-warm);
+  --color-anomaly-warm-foreground: var(--anomaly-warm-foreground);
+  --color-anomaly-cool: var(--anomaly-cool);
+  --color-anomaly-cool-foreground: var(--anomaly-cool-foreground);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
+  --font-heading: var(--font-display);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Light · soft dawn ─────────────────────────────────────────── */
+:root {
+  /* Font aliases — Instrument Serif comes in via --font-display from
+     next/font; Geist Sans/Mono ship as --font-geist-sans / --font-geist-mono.
+     We alias them so all components reference --font-sans / --font-mono. */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+
+  --background: oklch(0.985 0.008 80);     /* warm bone */
+  --foreground: oklch(0.18 0.025 264);     /* deep ink */
+
+  --card: oklch(0.997 0.004 80);
+  --card-foreground: oklch(0.18 0.025 264);
+  --popover: oklch(0.997 0.004 80);
+  --popover-foreground: oklch(0.18 0.025 264);
+
+  --primary: oklch(0.42 0.16 265);         /* muted indigo */
+  --primary-foreground: oklch(0.985 0.008 80);
+
+  --secondary: oklch(0.955 0.012 75);
+  --secondary-foreground: oklch(0.22 0.025 264);
+
+  --muted: oklch(0.95 0.012 75);
+  --muted-foreground: oklch(0.48 0.018 260);
+
+  --accent: oklch(0.93 0.03 200);          /* soft teal wash */
+  --accent-foreground: oklch(0.38 0.10 195);
+
+  --destructive: oklch(0.55 0.18 32);
+  --border: oklch(0.91 0.012 80);
+  --input: oklch(0.93 0.012 80);
+  --ring: oklch(0.50 0.18 265);
+
+  --anomaly-warm: oklch(0.60 0.18 38);     /* clay */
+  --anomaly-warm-foreground: oklch(0.99 0.005 60);
+  --anomaly-cool: oklch(0.45 0.15 250);    /* slate blue */
+  --anomaly-cool-foreground: oklch(0.985 0.008 80);
+
+  --chart-1: oklch(0.42 0.16 265);         /* indigo */
+  --chart-2: oklch(0.55 0.13 195);         /* teal */
+  --chart-3: oklch(0.66 0.14 60);          /* amber */
+  --chart-4: oklch(0.58 0.13 230);         /* sky */
+  --chart-5: oklch(0.55 0.16 32);          /* clay */
+
+  --sidebar: oklch(0.99 0.006 80);
+  --sidebar-foreground: oklch(0.20 0.025 264);
+  --sidebar-primary: oklch(0.42 0.16 265);
+  --sidebar-primary-foreground: oklch(0.985 0.008 80);
+  --sidebar-accent: oklch(0.94 0.018 200);
+  --sidebar-accent-foreground: oklch(0.30 0.10 260);
+  --sidebar-border: oklch(0.92 0.012 80);
+  --sidebar-ring: oklch(0.50 0.18 265);
+
+  --radius: 0.625rem;
+
+  /* atmospheric backdrop · pale dawn */
+  --mesh-a: oklch(0.93 0.07 55);           /* warm peach */
+  --mesh-b: oklch(0.92 0.06 220);          /* sky blue */
+  --mesh-c: oklch(0.94 0.05 155);          /* sage */
+  --mesh-opacity: 0.55;
+
+  /* glass surface */
+  --glass-bg: color-mix(in oklch, var(--card) 75%, transparent);
+  --glass-border: color-mix(in oklch, var(--primary) 14%, var(--border));
+  --shadow-glass:
+    0 1px 2px oklch(0.18 0.025 264 / 0.04),
+    0 12px 32px -12px oklch(0.18 0.025 264 / 0.10);
+}
+
+/* Dark · night sky / climate model ─────────────────────────── */
+.dark {
+  --background: oklch(0.13 0.025 264);     /* near-black indigo */
+  --foreground: oklch(0.96 0.012 85);      /* bone white */
+
+  --card: oklch(0.18 0.028 264);
+  --card-foreground: oklch(0.96 0.012 85);
+  --popover: oklch(0.20 0.028 264);
+  --popover-foreground: oklch(0.96 0.012 85);
+
+  --primary: oklch(0.72 0.16 270);         /* glowing indigo */
+  --primary-foreground: oklch(0.16 0.025 264);
+
+  --secondary: oklch(0.22 0.025 264);
+  --secondary-foreground: oklch(0.96 0.012 85);
+
+  --muted: oklch(0.21 0.022 264);
+  --muted-foreground: oklch(0.70 0.018 85);
+
+  --accent: oklch(0.30 0.06 195);          /* deep teal */
+  --accent-foreground: oklch(0.85 0.12 195);
+
+  --destructive: oklch(0.72 0.17 45);
+  --border: oklch(0.72 0.16 270 / 18%);    /* indigo-tinted glow */
+  --input: oklch(0.96 0.012 85 / 14%);
+  --ring: oklch(0.72 0.16 270);
+
+  --anomaly-warm: oklch(0.74 0.17 50);     /* amber glow */
+  --anomaly-warm-foreground: oklch(0.16 0.025 264);
+  --anomaly-cool: oklch(0.72 0.14 230);    /* sky glow */
+  --anomaly-cool-foreground: oklch(0.16 0.025 264);
+
+  --chart-1: oklch(0.72 0.16 270);         /* indigo */
+  --chart-2: oklch(0.78 0.14 195);         /* teal */
+  --chart-3: oklch(0.78 0.16 65);          /* amber */
+  --chart-4: oklch(0.74 0.14 230);         /* sky */
+  --chart-5: oklch(0.72 0.17 35);          /* clay */
+
+  --sidebar: oklch(0.16 0.026 264);
+  --sidebar-foreground: oklch(0.94 0.012 85);
+  --sidebar-primary: oklch(0.72 0.16 270);
+  --sidebar-primary-foreground: oklch(0.14 0.025 264);
+  --sidebar-accent: oklch(0.24 0.04 195);
+  --sidebar-accent-foreground: oklch(0.85 0.12 195);
+  --sidebar-border: oklch(0.72 0.16 270 / 16%);
+  --sidebar-ring: oklch(0.72 0.16 270);
+
+  /* atmospheric backdrop · night sky gradient */
+  --mesh-a: oklch(0.38 0.20 282);          /* deep indigo */
+  --mesh-b: oklch(0.42 0.14 195);          /* midnight teal */
+  --mesh-c: oklch(0.38 0.18 320);          /* faint magenta */
+  --mesh-opacity: 0.78;
+
+  --glass-bg: color-mix(in oklch, var(--card) 55%, transparent);
+  --glass-border: color-mix(in oklch, var(--primary) 22%, var(--border));
+  --shadow-glass:
+    0 1px 0 oklch(0.96 0.012 85 / 0.04) inset,
+    0 24px 48px -16px oklch(0 0 0 / 0.55);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans antialiased;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 35%, transparent);
+    color: var(--foreground);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Glassmorphic panel — the signature Climatifai surface */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  /* Subtle hairline used for cartographic/data dividers */
+  .hairline {
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--border) 18%,
+      var(--border) 82%,
+      transparent
+    );
+    height: 1px;
+  }
+
+  /* Numerical readout — mono, tabular figures */
+  .numeric {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum", "zero";
+  }
+
+  /* Eyebrow tag (small, uppercase, tracked) used in headers + heroes */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
 }
