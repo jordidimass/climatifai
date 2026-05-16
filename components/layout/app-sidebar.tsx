@@ -26,11 +26,11 @@ const NAV = [
     disabled: true,
   },
   {
-    href: "#",
+    href: "/insights",
     label: "Hallazgos",
     icon: Sparkles,
     description: "Agronomía con IA",
-    disabled: true,
+    disabled: false,
   },
 ];
 

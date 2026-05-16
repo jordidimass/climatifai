@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Menu } from "lucide-react";
+import { ArrowLeft, Menu, Sparkles } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sheet";
 
 const FLOW_LINKS = [
+  { href: "/insights", label: "Hallazgos IA" },
   { href: "/habla-ai", label: "Habla AI" },
   { href: "/analizar-siembra", label: "Analizar siembra" },
   { href: "/mapa-incendios", label: "Mapa de incendios" },
@@ -59,6 +60,17 @@ export function FlowHeader({
 
         <div className="flex shrink-0 items-center gap-1">
           <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hidden rounded-full md:inline-flex"
+            asChild
+          >
+            <Link href="/insights" className="gap-1.5 px-3">
+              <Sparkles className="size-3.5 shrink-0" aria-hidden />
+              Hallazgos
+            </Link>
+          </Button>
           <Sheet>
             <SheetTrigger asChild>
               <Button
