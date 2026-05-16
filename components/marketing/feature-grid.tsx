@@ -1,39 +1,46 @@
+"use client";
+
 import { Compass, LineChart, Sparkles } from "lucide-react";
 
-const FEATURES = [
-  {
-    icon: Compass,
-    eyebrow: "Patrones históricos",
-    title: "Un siglo de contexto.",
-    body: "Consulta datos de observación homogeneizados por región y mes. Entiende la línea base de la que el clima se está alejando.",
-  },
-  {
-    icon: LineChart,
-    eyebrow: "Escenarios proyectados",
-    title: "El mañana, en varios caminos.",
-    body: "Compara proyecciones entre escenarios SSP. Planifica riego, selección varietal y ventanas de cosecha frente a lo que viene.",
-  },
-  {
-    icon: Sparkles,
-    eyebrow: "Lecturas por cultivo",
-    title: "Agronomía, no solo clima.",
-    body: "GDD, días de estrés térmico y riesgo de sequía calculados para tus cultivos reales, no para una curva genérica de temperatura.",
-  },
-];
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 
 export function FeatureGrid() {
+  const { m } = useMarketingCopy();
+  const feats = [
+    {
+      icon: Compass,
+      eyebrow: m.features.f1eyebrow,
+      title: m.features.f1title,
+      body: m.features.f1body,
+    },
+    {
+      icon: LineChart,
+      eyebrow: m.features.f2eyebrow,
+      title: m.features.f2title,
+      body: m.features.f2body,
+    },
+    {
+      icon: Sparkles,
+      eyebrow: m.features.f3eyebrow,
+      title: m.features.f3title,
+      body: m.features.f3body,
+    },
+  ];
+
   return (
     <section id="capacidades" className="mx-auto max-w-7xl px-6 py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="eyebrow">Por qué Climatifai</p>
+        <p className="eyebrow">{m.features.sectionEyebrow}</p>
         <h2 className="mt-3 font-[family-name:var(--font-display)] text-4xl tracking-tight md:text-5xl">
-          La señal,{" "}
-          <span className="italic text-foreground/80">no el ruido.</span>
+          {m.features.sectionTitleBefore}{" "}
+          <span className="italic text-foreground/80">
+            {m.features.sectionTitleItalic}
+          </span>
         </h2>
       </div>
 
       <div className="mt-14 grid gap-4 md:grid-cols-3">
-        {FEATURES.map((f) => {
+        {feats.map((f) => {
           const Icon = f.icon;
           return (
             <article
@@ -47,9 +54,7 @@ export function FeatureGrid() {
               <h3 className="font-[family-name:var(--font-display)] text-2xl leading-tight tracking-tight">
                 {f.title}
               </h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {f.body}
-              </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{f.body}</p>
               <div className="hairline mt-auto" />
             </article>
           );

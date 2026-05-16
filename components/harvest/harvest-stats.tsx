@@ -2,21 +2,8 @@
 
 import { AnomalyBadge } from "@/components/data/anomaly-badge";
 import { StatCard } from "@/components/data/stat-card";
+import { deriveStats } from "@/lib/dashboard-stats";
 import { useSelectionStore } from "@/stores/selection-store";
-
-function deriveStats(regionId: string, cropId: string) {
-  const seed = (regionId + cropId)
-    .split("")
-    .reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-  const wave = (n: number) => ((seed * 9301 + n * 49297) % 233280) / 233280;
-
-  const tempDelta = +(0.8 + wave(1) * 1.6).toFixed(1);
-  const precipDelta = +(-20 + wave(2) * 14).toFixed(0);
-  const gdd = Math.round(1100 + wave(3) * 320);
-  const heatStress = Math.round(14 + wave(4) * 22);
-
-  return { tempDelta, precipDelta, gdd, heatStress };
-}
 
 export function HarvestStats() {
   const region = useSelectionStore((s) => s.region);

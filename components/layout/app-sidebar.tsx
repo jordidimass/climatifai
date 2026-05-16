@@ -19,11 +19,11 @@ const NAV = [
     description: "Incendios · beta",
   },
   {
-    href: "#",
+    href: "/dashboard/compare",
     label: "Comparar",
     icon: LineChart,
-    description: "Histórico vs. proyectado",
-    disabled: true,
+    description: "Dos cultivos · misma región",
+    disabled: false,
   },
   {
     href: "/insights",

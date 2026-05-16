@@ -10,6 +10,8 @@ import { useSelectionStore } from "@/stores/selection-store";
 export function AppTopbar() {
   const region = useSelectionStore((s) => s.region);
   const crop = useSelectionStore((s) => s.crop);
+  const compareCrop = useSelectionStore((s) => s.compareCrop);
+  const comparing = compareCrop.id !== crop.id;
 
   return (
     <header className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-xl">
@@ -19,6 +21,12 @@ export function AppTopbar() {
             {region.name} · {region.country}
             <span className="mx-2 text-foreground/30">/</span>
             {crop.name}
+            {comparing ? (
+              <>
+                <span className="mx-2 text-foreground/30">↔</span>
+                <span className="text-primary/90">{compareCrop.name}</span>
+              </>
+            ) : null}
           </p>
         </div>
 

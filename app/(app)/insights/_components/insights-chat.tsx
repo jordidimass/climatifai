@@ -36,6 +36,9 @@ function messageText(m: UIMessage): string {
 export function InsightsChat() {
   const region = useSelectionStore((s) => s.region);
   const crop = useSelectionStore((s) => s.crop);
+  const compareCrop = useSelectionStore((s) => s.compareCrop);
+  const compareActive =
+    compareCrop.id !== crop.id && !!compareCrop.name?.trim();
 
   const transport = useMemo(
     () =>
@@ -84,6 +87,10 @@ export function InsightsChat() {
       cropId: crop.id,
       cropName: crop.name,
       regionSummary: region.summary,
+      ...(compareActive && {
+        compareCropId: compareCrop.id,
+        compareCropName: compareCrop.name,
+      }),
     };
 
     try {
@@ -132,8 +139,10 @@ export function InsightsChat() {
           <div>
             <CardTitle className="font-heading text-lg">Hallazgos</CardTitle>
             <CardDescription>
-              Pregunta en lenguaje natural. El modelo usa la región y el cultivo
-              que eliges en la barra lateral.
+              Preguntá en castellano. El modelo recibe tu región
+              {compareActive ? " y los dos cultivos" : " y el cultivo que elegís"}
+              {" "}
+              en la barra lateral.
             </CardDescription>
           </div>
         </div>
@@ -143,13 +152,24 @@ export function InsightsChat() {
             "ring-1 ring-border/55 cf-insights-context-shine md:px-4",
           )}
         >
-          <span className="relative z-[1]">
-            <span className="font-medium text-foreground/90">{region.name}</span>
-            {" · "}
-            <span className="font-medium text-foreground/90">{crop.name}</span>
-            <span className="mx-2 text-border">|</span>
-            {region.summary}
-          </span>
+            <span className="relative z-[1]">
+              <span className="font-medium text-foreground/90">{region.name}</span>
+              {" · "}
+              <span className="font-medium text-foreground/90">{crop.name}</span>
+              {compareActive ? (
+                <>
+                  <span className="mx-2 text-border">→</span>
+                  <span className="font-medium text-primary/95">
+                    {compareCrop.name}
+                  </span>
+                  <span className="mx-2 text-[0.6rem] font-normal uppercase text-muted-foreground">
+                    comparativo
+                  </span>
+                </>
+              ) : null}
+              <span className="mx-2 text-border">|</span>
+              {region.summary}
+            </span>
         </p>
       </CardHeader>
 
@@ -166,8 +186,10 @@ export function InsightsChat() {
                 "cf-insights-hint-breathe motion-reduce:animate-none",
               )}
             >
-              Ejemplo: “¿Qué riesgos térmicos tiene este cultivo aquí en los próximos
-              años?” o “¿Cómo se ve la temporada de lluvias vs. necesidad de agua?”
+              Ejemplo:
+              {compareActive
+                ? " “¿Qué cultivo conviene ante sequía próxima, teniendo estos dos seleccionados?”"
+                : " “¿Qué riesgos térmicos tiene este cultivo aquí en los próximos años?”"}
             </p>
           )}
           {messages.map((m) => (

@@ -1,9 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight, Flame, Sparkles, Sprout } from "lucide-react";
 
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { Button } from "@/components/ui/button";
+import type { MarketingCopy } from "@/lib/marketing-copy";
 
 export function Hero() {
+  const { m } = useMarketingCopy();
+  const h = m.hero;
+
   return (
     <section
       id="por-que"
@@ -12,20 +19,16 @@ export function Hero() {
       <div className="mx-auto max-w-3xl text-center">
         <p className="eyebrow inline-flex items-center gap-2">
           <span className="size-1.5 rounded-full bg-accent-foreground" />
-          Inteligencia climática agrícola · v0.1
+          {h.eyebrow}
         </p>
 
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-5xl leading-[0.95] tracking-tight md:text-7xl">
-          Lee el clima.
-          <span className="block italic text-foreground/85">
-            Siembra mejor.
-          </span>
+          {h.line1}
+          <span className="block italic text-foreground/85">{h.line2}</span>
         </h1>
 
         <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground md:text-lg">
-          Compara cien años de clima con lo que viene para los cultivos y
-          regiones que trabajas. Hecho para productores, agrónomos y
-          cooperativas de Latinoamérica.
+          {h.body}
         </p>
       </div>
 
@@ -39,18 +42,17 @@ export function Hero() {
               <Sparkles className="size-6" aria-hidden />
             </span>
             <div>
-              <p className="eyebrow">Habla AI</p>
+              <p className="eyebrow">{h.cardEyebrow}</p>
               <p className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-tight md:text-3xl">
-                Describe tu cosecha en lenguaje natural
+                {h.cardTitle}
               </p>
               <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                Objetivos de siembra, riesgos y ventanas — conversación guiada
-                por contexto agrícola.
+                {h.cardBody}
               </p>
             </div>
           </div>
           <span className="inline-flex items-center gap-1 text-sm font-medium text-primary md:flex-col md:items-end">
-            Abrir
+            {h.cardOpen}
             <ArrowUpRight
               className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               aria-hidden
@@ -63,10 +65,10 @@ export function Hero() {
             <Link href="/analizar-siembra" className="flex flex-col gap-1 px-6">
               <span className="inline-flex items-center gap-2 text-base font-semibold">
                 <Sprout className="size-5" aria-hidden />
-                Analiza tu siembra
+                {h.sowingTitle}
               </span>
               <span className="text-xs font-normal text-primary-foreground/85">
-                Lecturas por región, tipo de siembra y fecha
+                {h.sowingSub}
               </span>
             </Link>
           </Button>
@@ -79,11 +81,9 @@ export function Hero() {
             <Link href="/mapa-incendios" className="flex flex-col gap-1 px-6">
               <span className="inline-flex items-center gap-2 text-base font-semibold">
                 <Flame className="size-5 text-anomaly-warm" aria-hidden />
-                Mapa de incendios
+                {h.firesTitle}
               </span>
-              <span className="text-xs font-normal text-muted-foreground">
-                Beta · capas satelitales próximamente
-              </span>
+              <span className="text-xs font-normal text-muted-foreground">{h.firesSub}</span>
             </Link>
           </Button>
         </div>
@@ -95,22 +95,26 @@ export function Hero() {
             size="sm"
             className="rounded-full text-muted-foreground"
           >
-            <Link href="#capacidades">Ver capacidades</Link>
+            <Link href="#capacidades">{h.seeFeatures}</Link>
           </Button>
         </div>
       </div>
 
-      <HeroReadout />
+      <HeroReadout labels={h.readout} />
     </section>
   );
 }
 
-function HeroReadout() {
+function HeroReadout({
+  labels,
+}: {
+  labels: MarketingCopy["hero"]["readout"];
+}) {
   const stats = [
-    { label: "Anomalía térmica", value: "+1.8", unit: "°C", sigma: "1.4σ" },
-    { label: "Δ precip. vs. 1991–2020", value: "−12", unit: "%", sigma: "0.9σ" },
-    { label: "Grados-día", value: "1,284", unit: "GDD", sigma: "+6%" },
-    { label: "Días de calor", value: "27", unit: "d", sigma: "+8" },
+    { label: labels.tempAnomaly, value: "+1.8", unit: "°C", sigma: "1.4σ" },
+    { label: labels.precipDelta, value: "−12", unit: "%", sigma: "0.9σ" },
+    { label: labels.gdd, value: "1,284", unit: "GDD", sigma: "+6%" },
+    { label: labels.heatDays, value: "27", unit: "d", sigma: "+8" },
   ];
   return (
     <div className="glass mx-auto mt-14 grid max-w-5xl grid-cols-2 gap-px overflow-hidden rounded-2xl md:grid-cols-4">
@@ -124,9 +128,7 @@ function HeroReadout() {
             <span className="numeric text-3xl font-medium tracking-tight text-foreground">
               {s.value}
             </span>
-            <span className="numeric text-sm text-muted-foreground">
-              {s.unit}
-            </span>
+            <span className="numeric text-sm text-muted-foreground">{s.unit}</span>
           </div>
           <span className="numeric text-xs text-anomaly-warm">{s.sigma}</span>
         </div>

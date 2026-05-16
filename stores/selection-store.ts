@@ -15,10 +15,12 @@ import {
 interface SelectionState {
   region: Region;
   crop: Crop;
+  compareCrop: Crop;
   sowingPresetId: SowingPresetId;
   sowingDate: string;
   setRegion: (region: Region) => void;
   setCrop: (crop: Crop) => void;
+  setCompareCrop: (crop: Crop) => void;
   setSowingPresetId: (id: SowingPresetId) => void;
   setSowingDate: (isoDate: string) => void;
   applySowingPreset: (id: SowingPresetId) => void;
@@ -26,6 +28,7 @@ interface SelectionState {
 }
 
 const DEFAULT_CROP = CROPS[0];
+const DEFAULT_COMPARE_CROP = CROPS.length > 1 ? CROPS[1]! : CROPS[0]!;
 const DEFAULT_PRESET = SOWING_PRESETS[0];
 
 function defaultSowingDate(): string {
@@ -42,10 +45,12 @@ function defaultSowingDate(): string {
 export const useSelectionStore = create<SelectionState>((set) => ({
   region: DEFAULT_REGION,
   crop: DEFAULT_CROP,
+  compareCrop: DEFAULT_COMPARE_CROP,
   sowingPresetId: DEFAULT_PRESET.id,
   sowingDate: defaultSowingDate(),
   setRegion: (region) => set({ region }),
   setCrop: (crop) => set({ crop }),
+  setCompareCrop: (compareCrop) => set({ compareCrop }),
   setSowingPresetId: (id) => set({ sowingPresetId: id }),
   setSowingDate: (isoDate) => set({ sowingDate: isoDate }),
   applySowingPreset: (id) => {
@@ -60,6 +65,7 @@ export const useSelectionStore = create<SelectionState>((set) => ({
     set({
       region: DEFAULT_REGION,
       crop: DEFAULT_CROP,
+      compareCrop: DEFAULT_COMPARE_CROP,
       sowingPresetId: DEFAULT_PRESET.id,
       sowingDate: defaultSowingDate(),
     }),

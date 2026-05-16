@@ -5,6 +5,8 @@ import { Menu } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import type { MarketingLocale } from "@/lib/marketing-copy";
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,20 +16,57 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
-const NAV = [
-  { href: "/#por-que", label: "Por qué" },
-  { href: "/#capacidades", label: "Capacidades" },
-  { href: "/#empresas", label: "Empresas" },
-] as const;
+function LangToggle({ compact }: { compact?: boolean }) {
+  const { locale, setLocale, m } = useMarketingCopy();
+  const h = m.header;
 
-const FLOWS = [
-  { href: "/habla-ai", label: "Habla AI" },
-  { href: "/analizar-siembra", label: "Analizar siembra" },
-  { href: "/mapa-incendios", label: "Mapa de incendios" },
-] as const;
+  return (
+    <div
+      role="group"
+      aria-label="Language"
+      className={cn(
+        "flex items-center gap-px rounded-full border border-border/70 bg-muted/40 p-0.5 text-[0.7rem] font-semibold",
+        compact && "scale-95",
+      )}
+    >
+      {(["es", "en"] as const satisfies readonly MarketingLocale[]).map((code) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => setLocale(code)}
+          className={cn(
+            "min-w-[2.05rem] rounded-full px-2 py-1 transition-colors",
+            locale === code
+              ? "bg-background text-foreground shadow-sm ring-1 ring-border/70"
+              : "text-muted-foreground hover:bg-background/50 hover:text-foreground",
+          )}
+          aria-pressed={locale === code}
+        >
+          {code === "es" ? h.langEs : h.langEn}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function SiteHeader() {
+  const { m } = useMarketingCopy();
+  const header = m.header;
+
+  const NAV = [
+    { href: "/#por-que", label: header.navWhy },
+    { href: "/#capacidades", label: header.navFeatures },
+    { href: "/#empresas", label: header.navBusiness },
+  ] as const;
+
+  const FLOWS = [
+    { href: "/habla-ai", label: header.flowAi },
+    { href: "/analizar-siembra", label: header.flowAnalyze },
+    { href: "/mapa-incendios", label: header.flowMap },
+  ] as const;
+
   return (
     <header className="sticky top-0 z-30">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-6">
@@ -49,6 +88,7 @@ export function SiteHeader() {
           </nav>
           <div className="flex items-center gap-1 md:gap-2">
             <div className="hidden items-center gap-1 md:flex">
+              <LangToggle />
               {FLOWS.map((item) => (
                 <Button key={item.href} asChild variant="ghost" size="sm">
                   <Link
@@ -60,6 +100,9 @@ export function SiteHeader() {
                 </Button>
               ))}
             </div>
+            <div className="md:hidden">
+              <LangToggle />
+            </div>
             <ThemeToggle />
             <Sheet>
               <SheetTrigger asChild>
@@ -67,15 +110,21 @@ export function SiteHeader() {
                   variant="ghost"
                   size="icon"
                   className="rounded-full lg:hidden"
-                  aria-label="Abrir menú"
+                  aria-label={header.openMenu}
                 >
                   <Menu className="size-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[min(100%,22rem)]">
                 <SheetHeader>
-                  <SheetTitle>Menú</SheetTitle>
+                  <SheetTitle>{header.mobileMenuTitle}</SheetTitle>
                 </SheetHeader>
+                <div className="mt-4 flex items-center justify-between gap-4 border-b border-border/60 pb-4">
+                  <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {header.languageLabel}
+                  </span>
+                  <LangToggle compact />
+                </div>
                 <nav
                   aria-label="Navegación móvil"
                   className="mt-4 flex flex-col gap-1"
