@@ -8,19 +8,19 @@ export function CtaSection() {
     <section id="enterprise" className="mx-auto max-w-7xl px-6 py-20">
       <div className="glass relative overflow-hidden rounded-3xl px-8 py-16 md:px-16 md:py-24">
         <div className="relative z-10 mx-auto max-w-2xl text-center">
-          <p className="eyebrow">For cooperatives & enterprise</p>
+          <p className="eyebrow">Para cooperativas y empresas</p>
           <h2 className="mt-3 font-[family-name:var(--font-display)] text-4xl tracking-tight md:text-5xl">
-            One climate model.{" "}
-            <span className="italic text-foreground/80">Every parcel.</span>
+            Un modelo climático.{" "}
+            <span className="italic text-foreground/80">Cada parcela.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-lg text-balance text-muted-foreground">
-            Bring Climatifai to your entire portfolio — bulk regions, custom
-            crop catalogs, and an API that drops into your existing tools.
+            Lleva Climatifai a todo tu portafolio: regiones por lote, catálogos
+            de cultivos a medida y una API que se integra con tus herramientas.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button asChild size="lg" className="rounded-full px-6">
               <Link href="/dashboard">
-                Try the dashboard
+                Probar el panel
                 <ArrowUpRight className="ml-1 size-4" aria-hidden="true" />
               </Link>
             </Button>
@@ -30,7 +30,7 @@ export function CtaSection() {
               variant="outline"
               className="rounded-full bg-background/60 px-6 backdrop-blur"
             >
-              <Link href="#contact">Talk to us</Link>
+              <Link href="#contact">Hablemos</Link>
             </Button>
           </div>
         </div>

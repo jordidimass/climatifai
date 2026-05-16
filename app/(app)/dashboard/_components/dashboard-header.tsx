@@ -9,7 +9,7 @@ export function DashboardHeader() {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p className="eyebrow">Overview</p>
+        <p className="eyebrow">Resumen</p>
         <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl tracking-tight md:text-4xl">
           {region.name}{" "}
           <span className="text-muted-foreground/80">·</span>{" "}
@@ -20,7 +20,7 @@ export function DashboardHeader() {
         </p>
       </div>
       <p className="numeric text-xs text-muted-foreground">
-        Baseline 1991–2020 · Projection SSP3-7.0 · 2031–2050
+        Línea base 1991–2020 · Proyección SSP3-7.0 · 2031–2050
       </p>
     </div>
   );

@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const OPTIONS = [
-  { value: "light", label: "Light", icon: SunMedium },
-  { value: "dark", label: "Dark", icon: Moon },
-  { value: "system", label: "System", icon: Monitor },
+  { value: "light", label: "Claro", icon: SunMedium },
+  { value: "dark", label: "Oscuro", icon: Moon },
+  { value: "system", label: "Sistema", icon: Monitor },
 ] as const;
 
 const subscribe = () => () => {};
@@ -34,12 +34,12 @@ export function ThemeToggle() {
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Toggle theme"
+          aria-label="Cambiar tema"
           className="rounded-full"
         >
           <SunMedium className="size-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute size-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">Cambiar tema</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-36">

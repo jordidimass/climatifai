@@ -3,21 +3,21 @@ import { Compass, LineChart, Sparkles } from "lucide-react";
 const FEATURES = [
   {
     icon: Compass,
-    eyebrow: "Historical patterns",
-    title: "A century of context.",
-    body: "Pull homogenized observation data for any region down to the month. See the baseline the climate is moving away from.",
+    eyebrow: "Patrones históricos",
+    title: "Un siglo de contexto.",
+    body: "Consulta datos de observación homogeneizados por región y mes. Entiende la línea base de la que el clima se está alejando.",
   },
   {
     icon: LineChart,
-    eyebrow: "Projected scenarios",
-    title: "Tomorrow, in five tracks.",
-    body: "Side-by-side projections across SSP scenarios. Plan irrigation, varietal selection, and harvest windows against what's coming.",
+    eyebrow: "Escenarios proyectados",
+    title: "El mañana, en varios caminos.",
+    body: "Compara proyecciones entre escenarios SSP. Planifica riego, selección varietal y ventanas de cosecha frente a lo que viene.",
   },
   {
     icon: Sparkles,
-    eyebrow: "Crop-aware insights",
-    title: "Agronomy, not just weather.",
-    body: "GDD, heat-stress days, drought risk — calculated for the actual crops you grow, not a generic temperature curve.",
+    eyebrow: "Lecturas por cultivo",
+    title: "Agronomía, no solo clima.",
+    body: "GDD, días de estrés térmico y riesgo de sequía calculados para tus cultivos reales, no para una curva genérica de temperatura.",
   },
 ];
 
@@ -25,10 +25,10 @@ export function FeatureGrid() {
   return (
     <section id="features" className="mx-auto max-w-7xl px-6 py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="eyebrow">Why Climatifai</p>
+        <p className="eyebrow">Por qué Climatifai</p>
         <h2 className="mt-3 font-[family-name:var(--font-display)] text-4xl tracking-tight md:text-5xl">
-          The signal,{" "}
-          <span className="italic text-foreground/80">not the static.</span>
+          La señal,{" "}
+          <span className="italic text-foreground/80">no el ruido.</span>
         </h2>
       </div>
 

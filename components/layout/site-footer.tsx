@@ -9,24 +9,24 @@ export function SiteFooter() {
         <div className="space-y-3">
           <Logo />
           <p className="max-w-sm text-sm text-muted-foreground">
-            Climate intelligence for the people who feed the world. Built for
-            farmers, agronomists, and the cooperatives in between.
+            Inteligencia climática para quienes alimentan al mundo. Hecho para
+            productores, agrónomos y cooperativas de Latinoamérica.
           </p>
         </div>
         <FooterColumn
-          title="Product"
+          title="Producto"
           links={[
-            { href: "/dashboard", label: "Dashboard" },
-            { href: "/#features", label: "Features" },
-            { href: "/#science", label: "Methodology" },
+            { href: "/dashboard", label: "Panel" },
+            { href: "/#features", label: "Funciones" },
+            { href: "/#science", label: "Metodología" },
           ]}
         />
         <FooterColumn
-          title="Company"
+          title="Compañía"
           links={[
-            { href: "/#about", label: "About" },
-            { href: "/#contact", label: "Contact" },
-            { href: "/#privacy", label: "Privacy" },
+            { href: "/#about", label: "Acerca de" },
+            { href: "/#contact", label: "Contacto" },
+            { href: "/#privacy", label: "Privacidad" },
           ]}
         />
       </div>
@@ -35,7 +35,7 @@ export function SiteFooter() {
           <span className="eyebrow !text-[0.65rem]">
             © {new Date().getFullYear()} · Climatifai
           </span>
-          <span className="numeric">v0.1 · scaffold</span>
+          <span className="numeric">v0.1 · base inicial</span>
         </div>
       </div>
     </footer>

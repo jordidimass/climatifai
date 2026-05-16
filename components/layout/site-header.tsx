@@ -5,9 +5,9 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
 
 const NAV = [
-  { href: "/#features", label: "Features" },
-  { href: "/#science", label: "Science" },
-  { href: "/#enterprise", label: "Enterprise" },
+  { href: "/#features", label: "Funciones" },
+  { href: "/#science", label: "Ciencia" },
+  { href: "/#enterprise", label: "Empresas" },
 ];
 
 export function SiteHeader() {
@@ -17,7 +17,7 @@ export function SiteHeader() {
         <div className="glass flex w-full items-center justify-between gap-6 rounded-full px-4 py-2">
           <Logo />
           <nav
-            aria-label="Primary"
+            aria-label="Principal"
             className="hidden items-center gap-1 md:flex"
           >
             {NAV.map((item) => (
@@ -33,7 +33,7 @@ export function SiteHeader() {
           <div className="flex items-center gap-1">
             <ThemeToggle />
             <Button asChild size="sm" className="ml-1 rounded-full">
-              <Link href="/dashboard">Open dashboard</Link>
+              <Link href="/dashboard">Abrir panel</Link>
             </Button>
           </div>
         </div>

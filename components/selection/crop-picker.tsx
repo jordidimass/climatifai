@@ -17,7 +17,7 @@ export function CropPicker() {
   return (
     <div className="space-y-1.5">
       <label htmlFor="crop-select" className="eyebrow">
-        Crop
+        Cultivo
       </label>
       <Select
         value={crop.id}
@@ -27,7 +27,7 @@ export function CropPicker() {
         }}
       >
         <SelectTrigger id="crop-select" className="w-full">
-          <SelectValue placeholder="Select a crop" />
+          <SelectValue placeholder="Selecciona un cultivo" />
         </SelectTrigger>
         <SelectContent>
           {CROPS.map((c) => (

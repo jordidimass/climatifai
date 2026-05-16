@@ -20,11 +20,11 @@ const displaySerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: {
-    default: "Climatifai — Agricultural climate intelligence",
+    default: "Climatifai — Inteligencia climática agrícola",
     template: "%s · Climatifai",
   },
   description:
-    "Compare historical climate patterns against current and projected conditions for the crops and regions you care about.",
+    "Compara patrones climáticos históricos con condiciones actuales y proyectadas para los cultivos y regiones que te importan.",
   metadataBase: new URL("https://climatifai.example"),
 };
 
@@ -33,7 +33,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="en"
+      lang="es-419"
       suppressHydrationWarning
       className={`${displaySerif.variable} ${GeistSans.variable} ${GeistMono.variable}`}
     >

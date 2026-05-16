@@ -7,25 +7,25 @@ import { RegionPicker } from "@/components/selection/region-picker";
 import { Separator } from "@/components/ui/separator";
 
 const NAV = [
-  { href: "/dashboard", label: "Overview", icon: BarChart3 },
+  { href: "/dashboard", label: "Resumen", icon: BarChart3 },
   {
     href: "/dashboard",
-    label: "Map",
+    label: "Mapa",
     icon: Map,
-    description: "Region & terrain",
+    description: "Región y terreno",
   },
   {
     href: "#",
-    label: "Compare",
+    label: "Comparar",
     icon: LineChart,
-    description: "Historical vs projected",
+    description: "Histórico vs. proyectado",
     disabled: true,
   },
   {
     href: "#",
-    label: "Insights",
+    label: "Hallazgos",
     icon: Sparkles,
-    description: "AI agronomy",
+    description: "Agronomía con IA",
     disabled: true,
   },
 ];
@@ -44,7 +44,7 @@ export function AppSidebar() {
 
       <Separator className="bg-sidebar-border/80" />
 
-      <nav aria-label="Workspace" className="mt-4 flex-1 space-y-0.5">
+      <nav aria-label="Espacio de trabajo" className="mt-4 flex-1 space-y-0.5">
         {NAV.map((item) => {
           const Icon = item.icon;
           return (
@@ -68,7 +68,7 @@ export function AppSidebar() {
                   {item.label}
                   {item.disabled && (
                     <span className="eyebrow ml-2 !text-[0.55rem] text-muted-foreground/70">
-                      soon
+                      pronto
                     </span>
                   )}
                 </span>
@@ -84,10 +84,10 @@ export function AppSidebar() {
       </nav>
 
       <div className="glass mt-4 rounded-lg px-3 py-3 text-xs leading-relaxed text-muted-foreground">
-        <p className="eyebrow mb-1 text-foreground/80">Saved scenarios</p>
+        <p className="eyebrow mb-1 text-foreground/80">Escenarios guardados</p>
         <p>
-          Pin region + crop combos here once you have a few you keep returning
-          to.
+          Fija aquí combinaciones de región y cultivo cuando tengas varias que
+          consultes seguido.
         </p>
       </div>
     </aside>

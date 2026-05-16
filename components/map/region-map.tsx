@@ -61,7 +61,7 @@ function RegionTag() {
   const region = useSelectionStore((s) => s.region);
   return (
     <div className="glass pointer-events-none absolute bottom-3 left-3 max-w-xs rounded-lg px-3 py-2 text-xs">
-      <p className="eyebrow">Focus area</p>
+      <p className="eyebrow">Área de enfoque</p>
       <p className="mt-0.5 font-medium text-foreground">
         {region.name}
         <span className="text-muted-foreground"> · {region.country}</span>
@@ -88,18 +88,18 @@ function MapPlaceholder() {
         <span className="inline-flex size-12 items-center justify-center rounded-full bg-accent text-accent-foreground">
           <MapIcon className="size-5" aria-hidden="true" />
         </span>
-        <p className="eyebrow">Map disabled</p>
+        <p className="eyebrow">Mapa desactivado</p>
         <h3 className="font-[family-name:var(--font-display)] text-xl tracking-tight">
-          Drop a Mapbox token to light it up.
+          Agrega un token de Mapbox para activarlo.
         </h3>
         <p className="max-w-sm text-xs leading-relaxed text-muted-foreground">
-          Set{" "}
+          Configura{" "}
           <code className="numeric rounded bg-muted px-1.5 py-0.5">
             NEXT_PUBLIC_MAPBOX_TOKEN
           </code>{" "}
-          in <code className="numeric">.env.local</code> with a free token from{" "}
-          <span className="numeric">mapbox.com</span> and reload — the region
-          map will replace this placeholder.
+          en <code className="numeric">.env.local</code> con un token gratis de{" "}
+          <span className="numeric">mapbox.com</span> y recarga: el mapa de la
+          región reemplazará este marcador.
         </p>
       </div>
     </div>

@@ -29,7 +29,7 @@ export function AppTopbar() {
           />
           <Input
             type="search"
-            placeholder="Search regions, crops…"
+            placeholder="Buscar regiones, cultivos..."
             className="w-72 pl-9"
           />
         </div>
@@ -37,7 +37,7 @@ export function AppTopbar() {
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Notifications"
+          aria-label="Notificaciones"
           className="rounded-full"
         >
           <Bell className="size-4" aria-hidden="true" />

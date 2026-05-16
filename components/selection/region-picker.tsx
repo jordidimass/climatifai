@@ -17,7 +17,7 @@ export function RegionPicker() {
   return (
     <div className="space-y-1.5">
       <label htmlFor="region-select" className="eyebrow">
-        Region
+        Región
       </label>
       <Select
         value={region.id}
@@ -27,7 +27,7 @@ export function RegionPicker() {
         }}
       >
         <SelectTrigger id="region-select" className="w-full">
-          <SelectValue placeholder="Select a region" />
+          <SelectValue placeholder="Selecciona una región" />
         </SelectTrigger>
         <SelectContent>
           {REGIONS.map((r) => (

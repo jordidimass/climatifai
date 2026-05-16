@@ -168,7 +168,7 @@ function Legend() {
     <div className="flex items-center gap-4 text-xs text-muted-foreground">
       <span className="inline-flex items-center gap-1.5">
         <span className="size-2 rounded-full" style={{ background: "var(--chart-1)" }} />
-        Historical
+        Histórico
       </span>
       <span className="inline-flex items-center gap-1.5">
         <span
@@ -178,7 +178,7 @@ function Legend() {
               "repeating-linear-gradient(90deg, var(--chart-2) 0 4px, transparent 4px 8px)",
           }}
         />
-        Projected
+        Proyectado
       </span>
     </div>
   );

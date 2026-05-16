@@ -13,12 +13,12 @@ export async function POST(request: Request) {
   try {
     payload = await request.json();
   } catch {
-    return Response.json({ error: "invalid JSON body" }, { status: 400 });
+    return Response.json({ error: "cuerpo JSON inválido" }, { status: 400 });
   }
 
   if (!Array.isArray(payload.messages)) {
     return Response.json(
-      { error: "expected { messages: UIMessage[] }" },
+      { error: "se esperaba { messages: UIMessage[] }" },
       { status: 400 },
     );
   }

@@ -31,31 +31,31 @@ export function DashboardStats() {
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
-        label="Temp anomaly"
+        label="Anomalía térmica"
         value={`+${stats.tempDelta}`}
         unit="°C"
-        caption={`Δ vs. 1991–2020 baseline · ${crop.name}`}
+        caption={`Δ vs. línea base 1991–2020 · ${crop.name}`}
         badge={<AnomalyBadge value={stats.tempDelta} unit="°C" />}
       />
       <StatCard
-        label="Precipitation Δ"
+        label="Δ precipitación"
         value={`${stats.precipDelta}`}
         unit="%"
-        caption="Annual total vs. baseline"
+        caption="Total anual vs. línea base"
         badge={<AnomalyBadge value={stats.precipDelta} unit="%" />}
       />
       <StatCard
-        label="Growing-degree-days"
+        label="Grados-día de crecimiento"
         value={stats.gdd.toLocaleString()}
         unit="GDD"
-        caption={`Base ${crop.gddBaseC}°C · season cumulative`}
+        caption={`Base ${crop.gddBaseC}°C · acumulado de temporada`}
         badge={<AnomalyBadge value={6} unit="%" tone="warm" />}
       />
       <StatCard
-        label="Heat-stress days"
+        label="Días de estrés térmico"
         value={`${stats.heatStress}`}
         unit="d"
-        caption={`Days above ${crop.heatStressC}°C max`}
+        caption={`Días sobre ${crop.heatStressC}°C máx.`}
         badge={<AnomalyBadge value={stats.heatStress - 14} unit="d" />}
       />
     </div>

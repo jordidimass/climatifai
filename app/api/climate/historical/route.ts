@@ -5,8 +5,8 @@ import { fetchClimateSeries } from "@/lib/api/climate";
 const querySchema = z.object({
   regionId: z.string().min(1),
   cropId: z.string().min(1),
-  from: z.string().regex(/^\d{4}-\d{2}$/, "expected YYYY-MM"),
-  to: z.string().regex(/^\d{4}-\d{2}$/, "expected YYYY-MM"),
+  from: z.string().regex(/^\d{4}-\d{2}$/, "se esperaba YYYY-MM"),
+  to: z.string().regex(/^\d{4}-\d{2}$/, "se esperaba YYYY-MM"),
 });
 
 export async function GET(request: Request) {
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
   if (!parsed.success) {
     return Response.json(
-      { error: "invalid query", issues: parsed.error.issues },
+      { error: "consulta inválida", issues: parsed.error.issues },
       { status: 400 },
     );
   }
