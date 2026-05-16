@@ -18,13 +18,11 @@ const STYLES = {
 export function RegionMap() {
   const region = useSelectionStore((s) => s.region);
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
 
   if (!TOKEN) return <MapPlaceholder />;
 
   const styleKey: keyof typeof STYLES =
-    mounted && resolvedTheme === "dark" ? "dark" : "light";
+    resolvedTheme === "dark" ? "dark" : "light";
 
   return (
     <div className="glass relative h-full min-h-[420px] overflow-hidden rounded-xl">

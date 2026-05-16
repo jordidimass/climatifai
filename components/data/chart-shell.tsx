@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   Area,
   AreaChart,
@@ -22,6 +23,12 @@ interface ChartShellProps {
   className?: string;
 }
 
+const subscribe = () => () => {};
+
+function useMounted() {
+  return React.useSyncExternalStore(subscribe, () => true, () => false);
+}
+
 /**
  * Themed Recharts wrapper. Reads `--chart-*` CSS variables so the chart
  * re-paints automatically when the theme toggles light/dark.
@@ -33,6 +40,7 @@ export function ChartShell({
   kind = "area",
   className,
 }: ChartShellProps) {
+  const mounted = useMounted();
   const stroke1 = "var(--chart-1)";
   const stroke2 = "var(--chart-2)";
 
@@ -48,106 +56,108 @@ export function ChartShell({
         <Legend />
       </header>
       <div className="h-56 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          {kind === "area" ? (
-            <AreaChart
-              data={data}
-              margin={{ top: 4, right: 8, bottom: 0, left: -16 }}
-            >
-              <defs>
-                <linearGradient id="cl-hist" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={stroke1} stopOpacity={0.35} />
-                  <stop offset="100%" stopColor={stroke1} stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="cl-proj" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={stroke2} stopOpacity={0.35} />
-                  <stop offset="100%" stopColor={stroke2} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid stroke="var(--border)" strokeDasharray="2 4" vertical={false} />
-              <XAxis
-                dataKey="month"
-                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-                axisLine={{ stroke: "var(--border)" }}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-                axisLine={{ stroke: "var(--border)" }}
-                tickLine={false}
-                width={36}
-              />
-              <Tooltip
-                contentStyle={{
-                  background: "var(--popover)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
-                  color: "var(--popover-foreground)",
-                  fontSize: 12,
-                }}
-                cursor={{ stroke: "var(--ring)", strokeOpacity: 0.4 }}
-              />
-              <Area
-                type="monotone"
-                dataKey="historical"
-                stroke={stroke1}
-                strokeWidth={2}
-                fill="url(#cl-hist)"
-              />
-              <Area
-                type="monotone"
-                dataKey="projected"
-                stroke={stroke2}
-                strokeWidth={2}
-                strokeDasharray="4 4"
-                fill="url(#cl-proj)"
-              />
-            </AreaChart>
-          ) : (
-            <LineChart
-              data={data}
-              margin={{ top: 4, right: 8, bottom: 0, left: -16 }}
-            >
-              <CartesianGrid stroke="var(--border)" strokeDasharray="2 4" vertical={false} />
-              <XAxis
-                dataKey="month"
-                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-                axisLine={{ stroke: "var(--border)" }}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
-                axisLine={{ stroke: "var(--border)" }}
-                tickLine={false}
-                width={36}
-              />
-              <Tooltip
-                contentStyle={{
-                  background: "var(--popover)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
-                  color: "var(--popover-foreground)",
-                  fontSize: 12,
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="historical"
-                stroke={stroke1}
-                strokeWidth={2}
-                dot={false}
-              />
-              <Line
-                type="monotone"
-                dataKey="projected"
-                stroke={stroke2}
-                strokeWidth={2}
-                strokeDasharray="4 4"
-                dot={false}
-              />
-            </LineChart>
-          )}
-        </ResponsiveContainer>
+        {mounted ? (
+          <ResponsiveContainer width="100%" height="100%">
+            {kind === "area" ? (
+              <AreaChart
+                data={data}
+                margin={{ top: 4, right: 8, bottom: 0, left: -16 }}
+              >
+                <defs>
+                  <linearGradient id="cl-hist" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={stroke1} stopOpacity={0.35} />
+                    <stop offset="100%" stopColor={stroke1} stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="cl-proj" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={stroke2} stopOpacity={0.35} />
+                    <stop offset="100%" stopColor={stroke2} stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="var(--border)" strokeDasharray="2 4" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tickLine={false}
+                  width={36}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: "var(--popover)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 8,
+                    color: "var(--popover-foreground)",
+                    fontSize: 12,
+                  }}
+                  cursor={{ stroke: "var(--ring)", strokeOpacity: 0.4 }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="historical"
+                  stroke={stroke1}
+                  strokeWidth={2}
+                  fill="url(#cl-hist)"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="projected"
+                  stroke={stroke2}
+                  strokeWidth={2}
+                  strokeDasharray="4 4"
+                  fill="url(#cl-proj)"
+                />
+              </AreaChart>
+            ) : (
+              <LineChart
+                data={data}
+                margin={{ top: 4, right: 8, bottom: 0, left: -16 }}
+              >
+                <CartesianGrid stroke="var(--border)" strokeDasharray="2 4" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
+                  axisLine={{ stroke: "var(--border)" }}
+                  tickLine={false}
+                  width={36}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: "var(--popover)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 8,
+                    color: "var(--popover-foreground)",
+                    fontSize: 12,
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="historical"
+                  stroke={stroke1}
+                  strokeWidth={2}
+                  dot={false}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="projected"
+                  stroke={stroke2}
+                  strokeWidth={2}
+                  strokeDasharray="4 4"
+                  dot={false}
+                />
+              </LineChart>
+            )}
+          </ResponsiveContainer>
+        ) : null}
       </div>
     </section>
   );

@@ -12,7 +12,6 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    // eslint-disable-next-line no-console
     console.error("Unhandled error", error);
   }, [error]);
 

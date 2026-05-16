@@ -28,7 +28,6 @@ function parse<T extends z.ZodTypeAny>(schema: T, source: Record<string, string 
     if (process.env.NODE_ENV === "production") {
       throw new Error(`Invalid environment configuration:\n${issues}`);
     }
-    // eslint-disable-next-line no-console
     console.warn(`[env] schema warnings:\n${issues}`);
     return source as z.infer<T>;
   }

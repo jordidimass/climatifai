@@ -10,7 +10,7 @@ export default function NotFound() {
         Off the map.
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        That coordinate doesn't lead anywhere yet. Head back to a known region.
+        That coordinate doesn&apos;t lead anywhere yet. Head back to a known region.
       </p>
       <Button asChild className="mt-6 rounded-full">
         <Link href="/">Return home</Link>

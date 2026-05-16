@@ -1,16 +1,7 @@
-import dynamic from "next/dynamic";
-
 import { ChartShell } from "@/components/data/chart-shell";
+import { RegionMapPanel } from "@/components/map/region-map-panel";
 import { DashboardHeader } from "./_components/dashboard-header";
 import { DashboardStats } from "./_components/dashboard-stats";
-
-/**
- * The map ships Mapbox GL JS (DOM-only) so we render it client-only.
- */
-const RegionMap = dynamic(
-  () => import("@/components/map/region-map").then((m) => m.RegionMap),
-  { ssr: false, loading: () => <MapSkeleton /> },
-);
 
 const SAMPLE_SERIES = [
   { month: "Jan", historical: 6.4, projected: 7.1 },
@@ -33,7 +24,7 @@ export default function DashboardPage() {
       <DashboardHeader />
       <DashboardStats />
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <RegionMap />
+        <RegionMapPanel />
         <ChartShell
           title="Mean temperature · monthly"
           subtitle="Historical baseline (1991–2020) vs. SSP3-7.0 projection (2031–2050)"
@@ -43,11 +34,5 @@ export default function DashboardPage() {
         />
       </div>
     </div>
-  );
-}
-
-function MapSkeleton() {
-  return (
-    <div className="glass relative h-full min-h-[420px] animate-pulse rounded-xl" />
   );
 }

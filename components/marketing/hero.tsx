@@ -20,7 +20,7 @@ export function Hero() {
         </h1>
 
         <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground md:text-lg">
-          Compare a hundred years of climate against what's coming, for the
+          Compare a hundred years of climate against what&apos;s coming, for the
           exact crops and regions you grow. Built for farmers, agronomists,
           and the cooperatives in between.
         </p>
