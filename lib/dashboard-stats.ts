@@ -26,3 +26,13 @@ export function deriveStats(regionId: string, cropId: string) {
 
   return { tempDelta, precipDelta, gdd, heatStress, riskScore };
 }
+
+/** Label for demo risk tiers (riskScore 0–100, lower better). */
+export function riskStressLabel(score: number): {
+  label: string;
+  tone: "low" | "moderate" | "high";
+} {
+  if (score >= 65) return { label: "Alto", tone: "high" };
+  if (score >= 45) return { label: "Moderado", tone: "moderate" };
+  return { label: "Bajo–moderado", tone: "low" };
+}

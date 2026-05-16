@@ -1,7 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { CROPS, getCrop } from "@/lib/api/crops";
-import { useSelectionStore } from "@/stores/selection-store";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -9,10 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSelectionStore } from "@/stores/selection-store";
+import { GitCompare } from "lucide-react";
 
 export function CropPicker() {
+  const router = useRouter();
   const crop = useSelectionStore((s) => s.crop);
   const setCrop = useSelectionStore((s) => s.setCrop);
+  const comparisonMode = useSelectionStore((s) => s.comparisonMode);
+  const enterComparisonMode = useSelectionStore((s) => s.enterComparisonMode);
+  const leaveComparisonMode = useSelectionStore((s) => s.leaveComparisonMode);
 
   return (
     <div className="space-y-1.5">
@@ -42,6 +50,36 @@ export function CropPicker() {
           ))}
         </SelectContent>
       </Select>
+      <div className="flex flex-wrap gap-2 pt-2">
+        {comparisonMode ? (
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="h-8 rounded-full px-3 text-xs"
+            onClick={() => {
+              leaveComparisonMode();
+              router.push("/analizar-siembra/resultado");
+            }}
+          >
+            Salir del modo comparación
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-8 gap-1.5 rounded-full px-3 text-xs"
+            onClick={() => {
+              enterComparisonMode();
+              router.push("/dashboard/compare");
+            }}
+          >
+            <GitCompare className="size-3.5 shrink-0" aria-hidden />
+            Comparar cultivos…
+          </Button>
+        )}
+      </div>
       <p className="pt-1 text-xs leading-relaxed text-muted-foreground">
         {crop.tagline}
       </p>

@@ -1,7 +1,15 @@
 "use client";
 
 import { useSelectionStore } from "@/stores/selection-store";
+import type { Crop } from "@/types/crop";
 import { cn } from "@/lib/utils";
+
+export type CropTimelineProps = {
+  /** Override sidebar cultivo — útil columnas lado a lado. */
+  crop?: Crop;
+  /** `compact`: sin tutorial largo para duplicar menos en vista comparación. */
+  variant?: "full" | "compact";
+};
 
 const MONTH_LABELS = [
   "Ene",
@@ -48,17 +56,34 @@ const PHASE_LABEL_ES: Record<Phase, string> = {
 };
 
 /** Demo hasta cablear desviaciones reales. */
-const DEMO_MONTH_RISK = (i: number) => i === 6 || i === 7;
+function demoMonthRiskDefault(i: number): boolean {
+  return i === 6 || i === 7;
+}
 
-export function CropTimeline() {
-  const crop = useSelectionStore((s) => s.crop);
+/** Rota meses alerta por `cropId` para que dos columnas no sean idénticas. */
+function demoMonthRiskForCrop(cropId: string) {
+  const shift =
+    [...cropId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0) % 12;
+  return (i: number): boolean => {
+    const j = (i - shift + 12) % 12;
+    return demoMonthRiskDefault(j);
+  };
+}
+
+export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineProps) {
+  const storeCrop = useSelectionStore((s) => s.crop);
+  const crop = cropProp ?? storeCrop;
+  const dense = variant === "compact";
+  const monthRiskFn =
+    cropProp !== undefined || dense ? demoMonthRiskForCrop(crop.id) : demoMonthRiskDefault;
   const today = new Date();
   const todayMonthIdx = Math.min(Math.max(today.getMonth(), 0), 11);
 
   return (
     <section
       className={cn(
-        "glass cf-crop-timeline-wrap motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:translate-y-0 space-y-3 rounded-xl border border-border/70 p-4",
+        "glass cf-crop-timeline-wrap motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:translate-y-0 space-y-3 rounded-xl border border-border/70",
+        dense ? "p-3" : "p-4",
       )}
       aria-label="Calendario tipo del ciclo productivo"
     >
@@ -70,49 +95,62 @@ export function CropTimeline() {
           <p className="eyebrow text-muted-foreground">Ciclo del cultivo</p>
           <p className="font-medium text-foreground">{crop.name}</p>
         </div>
-        <div className="rounded-lg border border-border/70 bg-muted/25 px-3 py-2.5 text-xs leading-snug text-muted-foreground">
-          <p id="crop-timeline-howto-heading" className="mb-2 font-semibold text-foreground">
-            Cómo leer esta barra
+        {!dense ? (
+          <div className="rounded-lg border border-border/70 bg-muted/25 px-3 py-2.5 text-xs leading-snug text-muted-foreground">
+            <p id="crop-timeline-howto-heading" className="mb-2 font-semibold text-foreground">
+              Cómo leer esta barra
+            </p>
+            <ol className="mb-2 list-none space-y-2 pl-0">
+              <li className="flex gap-2.5">
+                <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[0.65rem] font-bold text-primary ring-1 ring-primary/20">
+                  1
+                </span>
+                <span>
+                  Cada{" "}
+                  <strong className="font-medium text-foreground">columna</strong>{" "}
+                  es un mes; el orden va de izquierda a derecha durante el año.
+                </span>
+              </li>
+              <li className="flex gap-2.5">
+                <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[0.65rem] font-bold text-primary ring-1 ring-primary/20">
+                  2
+                </span>
+                <span>
+                  El{" "}
+                  <strong className="font-medium text-foreground">color alto</strong>{" "}
+                  indica la etapa del cultivo ahí (siembra, crecimiento, cosecha o
+                  tiempo libre según esta plantilla).
+                </span>
+              </li>
+              <li className="flex gap-2.5">
+                <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-destructive/12 text-[0.65rem] font-bold text-destructive ring-1 ring-destructive/25">
+                  3
+                </span>
+                <span>
+                  Si ves una{" "}
+                  <strong className="font-medium text-destructive">
+                    franja roja
+                  </strong>{" "}
+                  en la base y dice{" "}
+                  <strong className="font-medium text-destructive">
+                    alerta
+                  </strong>{" "}
+                  bajo el mes, ese mes está marcado como “clima poco habitual”{" "}
+                  <span className="text-muted-foreground">(solo ejemplo).</span>
+                </span>
+              </li>
+            </ol>
+            <p className="border-t border-border/60 pt-2 text-[0.65rem] text-muted-foreground">
+              Paso el cursor sobre cualquier mes para ver el nombre, la etapa y
+              más detalle.
+            </p>
+          </div>
+        ) : (
+          <p className="text-[0.65rem] leading-snug text-muted-foreground">
+            Franja inferior roja = mes de muestra marcado como clima fuera de lo
+            usual (solo demo).
           </p>
-          <ol className="mb-2 list-none space-y-2 pl-0">
-            <li className="flex gap-2.5">
-              <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[0.65rem] font-bold text-primary ring-1 ring-primary/20">
-                1
-              </span>
-              <span>
-                Cada <strong className="font-medium text-foreground">columna</strong>{" "}
-                es un mes; el orden va de izquierda a derecha durante el año.
-              </span>
-            </li>
-            <li className="flex gap-2.5">
-              <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[0.65rem] font-bold text-primary ring-1 ring-primary/20">
-                2
-              </span>
-              <span>
-                El <strong className="font-medium text-foreground">color alto</strong>{" "}
-                indica la etapa del cultivo ahí (siembra, crecimiento, cosecha o
-                tiempo libre según esta plantilla).
-              </span>
-            </li>
-            <li className="flex gap-2.5">
-              <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-destructive/12 text-[0.65rem] font-bold text-destructive ring-1 ring-destructive/25">
-                3
-              </span>
-              <span>
-                Si ves una{" "}
-                <strong className="font-medium text-destructive">franja roja</strong>{" "}
-                en la base y dice{" "}
-                <strong className="font-medium text-destructive">alerta</strong>{" "}
-                bajo el mes, ese mes está marcado como “clima poco habitual”{" "}
-                <span className="text-muted-foreground">(solo ejemplo).</span>
-              </span>
-            </li>
-          </ol>
-          <p className="border-t border-border/60 pt-2 text-[0.65rem] text-muted-foreground">
-            Paso el cursor sobre cualquier mes para ver el nombre, la etapa y
-            más detalle.
-          </p>
-        </div>
+        )}
       </div>
 
       <p
@@ -135,7 +173,7 @@ export function CropTimeline() {
             />
             {MONTH_LABELS.map((label, i) => {
               const phase = phaseForMonth(i);
-              const risky = DEMO_MONTH_RISK(i);
+              const risky = monthRiskFn(i);
               const delayMs = 120 + i * 42;
               return (
                 <div
@@ -187,7 +225,7 @@ export function CropTimeline() {
 
           <div className="mt-1 grid min-w-[320px] grid-cols-12 gap-px text-center tabular-nums">
             {MONTH_LABELS.map((m, i) => {
-              const risky = DEMO_MONTH_RISK(i);
+              const risky = monthRiskFn(i);
               return (
                 <div
                   key={m}
@@ -244,11 +282,12 @@ export function CropTimeline() {
           </ul>
         </div>
 
-        <div className="space-y-2">
-          <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">
-            Otras señales en la misma vista
-          </p>
-          <ul className="flex flex-wrap gap-x-6 gap-y-3 text-[0.65rem]">
+        {!dense ? (
+          <div className="space-y-2">
+            <p className="text-[0.65rem] font-semibold uppercase tracking-wide text-muted-foreground">
+              Otras señales en la misma vista
+            </p>
+            <ul className="flex flex-wrap gap-x-6 gap-y-3 text-[0.65rem]">
             <li
               className="cf-crop-mini-rise flex items-start gap-2 motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:translate-y-0 sm:items-center sm:gap-3"
               style={{ animationDelay: "900ms" }}
@@ -293,7 +332,8 @@ export function CropTimeline() {
               </span>
             </li>
           </ul>
-        </div>
+          </div>
+        ) : null}
       </div>
     </section>
   );

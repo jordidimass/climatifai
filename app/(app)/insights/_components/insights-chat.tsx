@@ -37,8 +37,12 @@ export function InsightsChat() {
   const region = useSelectionStore((s) => s.region);
   const crop = useSelectionStore((s) => s.crop);
   const compareCrop = useSelectionStore((s) => s.compareCrop);
+  const comparisonMode = useSelectionStore((s) => s.comparisonMode);
+  /** Solo paralelizamos cuando el modo comparación está encendido (p. ej. desde /dashboard/compare). */
   const compareActive =
-    compareCrop.id !== crop.id && !!compareCrop.name?.trim();
+    comparisonMode &&
+    compareCrop.id !== crop.id &&
+    !!compareCrop.name?.trim();
 
   const transport = useMemo(
     () =>
@@ -139,10 +143,11 @@ export function InsightsChat() {
           <div>
             <CardTitle className="font-heading text-lg">Hallazgos</CardTitle>
             <CardDescription>
-              Preguntá en castellano. El modelo recibe tu región
-              {compareActive ? " y los dos cultivos" : " y el cultivo que elegís"}
-              {" "}
-              en la barra lateral.
+              Preguntá en castellano. El modelo recibe la región y el cultivo del
+              panel lateral.
+              {compareActive
+                ? " Con el modo comparación activo, también el segundo cultivo para contrastarlos."
+                : null}
             </CardDescription>
           </div>
         </div>

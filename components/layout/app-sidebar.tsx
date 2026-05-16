@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { BarChart3, LineChart, Map, Sparkles } from "lucide-react";
+import { BarChart3, Map, Sparkles } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
+import { CompareSidebarLink } from "@/components/layout/compare-sidebar-link";
 import { CropPicker } from "@/components/selection/crop-picker";
 import { RegionPicker } from "@/components/selection/region-picker";
 import { Separator } from "@/components/ui/separator";
@@ -17,13 +18,6 @@ const NAV = [
     label: "Mapa",
     icon: Map,
     description: "Incendios · beta",
-  },
-  {
-    href: "/dashboard/compare",
-    label: "Comparar",
-    icon: LineChart,
-    description: "Dos cultivos · misma región",
-    disabled: false,
   },
   {
     href: "/insights",
@@ -49,7 +43,33 @@ export function AppSidebar() {
       <Separator className="bg-sidebar-border/80" />
 
       <nav aria-label="Espacio de trabajo" className="mt-4 flex-1 space-y-0.5">
-        {NAV.map((item) => {
+        {NAV.slice(0, 2).map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={
+                "group flex items-start gap-3 rounded-md px-3 py-2 text-sm transition-colors text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
+              }
+            >
+              <Icon
+                className="mt-0.5 size-4 shrink-0 text-muted-foreground group-hover:text-foreground"
+                aria-hidden="true"
+              />
+              <span className="flex flex-col leading-tight">
+                <span className="font-medium">{item.label}</span>
+                {item.description && (
+                  <span className="text-xs text-muted-foreground">
+                    {item.description}
+                  </span>
+                )}
+              </span>
+            </Link>
+          );
+        })}
+        <CompareSidebarLink />
+        {NAV.slice(2).map((item) => {
           const Icon = item.icon;
           return (
             <Link
