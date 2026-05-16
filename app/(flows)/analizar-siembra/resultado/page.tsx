@@ -2,12 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
 
-import { ChartShell } from "@/components/data/chart-shell";
 import { CropTimeline } from "@/components/data/crop-timeline";
 import { HarvestExtras } from "@/components/harvest/harvest-extras";
 import { HarvestStats } from "@/components/harvest/harvest-stats";
 import { HarvestSummaryHeader } from "@/components/harvest/harvest-summary-header";
-import { SAMPLE_CLIMATE_SERIES } from "@/components/harvest/sample-climate-series";
+import { ResultadoClimatePanel } from "@/components/harvest/resultado-climate-panel";
 import { FlowHeader } from "@/components/layout/flow-header";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
 import { Button } from "@/components/ui/button";
@@ -67,13 +66,7 @@ export default function AnalizarSiembraResultadoPage() {
           </div>
           <div className="flex min-w-0 flex-col gap-6">
             <RegionMapPanel />
-            <ChartShell
-              title="Temperatura media · mensual"
-              subtitle="Línea base histórica (1991–2020) vs. proyección SSP3-7.0 (2031–2050)"
-              data={SAMPLE_CLIMATE_SERIES}
-              kind="area"
-              className="h-full"
-            />
+            <ResultadoClimatePanel />
           </div>
         </div>
       </div>

@@ -1,35 +1,16 @@
 "use client";
 
-import type { ClimatePoint, ClimateSeries } from "@/types/climate";
+import type { ClimateComparisonMonthRow, ClimatePoint } from "@/types/climate";
+import { buildComparisonChartRows } from "@/lib/climate/build-comparison-chart-rows";
+import { getCrop } from "@/lib/api/crops";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const MONTH_LABELS = [
-  "Ene",
-  "Feb",
-  "Mar",
-  "Abr",
-  "May",
-  "Jun",
-  "Jul",
-  "Ago",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dic",
-] as const;
-
-export type ClimateChartRow = {
-  month: string;
-  historical: number;
-  projected: number;
-};
-
-async function fetchSeries(
+async function fetchSeriesPoints(
   regionId: string,
   cropId: string,
   kind: "historical" | "projected",
-): Promise<ClimateSeries> {
+): Promise<ClimatePoint[]> {
   const params =
     kind === "historical"
       ? new URLSearchParams({
@@ -56,36 +37,14 @@ async function fetchSeries(
       typeof body.error === "string" ? body.error : `HTTP ${res.status}`,
     );
   }
-  return res.json();
-}
-
-function zipPartial(
-  historical: ClimatePoint[] | undefined,
-  projected: ClimatePoint[] | undefined,
-): ClimateChartRow[] {
-  const hist = historical?.slice(0, 12) ?? [];
-  const proj = projected?.slice(0, 12) ?? [];
-  const len = Math.max(hist.length, proj.length);
-
-  const rows: ClimateChartRow[] = [];
-  for (let i = 0; i < len; i++) {
-    const hp = hist[i];
-    const pp = proj[i];
-    const month =
-      MONTH_LABELS[i] ?? hp?.month.slice(5) ?? pp?.month.slice(5) ?? `M${i + 1}`;
-    const histVal = hp?.tempMeanC ?? pp?.tempMeanC ?? 0;
-    const projVal = pp?.tempMeanC ?? hp?.tempMeanC ?? histVal;
-    rows.push({
-      month,
-      historical: histVal,
-      projected: projVal,
-    });
-  }
-  return rows;
+  const json = (await res.json()) as { points: ClimatePoint[] };
+  return json.points ?? [];
 }
 
 export function useClimateChartData(regionId: string, cropId: string) {
-  const [data, setData] = useState<ClimateChartRow[]>([]);
+  const [comparisonRows, setComparisonRows] = useState<
+    ClimateComparisonMonthRow[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [partial, setPartial] = useState(false);
@@ -101,20 +60,28 @@ export function useClimateChartData(regionId: string, cropId: string) {
     let errProj: Error | undefined;
 
     try {
-      const h = await fetchSeries(regionId, cropId, "historical");
-      historical = h.points;
+      historical = await fetchSeriesPoints(regionId, cropId, "historical");
     } catch (e) {
       errHist = e instanceof Error ? e : new Error("Historical fetch failed.");
     }
 
     try {
-      const p = await fetchSeries(regionId, cropId, "projected");
-      projected = p.points;
+      projected = await fetchSeriesPoints(regionId, cropId, "projected");
     } catch (e) {
       errProj = e instanceof Error ? e : new Error("Projection fetch failed.");
     }
 
-    const rows = zipPartial(historical, projected);
+    const hSlice = historical?.slice(0, 12);
+    const pSlice = projected?.slice(0, 12);
+    const crop = getCrop(cropId);
+
+    const rows = buildComparisonChartRows({
+      historical: hSlice,
+      projected: pSlice,
+      regionId,
+      cropId,
+      crop,
+    });
 
     if (rows.length === 0) {
       const msg =
@@ -122,9 +89,9 @@ export function useClimateChartData(regionId: string, cropId: string) {
           ? "No se pudieron cargar las series históricas ni proyectadas."
           : errHist?.message ??
             errProj?.message ??
-            "No hay datos de temperatura para mostrar.";
+            "No hay datos climáticos para mostrar.";
       setError(msg);
-      setData([]);
+      setComparisonRows([]);
       setLoading(false);
       return;
     }
@@ -133,15 +100,15 @@ export function useClimateChartData(regionId: string, cropId: string) {
       setPartial(true);
       toast.warning("Datos parciales", {
         description:
-          errHist && !projected?.length
+          errHist && !historical?.length
             ? "Sin histórico: se muestra solo lo disponible de la proyección."
-            : errProj && !historical?.length
+            : errProj && !projected?.length
               ? "Sin proyección: se muestra la línea base disponible."
-              : "Recuperamos parte de las series climáticas. Revisa con datos oficiales en producción.",
+              : "Parte de las series climáticas no cargó por completo. Reintentá cuando la API responda.",
       });
     }
 
-    setData(rows);
+    setComparisonRows(rows);
     setLoading(false);
   }, [regionId, cropId]);
 
@@ -151,5 +118,11 @@ export function useClimateChartData(regionId: string, cropId: string) {
     });
   }, [load]);
 
-  return { data, loading, error, reload: load, partial };
+  return {
+    comparisonRows,
+    loading,
+    error,
+    reload: load,
+    partial,
+  };
 }
