@@ -39,7 +39,7 @@ export function Logo({ href = "/", className, iconOnly = false }: LogoProps) {
   return (
     <Link
       href={href}
-      aria-label="Climatifai — home"
+      aria-label="Climatifai — inicio"
       className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       {content}

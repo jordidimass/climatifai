@@ -5,9 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ───────────────────────────────────────────────────────────────
-   Climatifai · Atmospheric / Climate-Cinematic design system
+   Climatifai · Refined agronomic climate design system
    All design decisions live as CSS variables. Components reference
-   tokens — never raw colors. Light = "soft dawn", Dark = "night sky".
+   tokens — never raw colors. Light = "cultivated field", Dark = "canopy".
    ─────────────────────────────────────────────────────────────── */
 
 @theme inline {
@@ -64,7 +64,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Light · soft dawn ─────────────────────────────────────────── */
+/* Light · cultivated field ──────────────────────────────────── */
 :root {
   /* Font aliases — Instrument Serif comes in via --font-display from
      next/font; Geist Sans/Mono ship as --font-geist-sans / --font-geist-mono.
@@ -74,125 +74,126 @@
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
     Monaco, Consolas, monospace;
 
-  --background: oklch(0.985 0.008 80);     /* warm bone */
-  --foreground: oklch(0.18 0.025 264);     /* deep ink */
+  --background: oklch(0.982 0.018 95);     /* warm oat */
+  --foreground: oklch(0.18 0.035 145);     /* deep canopy */
 
-  --card: oklch(0.997 0.004 80);
-  --card-foreground: oklch(0.18 0.025 264);
-  --popover: oklch(0.997 0.004 80);
-  --popover-foreground: oklch(0.18 0.025 264);
+  --card: oklch(0.996 0.01 98);
+  --card-foreground: oklch(0.18 0.035 145);
+  --popover: oklch(0.996 0.01 98);
+  --popover-foreground: oklch(0.18 0.035 145);
 
-  --primary: oklch(0.42 0.16 265);         /* muted indigo */
-  --primary-foreground: oklch(0.985 0.008 80);
+  --primary: oklch(0.43 0.135 145);        /* cultivated green */
+  --primary-foreground: oklch(0.985 0.018 95);
 
-  --secondary: oklch(0.955 0.012 75);
-  --secondary-foreground: oklch(0.22 0.025 264);
+  --secondary: oklch(0.94 0.03 112);
+  --secondary-foreground: oklch(0.24 0.055 140);
 
-  --muted: oklch(0.95 0.012 75);
-  --muted-foreground: oklch(0.48 0.018 260);
+  --muted: oklch(0.94 0.024 103);
+  --muted-foreground: oklch(0.46 0.035 128);
 
-  --accent: oklch(0.93 0.03 200);          /* soft teal wash */
-  --accent-foreground: oklch(0.38 0.10 195);
+  --accent: oklch(0.90 0.06 132);          /* fresh sage */
+  --accent-foreground: oklch(0.34 0.11 145);
 
   --destructive: oklch(0.55 0.18 32);
-  --border: oklch(0.91 0.012 80);
-  --input: oklch(0.93 0.012 80);
-  --ring: oklch(0.50 0.18 265);
+  --border: oklch(0.88 0.025 105);
+  --input: oklch(0.91 0.024 105);
+  --ring: oklch(0.48 0.14 145);
 
-  --anomaly-warm: oklch(0.60 0.18 38);     /* clay */
+  --anomaly-warm: oklch(0.58 0.16 48);     /* dry clay */
   --anomaly-warm-foreground: oklch(0.99 0.005 60);
-  --anomaly-cool: oklch(0.45 0.15 250);    /* slate blue */
-  --anomaly-cool-foreground: oklch(0.985 0.008 80);
+  --anomaly-cool: oklch(0.47 0.11 205);    /* irrigation blue */
+  --anomaly-cool-foreground: oklch(0.985 0.018 95);
 
-  --chart-1: oklch(0.42 0.16 265);         /* indigo */
-  --chart-2: oklch(0.55 0.13 195);         /* teal */
-  --chart-3: oklch(0.66 0.14 60);          /* amber */
-  --chart-4: oklch(0.58 0.13 230);         /* sky */
-  --chart-5: oklch(0.55 0.16 32);          /* clay */
+  --chart-1: oklch(0.42 0.13 145);         /* leaf */
+  --chart-2: oklch(0.58 0.12 85);          /* harvest olive */
+  --chart-3: oklch(0.63 0.14 58);          /* grain */
+  --chart-4: oklch(0.50 0.10 205);         /* irrigation */
+  --chart-5: oklch(0.55 0.14 38);          /* clay */
 
-  --sidebar: oklch(0.99 0.006 80);
-  --sidebar-foreground: oklch(0.20 0.025 264);
-  --sidebar-primary: oklch(0.42 0.16 265);
-  --sidebar-primary-foreground: oklch(0.985 0.008 80);
-  --sidebar-accent: oklch(0.94 0.018 200);
-  --sidebar-accent-foreground: oklch(0.30 0.10 260);
-  --sidebar-border: oklch(0.92 0.012 80);
-  --sidebar-ring: oklch(0.50 0.18 265);
+  --sidebar: oklch(0.975 0.022 100);
+  --sidebar-foreground: oklch(0.20 0.04 145);
+  --sidebar-primary: oklch(0.43 0.135 145);
+  --sidebar-primary-foreground: oklch(0.985 0.018 95);
+  --sidebar-accent: oklch(0.91 0.05 130);
+  --sidebar-accent-foreground: oklch(0.28 0.08 145);
+  --sidebar-border: oklch(0.87 0.03 105);
+  --sidebar-ring: oklch(0.48 0.14 145);
 
   --radius: 0.625rem;
 
-  /* atmospheric backdrop · pale dawn */
-  --mesh-a: oklch(0.93 0.07 55);           /* warm peach */
-  --mesh-b: oklch(0.92 0.06 220);          /* sky blue */
-  --mesh-c: oklch(0.94 0.05 155);          /* sage */
-  --mesh-opacity: 0.55;
+  /* atmospheric backdrop · quiet farmland */
+  --mesh-a: oklch(0.90 0.075 118);         /* sage wash */
+  --mesh-b: oklch(0.91 0.055 78);          /* dry straw */
+  --mesh-c: oklch(0.88 0.07 155);          /* young leaf */
+  --mesh-opacity: 0.50;
 
   /* glass surface */
   --glass-bg: color-mix(in oklch, var(--card) 75%, transparent);
-  --glass-border: color-mix(in oklch, var(--primary) 14%, var(--border));
+  --glass-border: color-mix(in oklch, var(--primary) 18%, var(--border));
   --shadow-glass:
-    0 1px 2px oklch(0.18 0.025 264 / 0.04),
-    0 12px 32px -12px oklch(0.18 0.025 264 / 0.10);
+    0 1px 2px oklch(0.18 0.035 145 / 0.04),
+    0 12px 32px -12px oklch(0.18 0.035 145 / 0.12);
 }
 
-/* Dark · night sky / climate model ─────────────────────────── */
+/* Dark · canopy / climate model ────────────────────────────── */
 .dark {
-  --background: oklch(0.13 0.025 264);     /* near-black indigo */
-  --foreground: oklch(0.96 0.012 85);      /* bone white */
+  --background: oklch(0.105 0.045 150);    /* deep forest canopy */
+  --foreground: oklch(0.94 0.035 102);     /* warm oat */
 
-  --card: oklch(0.18 0.028 264);
-  --card-foreground: oklch(0.96 0.012 85);
-  --popover: oklch(0.20 0.028 264);
-  --popover-foreground: oklch(0.96 0.012 85);
+  --card: oklch(0.155 0.045 150);
+  --card-foreground: oklch(0.94 0.035 102);
+  --popover: oklch(0.17 0.048 150);
+  --popover-foreground: oklch(0.94 0.035 102);
 
-  --primary: oklch(0.72 0.16 270);         /* glowing indigo */
-  --primary-foreground: oklch(0.16 0.025 264);
+  --primary: oklch(0.76 0.18 142);         /* living leaf */
+  --primary-foreground: oklch(0.10 0.045 150);
 
-  --secondary: oklch(0.22 0.025 264);
-  --secondary-foreground: oklch(0.96 0.012 85);
+  --secondary: oklch(0.205 0.055 145);
+  --secondary-foreground: oklch(0.92 0.04 105);
 
-  --muted: oklch(0.21 0.022 264);
-  --muted-foreground: oklch(0.70 0.018 85);
+  --muted: oklch(0.19 0.045 145);
+  --muted-foreground: oklch(0.70 0.045 112);
 
-  --accent: oklch(0.30 0.06 195);          /* deep teal */
-  --accent-foreground: oklch(0.85 0.12 195);
+  --accent: oklch(0.27 0.085 132);         /* dense moss */
+  --accent-foreground: oklch(0.84 0.14 135);
 
   --destructive: oklch(0.72 0.17 45);
-  --border: oklch(0.72 0.16 270 / 18%);    /* indigo-tinted glow */
-  --input: oklch(0.96 0.012 85 / 14%);
-  --ring: oklch(0.72 0.16 270);
+  --border: oklch(0.76 0.18 142 / 22%);    /* green-tinted glow */
+  --input: oklch(0.94 0.035 102 / 13%);
+  --ring: oklch(0.76 0.18 142);
 
   --anomaly-warm: oklch(0.74 0.17 50);     /* amber glow */
-  --anomaly-warm-foreground: oklch(0.16 0.025 264);
-  --anomaly-cool: oklch(0.72 0.14 230);    /* sky glow */
-  --anomaly-cool-foreground: oklch(0.16 0.025 264);
+  --anomaly-warm-foreground: oklch(0.13 0.035 145);
+  --anomaly-cool: oklch(0.72 0.12 205);    /* irrigation glow */
+  --anomaly-cool-foreground: oklch(0.13 0.035 145);
 
-  --chart-1: oklch(0.72 0.16 270);         /* indigo */
-  --chart-2: oklch(0.78 0.14 195);         /* teal */
-  --chart-3: oklch(0.78 0.16 65);          /* amber */
-  --chart-4: oklch(0.74 0.14 230);         /* sky */
+  --chart-1: oklch(0.76 0.18 142);         /* leaf */
+  --chart-2: oklch(0.80 0.14 92);          /* olive */
+  --chart-3: oklch(0.80 0.17 65);          /* grain */
+  --chart-4: oklch(0.73 0.13 205);         /* irrigation */
   --chart-5: oklch(0.72 0.17 35);          /* clay */
 
-  --sidebar: oklch(0.16 0.026 264);
-  --sidebar-foreground: oklch(0.94 0.012 85);
-  --sidebar-primary: oklch(0.72 0.16 270);
-  --sidebar-primary-foreground: oklch(0.14 0.025 264);
-  --sidebar-accent: oklch(0.24 0.04 195);
-  --sidebar-accent-foreground: oklch(0.85 0.12 195);
-  --sidebar-border: oklch(0.72 0.16 270 / 16%);
-  --sidebar-ring: oklch(0.72 0.16 270);
+  --sidebar: oklch(0.12 0.05 150);
+  --sidebar-foreground: oklch(0.92 0.035 102);
+  --sidebar-primary: oklch(0.76 0.18 142);
+  --sidebar-primary-foreground: oklch(0.10 0.045 150);
+  --sidebar-accent: oklch(0.22 0.075 135);
+  --sidebar-accent-foreground: oklch(0.84 0.14 135);
+  --sidebar-border: oklch(0.76 0.18 142 / 18%);
+  --sidebar-ring: oklch(0.76 0.18 142);
 
-  /* atmospheric backdrop · night sky gradient */
-  --mesh-a: oklch(0.38 0.20 282);          /* deep indigo */
-  --mesh-b: oklch(0.42 0.14 195);          /* midnight teal */
-  --mesh-c: oklch(0.38 0.18 320);          /* faint magenta */
-  --mesh-opacity: 0.78;
+  /* atmospheric backdrop · humid canopy */
+  --mesh-a: oklch(0.28 0.16 145);          /* deep leaf */
+  --mesh-b: oklch(0.24 0.12 178);          /* shaded teal */
+  --mesh-c: oklch(0.30 0.13 92);           /* olive shadow */
+  --mesh-opacity: 0.88;
 
-  --glass-bg: color-mix(in oklch, var(--card) 55%, transparent);
-  --glass-border: color-mix(in oklch, var(--primary) 22%, var(--border));
+  --glass-bg: color-mix(in oklch, var(--card) 76%, transparent);
+  --glass-border: color-mix(in oklch, var(--primary) 32%, var(--border));
   --shadow-glass:
-    0 1px 0 oklch(0.96 0.012 85 / 0.04) inset,
-    0 24px 48px -16px oklch(0 0 0 / 0.55);
+    0 1px 0 oklch(0.96 0.035 102 / 0.06) inset,
+    0 28px 60px -18px oklch(0 0 0 / 0.72),
+    0 0 0 1px oklch(0.76 0.18 142 / 0.04);
 }
 
 @layer base {
@@ -205,6 +206,42 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "ss01", "cv11";
+    background-image:
+      linear-gradient(
+        115deg,
+        transparent 0%,
+        color-mix(in oklch, var(--primary) 5%, transparent) 48%,
+        transparent 100%
+      ),
+      repeating-linear-gradient(
+        92deg,
+        color-mix(in oklch, var(--primary) 4%, transparent) 0 1px,
+        transparent 1px 38px
+      );
+  }
+  .dark body {
+    background-image:
+      radial-gradient(
+        circle at 18% 8%,
+        color-mix(in oklch, var(--primary) 18%, transparent) 0%,
+        transparent 34%
+      ),
+      radial-gradient(
+        circle at 82% 18%,
+        color-mix(in oklch, var(--chart-2) 14%, transparent) 0%,
+        transparent 30%
+      ),
+      linear-gradient(
+        115deg,
+        transparent 0%,
+        color-mix(in oklch, var(--primary) 7%, transparent) 48%,
+        transparent 100%
+      ),
+      repeating-linear-gradient(
+        92deg,
+        color-mix(in oklch, var(--primary) 7%, transparent) 0 1px,
+        transparent 1px 42px
+      );
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);

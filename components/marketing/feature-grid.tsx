@@ -23,7 +23,7 @@ const FEATURES = [
 
 export function FeatureGrid() {
   return (
-    <section id="features" className="mx-auto max-w-7xl px-6 py-20">
+    <section id="capacidades" className="mx-auto max-w-7xl px-6 py-20">
       <div className="mx-auto max-w-2xl text-center">
         <p className="eyebrow">Por qué Climatifai</p>
         <h2 className="mt-3 font-[family-name:var(--font-display)] text-4xl tracking-tight md:text-5xl">

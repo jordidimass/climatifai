@@ -4,11 +4,6 @@ import { AnomalyBadge } from "@/components/data/anomaly-badge";
 import { StatCard } from "@/components/data/stat-card";
 import { useSelectionStore } from "@/stores/selection-store";
 
-/**
- * Placeholder analytics — deterministic values derived from the selected
- * region + crop so the dashboard reacts to changes without a real data
- * source wired yet.
- */
 function deriveStats(regionId: string, cropId: string) {
   const seed = (regionId + cropId)
     .split("")
@@ -23,36 +18,36 @@ function deriveStats(regionId: string, cropId: string) {
   return { tempDelta, precipDelta, gdd, heatStress };
 }
 
-export function DashboardStats() {
+export function HarvestStats() {
   const region = useSelectionStore((s) => s.region);
   const crop = useSelectionStore((s) => s.crop);
   const stats = deriveStats(region.id, crop.id);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-1 lg:gap-3">
       <StatCard
-        label="Anomalía térmica"
+        label="Ola de calor (riesgo)"
         value={`+${stats.tempDelta}`}
         unit="°C"
         caption={`Δ vs. línea base 1991–2020 · ${crop.name}`}
         badge={<AnomalyBadge value={stats.tempDelta} unit="°C" />}
       />
       <StatCard
-        label="Δ precipitación"
+        label="Mejor ventana (índice)"
         value={`${stats.precipDelta}`}
         unit="%"
-        caption="Total anual vs. línea base"
+        caption="Precipitación anual vs. línea base"
         badge={<AnomalyBadge value={stats.precipDelta} unit="%" />}
       />
       <StatCard
-        label="Grados-día de crecimiento"
+        label="Rendimiento vs. pronóstico"
         value={stats.gdd.toLocaleString()}
         unit="GDD"
-        caption={`Base ${crop.gddBaseC}°C · acumulado de temporada`}
+        caption={`Base ${crop.gddBaseC}°C · acumulado proyectado`}
         badge={<AnomalyBadge value={6} unit="%" tone="warm" />}
       />
       <StatCard
-        label="Días de estrés térmico"
+        label="Rendimiento potencial"
         value={`${stats.heatStress}`}
         unit="d"
         caption={`Días sobre ${crop.heatStressC}°C máx.`}

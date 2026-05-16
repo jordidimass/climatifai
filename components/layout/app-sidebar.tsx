@@ -7,12 +7,16 @@ import { RegionPicker } from "@/components/selection/region-picker";
 import { Separator } from "@/components/ui/separator";
 
 const NAV = [
-  { href: "/dashboard", label: "Resumen", icon: BarChart3 },
   {
-    href: "/dashboard",
+    href: "/analizar-siembra/resultado",
+    label: "Resumen",
+    icon: BarChart3,
+  },
+  {
+    href: "/mapa-incendios",
     label: "Mapa",
     icon: Map,
-    description: "Región y terreno",
+    description: "Incendios · beta",
   },
   {
     href: "#",

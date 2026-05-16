@@ -10,8 +10,12 @@ const RegionMap = dynamic(
   { ssr: false, loading: () => <MapSkeleton /> },
 );
 
-export function RegionMapPanel() {
-  return <RegionMap />;
+export function RegionMapPanel({
+  variant = "rounded",
+}: {
+  variant?: "rounded" | "full";
+}) {
+  return <RegionMap variant={variant} />;
 }
 
 function MapSkeleton() {

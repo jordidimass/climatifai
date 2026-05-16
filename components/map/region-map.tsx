@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { useTheme } from "next-themes";
 import { Map as MapIcon } from "lucide-react";
 import Map, { Marker, NavigationControl } from "react-map-gl/mapbox";
@@ -15,17 +14,23 @@ const STYLES = {
   dark: "mapbox://styles/mapbox/dark-v11",
 } as const;
 
-export function RegionMap() {
+const shellClass = {
+  rounded:
+    "glass relative h-full min-h-[420px] overflow-hidden rounded-xl",
+  full: "relative h-full min-h-[420px] overflow-hidden rounded-none border-y border-border/40 bg-muted/15 md:border-x-0",
+} as const;
+
+export function RegionMap({ variant = "rounded" }: { variant?: keyof typeof shellClass }) {
   const region = useSelectionStore((s) => s.region);
   const { resolvedTheme } = useTheme();
 
-  if (!TOKEN) return <MapPlaceholder />;
+  if (!TOKEN) return <MapPlaceholder variant={variant} />;
 
   const styleKey: keyof typeof STYLES =
     resolvedTheme === "dark" ? "dark" : "light";
 
   return (
-    <div className="glass relative h-full min-h-[420px] overflow-hidden rounded-xl">
+    <div className={shellClass[variant]}>
       <Map
         mapboxAccessToken={TOKEN}
         initialViewState={{
@@ -73,9 +78,19 @@ function RegionTag() {
   );
 }
 
-function MapPlaceholder() {
+function MapPlaceholder({
+  variant = "rounded",
+}: {
+  variant?: keyof typeof shellClass;
+}) {
   return (
-    <div className="glass relative flex h-full min-h-[420px] flex-col items-center justify-center gap-3 overflow-hidden rounded-xl px-8 text-center">
+    <div
+      className={`relative flex h-full min-h-[420px] flex-col items-center justify-center gap-3 overflow-hidden px-8 text-center ${
+        variant === "rounded"
+          ? "glass rounded-xl"
+          : "rounded-none border-y border-border/40 bg-muted/15 md:border-x-0"
+      }`}
+    >
       <div
         className="absolute inset-0 opacity-40"
         style={{

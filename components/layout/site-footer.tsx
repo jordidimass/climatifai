@@ -16,9 +16,10 @@ export function SiteFooter() {
         <FooterColumn
           title="Producto"
           links={[
-            { href: "/dashboard", label: "Panel" },
-            { href: "/#features", label: "Funciones" },
-            { href: "/#science", label: "Metodología" },
+            { href: "/analizar-siembra", label: "Analizar siembra" },
+            { href: "/mapa-incendios", label: "Mapa de incendios" },
+            { href: "/habla-ai", label: "Habla AI" },
+            { href: "/#capacidades", label: "Capacidades" },
           ]}
         />
         <FooterColumn

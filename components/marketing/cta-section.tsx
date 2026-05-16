@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export function CtaSection() {
   return (
-    <section id="enterprise" className="mx-auto max-w-7xl px-6 py-20">
+    <section id="empresas" className="mx-auto max-w-7xl px-6 py-20">
       <div className="glass relative overflow-hidden rounded-3xl px-8 py-16 md:px-16 md:py-24">
         <div className="relative z-10 mx-auto max-w-2xl text-center">
           <p className="eyebrow">Para cooperativas y empresas</p>
@@ -19,8 +19,8 @@ export function CtaSection() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button asChild size="lg" className="rounded-full px-6">
-              <Link href="/dashboard">
-                Probar el panel
+              <Link href="/analizar-siembra">
+                Analiza tu siembra
                 <ArrowUpRight className="ml-1 size-4" aria-hidden="true" />
               </Link>
             </Button>
