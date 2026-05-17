@@ -63,6 +63,7 @@ function useSuitabilityStatus(
 
 export function HarvestSummaryHeader() {
   const region = useSelectionStore((s) => s.region);
+  const customLocation = useSelectionStore((s) => s.customLocation);
   const crop = useSelectionStore((s) => s.crop);
   const sowingPresetId = useSelectionStore((s) => s.sowingPresetId);
   const sowingDate = useSelectionStore((s) => s.sowingDate);
@@ -70,19 +71,37 @@ export function HarvestSummaryHeader() {
   const matchingPreset = preset?.cropId === crop.id ? preset : undefined;
   const status = useSuitabilityStatus(region.id, crop.id);
 
+  const placeName = customLocation?.label ?? region.name;
+  const lat = customLocation?.lat ?? region.center.lat;
+  const lng = customLocation?.lng ?? region.center.lng;
+  const elevation = customLocation?.elevation ?? region.elevation;
+
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
-      <div>
+      <div className="min-w-0">
         <p className="eyebrow">Resultado de análisis</p>
         <div className="mt-1 flex flex-wrap items-center gap-3">
           <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight md:text-4xl">
-            {region.name}{" "}
+            {placeName}{" "}
             <span className="text-muted-foreground/80">·</span>{" "}
             <span className="italic text-foreground/85">{crop.name}</span>
           </h1>
           <RiskBadge status={status} />
         </div>
-        <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+        <p className="numeric mt-1 text-xs text-muted-foreground">
+          {lat.toFixed(4)}°, {lng.toFixed(4)}°
+          {typeof elevation === "number" ? ` · ${Math.round(elevation)} m` : ""}
+          {customLocation && (
+            <>
+              {" · "}
+              <span>
+                Región registrada:{" "}
+                <span className="font-medium text-foreground">{region.name}</span>
+              </span>
+            </>
+          )}
+        </p>
+        <p className="mt-2 max-w-xl text-sm text-muted-foreground">
           {region.summary}
         </p>
         <p className="mt-2 text-xs text-muted-foreground">
