@@ -15,6 +15,7 @@ const serverSchema = z.object({
   AI_GATEWAY_API_KEY: z.string().min(1).optional(),
   AGRI_API_BASE_URL: z.url().optional(),
   AGRI_GRAPHQL_URL: z.url().optional(),
+  FIRMS_MAP_KEY: z.string().min(1).optional(),
 });
 
 const clientSchema = z.object({
@@ -41,6 +42,7 @@ export const serverEnv = parse(serverSchema, {
   AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
   AGRI_API_BASE_URL: process.env.AGRI_API_BASE_URL,
   AGRI_GRAPHQL_URL: process.env.AGRI_GRAPHQL_URL,
+  FIRMS_MAP_KEY: process.env.FIRMS_MAP_KEY,
 });
 
 export const clientEnv = parse(clientSchema, {
