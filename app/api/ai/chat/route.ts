@@ -16,6 +16,11 @@ type SelectionContextPayload = {
   compareCropId?: string;
   compareCropName?: string;
   regionSummary?: string;
+  /** Punto elegido en el buscador (Open-Meteo); la región de catálogo sigue siendo la más cercana. */
+  geocodedLabel?: string;
+  latitude?: number;
+  longitude?: number;
+  elevationMeters?: number;
 };
 
 function withSelectionContext(
@@ -47,10 +52,25 @@ function withSelectionContext(
 - Cultivo: ${ctx.cropName ?? "—"} · id: ${ctx.cropId ?? "—"}`;
   }
 
+  let geoLine = "";
+  if (
+    ctx.geocodedLabel?.trim() &&
+    typeof ctx.latitude === "number" &&
+    typeof ctx.longitude === "number"
+  ) {
+    const elev =
+      typeof ctx.elevationMeters === "number"
+        ? ` · altitud ~${Math.round(ctx.elevationMeters)} m`
+        : "";
+    geoLine = `
+- **Ubicación geocodificada (buscador):** ${ctx.geocodedLabel.trim()} · coordenadas aprox. ${ctx.latitude.toFixed(4)}, ${ctx.longitude.toFixed(4)}${elev}
+- Usá este punto como referencia espacial; los datos operativos del MVP siguen anclados a la región de catálogo indicada abajo.`;
+  }
+
   return `${base}
 
 ## Contexto seleccionado en la app (no inventes ubicaciones fuera de esto)
-- Región: ${ctx.regionName ?? "—"} · id: ${ctx.regionId ?? "—"}
+- Región (catálogo, más cercana al punto): ${ctx.regionName ?? "—"} · id: ${ctx.regionId ?? "—"}${geoLine}
 ${block}
 - Resumen de región disponible para el MVP: ${ctx.regionSummary ?? "—"}`;
 }

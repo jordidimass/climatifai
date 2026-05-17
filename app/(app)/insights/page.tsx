@@ -9,9 +9,13 @@ export default function InsightsPage() {
         title="Hallazgos con IA"
         description={
           <>
-            Interpretación climática para tu combinación región + cultivo. Las
-            respuestas son orientativas; valida siempre con campo y datos
-            locales.
+            Interpretación climática para tu región y cultivo. Usá{" "}
+            <strong className="font-medium text-foreground">
+              Ir a Hallazgos
+            </strong>{" "}
+            en el resultado de Analizar siembra: se copian en la dirección los
+            mismos datos (región del catálogo, cultivo, fecha y punto
+            geocodificado cuando exista).
           </>
         }
       />

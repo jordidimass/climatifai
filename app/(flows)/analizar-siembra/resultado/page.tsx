@@ -7,6 +7,7 @@ import { HarvestChart } from "@/components/harvest/harvest-chart";
 import { HarvestExtras } from "@/components/harvest/harvest-extras";
 import { HarvestStats } from "@/components/harvest/harvest-stats";
 import { HarvestSummaryHeader } from "@/components/harvest/harvest-summary-header";
+import { InsightsLinkWithSelection } from "@/components/insights/insights-link-with-selection";
 import { FlowHeader } from "@/components/layout/flow-header";
 import { RiskCirclesLayer } from "@/components/map/layers/risk-circles-layer";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
@@ -49,10 +50,10 @@ export default function AnalizarSiembraResultadoPage() {
             región y cultivo ya en contexto.
           </p>
           <Button size="sm" className="shrink-0 rounded-full shadow-none" asChild>
-            <Link href="/insights" className="gap-2">
+            <InsightsLinkWithSelection className="flex items-center gap-2">
               <Sparkles className="size-4 shrink-0" aria-hidden />
               Ir a Hallazgos
-            </Link>
+            </InsightsLinkWithSelection>
           </Button>
         </div>
 

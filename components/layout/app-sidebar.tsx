@@ -4,7 +4,6 @@ import { BarChart3, Map, Sparkles } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { CompareSidebarLink } from "@/components/layout/compare-sidebar-link";
 import { CropPicker } from "@/components/selection/crop-picker";
-import { RegionPicker } from "@/components/selection/region-picker";
 import { Separator } from "@/components/ui/separator";
 
 const NAV = [
@@ -36,7 +35,6 @@ export function AppSidebar() {
       </div>
 
       <div className="space-y-4 px-2 pb-6">
-        <RegionPicker />
         <CropPicker />
       </div>
 
@@ -110,8 +108,8 @@ export function AppSidebar() {
       <div className="glass mt-4 rounded-lg px-3 py-3 text-xs leading-relaxed text-muted-foreground">
         <p className="eyebrow mb-1 text-foreground/80">Escenarios guardados</p>
         <p>
-          Fija aquí combinaciones de región y cultivo cuando tengas varias que
-          consultes seguido.
+          Elegí el cultivo aquí; la ubicación y la región de catálogo las definís
+          en Analizar siembra paso a paso antes de llegar al resultado.
         </p>
       </div>
     </aside>

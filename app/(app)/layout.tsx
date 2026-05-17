@@ -1,5 +1,8 @@
+import { Suspense } from "react";
+
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppTopbar } from "@/components/layout/app-topbar";
+import { SelectionFromSearchParams } from "@/components/selection/selection-from-search-params";
 
 export default function AppLayout({
   children,
@@ -8,6 +11,9 @@ export default function AppLayout({
 }) {
   return (
     <div className="flex min-h-svh flex-1">
+      <Suspense fallback={null}>
+        <SelectionFromSearchParams />
+      </Suspense>
       <AppSidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <AppTopbar />
