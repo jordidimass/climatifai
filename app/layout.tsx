@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { MarketingLocaleProvider } from "@/components/marketing/marketing-locale-provider";
 import { GradientMesh } from "@/components/brand/gradient-mesh";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
@@ -46,7 +47,9 @@ export default function RootLayout({
         >
           <GradientMesh />
           <TooltipProvider delayDuration={200}>
-            <div className="relative flex min-h-svh flex-col">{children}</div>
+            <MarketingLocaleProvider>
+              <div className="relative flex min-h-svh flex-col">{children}</div>
+            </MarketingLocaleProvider>
           </TooltipProvider>
           <Toaster richColors closeButton position="bottom-right" />
         </ThemeProvider>

@@ -4,7 +4,6 @@ import { Bell, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useSelectionStore } from "@/stores/selection-store";
 
 export function AppTopbar() {
@@ -50,7 +49,6 @@ export function AppTopbar() {
         >
           <Bell className="size-4" aria-hidden="true" />
         </Button>
-        <ThemeToggle />
       </div>
     </header>
   );

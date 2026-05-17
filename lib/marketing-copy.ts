@@ -5,6 +5,10 @@ export type MarketingCopy = {
     navWhy: string;
     navFeatures: string;
     navBusiness: string;
+    navHome: string;
+    backLabel: string;
+    subResultado: string;
+    subMapSelection: string;
     flowAi: string;
     flowAnalyze: string;
     flowMap: string;
@@ -58,10 +62,12 @@ export type MarketingCopy = {
     dataSourcesEyebrow: string;
     dataSourcesBody: string;
     columnProduct: string;
+    columnSite: string;
     columnCompany: string;
     linkAnalyze: string;
     linkMap: string;
     linkAi: string;
+    linkInsights: string;
     linkFeatures: string;
     linkAbout: string;
     linkContact: string;
@@ -76,6 +82,10 @@ const es: MarketingCopy = {
     navWhy: "Por qué",
     navFeatures: "Capacidades",
     navBusiness: "Empresas",
+    navHome: "Inicio",
+    backLabel: "Volver",
+    subResultado: "Resultado",
+    subMapSelection: "Selector en mapa",
     flowAi: "Habla AI",
     flowAnalyze: "Analizar siembra",
     flowMap: "Mapa de incendios",
@@ -142,10 +152,12 @@ const es: MarketingCopy = {
     dataSourcesBody:
       "Ejemplos citados por el proyecto: Open-Meteo · NASA FIRMS · FAO GAEZ · SoilGrids ISRIC · CHIRPS · Claude AI. Integraciones reales y licencias pueden variar.",
     columnProduct: "Producto",
+    columnSite: "Sitio",
     columnCompany: "Compañía",
     linkAnalyze: "Analizar siembra",
     linkMap: "Mapa de incendios",
     linkAi: "Habla AI",
+    linkInsights: "Hallazgos IA",
     linkFeatures: "Capacidades",
     linkAbout: "Acerca de",
     linkContact: "Contacto",
@@ -160,6 +172,10 @@ const en: MarketingCopy = {
     navWhy: "Why this",
     navFeatures: "Capabilities",
     navBusiness: "Enterprise",
+    navHome: "Home",
+    backLabel: "Back",
+    subResultado: "Results",
+    subMapSelection: "Map picker",
     flowAi: "Talk to AI",
     flowAnalyze: "Analyze sowing",
     flowMap: "Wildfire map",
@@ -226,10 +242,12 @@ const en: MarketingCopy = {
     dataSourcesBody:
       "Examples flagged in-scope: Open-Meteo · NASA FIRMS · FAO GAEZ · SoilGrids ISRIC · CHIRPS · Claude AI. Final integrations/licensing may differ.",
     columnProduct: "Product",
+    columnSite: "Site",
     columnCompany: "Company",
     linkAnalyze: "Analyze sowing",
     linkMap: "Wildfire map",
     linkAi: "Talk to AI",
+    linkInsights: "AI insights",
     linkFeatures: "Capabilities",
     linkAbout: "About",
     linkContact: "Contact",

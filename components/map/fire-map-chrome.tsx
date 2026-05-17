@@ -38,11 +38,13 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
 
   // Stable callback so the layer effect that calls `onData(filtered)` doesn't
   // re-run every render.
-  const handleData = React.useCallback((fc: HotspotFC) => setCurrentFC(fc), []);
+  const handleData = React.useCallback((fc: HotspotFC) => {
+    setCurrentFC((prev) => (prev === fc ? prev : fc));
+  }, []);
 
   return (
-    <div className={cn("relative flex flex-1 flex-col", className)}>
-      <div className="relative min-h-[calc(100svh-3.5rem)] flex-1">
+    <div className={cn("relative flex min-h-0 flex-1 flex-col", className)}>
+      <div className="relative min-h-0 flex-1">
         <RegionMapPanel variant="full">
           <FireHotspotsLayer onData={handleData} />
           <FireDetailPopover />

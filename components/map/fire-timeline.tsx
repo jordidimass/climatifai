@@ -44,7 +44,17 @@ export function FireTimeline({ className }: FireTimelineProps) {
     return { from, to };
   }, [dataSpan, dayRange, mountedAt]);
 
-  const effectivePlayhead = playhead ?? span.to;
+  /** Keep slider value inside bounds when dataSpan arrives or shrinks. */
+  React.useEffect(() => {
+    const ph = useFireStore.getState().playhead;
+    if (ph == null) return;
+    if (ph >= span.from && ph <= span.to) return;
+    const clamped = clampMs(ph, span.from, span.to);
+    setPlayhead(clamped);
+  }, [span.from, span.to, setPlayhead]);
+
+  const rawPlayhead = playhead ?? span.to;
+  const effectivePlayhead = clampMs(rawPlayhead, span.from, span.to);
 
   // Play loop — advance playhead, wrap at the end.
   React.useEffect(() => {
@@ -130,6 +140,7 @@ export function FireTimeline({ className }: FireTimelineProps) {
           )}
         </Button>
         <input
+          key={`${span.from}-${span.to}`}
           type="range"
           min={span.from}
           max={span.to}
@@ -137,7 +148,9 @@ export function FireTimeline({ className }: FireTimelineProps) {
           value={effectivePlayhead}
           onChange={(e) => {
             setPlaying(false);
-            setPlayhead(Number(e.target.value));
+            const next = Number(e.target.value);
+            if (next === useFireStore.getState().playhead) return;
+            setPlayhead(next);
           }}
           className="flex-1 accent-[var(--risk-bad)]"
           aria-label="Línea temporal"
@@ -153,4 +166,8 @@ export function FireTimeline({ className }: FireTimelineProps) {
       </div>
     </div>
   );
+}
+
+function clampMs(n: number, lo: number, hi: number) {
+  return Math.min(hi, Math.max(lo, n));
 }

@@ -133,9 +133,24 @@ export function FireHotspotsLayer({ onData }: FireHotspotsLayerProps) {
     return { type: "FeatureCollection", features };
   }, [allFeatures, playhead, windowHours]);
 
+  const onDataRef = React.useRef(onData);
+  onDataRef.current = onData;
+  const lastSentRef = React.useRef<HotspotFC | null>(null);
+
   React.useEffect(() => {
-    onData?.(filtered);
-  }, [filtered, onData]);
+    const cb = onDataRef.current;
+    if (!cb) return;
+    const prev = lastSentRef.current;
+    if (
+      prev &&
+      prev.type === filtered.type &&
+      prev.features === filtered.features
+    ) {
+      return;
+    }
+    lastSentRef.current = filtered;
+    cb(filtered);
+  }, [filtered]);
 
   // Click handler — register on map instance via useMap. Mapbox supports
   // layer-scoped listeners: `map.on("click", layerId, handler)`.

@@ -11,6 +11,11 @@ export function CtaSection() {
   const c = m.cta;
   return (
     <section id="empresas" className="mx-auto max-w-7xl px-6 py-20">
+      <div
+        id="contact"
+        tabIndex={-1}
+        className="scroll-mt-28 outline-none"
+      />
       <div className="glass relative overflow-hidden rounded-3xl px-8 py-16 md:px-16 md:py-24">
         <div className="relative z-10 mx-auto max-w-2xl text-center">
           <p className="eyebrow">{c.eyebrow}</p>
@@ -32,7 +37,7 @@ export function CtaSection() {
               variant="outline"
               className="rounded-full bg-background/60 px-6 backdrop-blur"
             >
-              <Link href="#contact">{c.secondaryContact}</Link>
+              <Link href="/#contact">{c.secondaryContact}</Link>
             </Button>
           </div>
         </div>

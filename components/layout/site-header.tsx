@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ArrowLeft, Menu } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
@@ -17,6 +18,20 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+
+const FLOW_SUBROWS: Record<
+  string,
+  { backHref: string; titleKey: "subResultado" | "subMapSelection" }
+> = {
+  "/analizar-siembra/resultado": {
+    backHref: "/analizar-siembra",
+    titleKey: "subResultado",
+  },
+  "/mapa-incendios/seleccion": {
+    backHref: "/mapa-incendios",
+    titleKey: "subMapSelection",
+  },
+};
 
 function LangToggle({ compact }: { compact?: boolean }) {
   const { locale, setLocale, m } = useMarketingCopy();
@@ -51,58 +66,72 @@ function LangToggle({ compact }: { compact?: boolean }) {
   );
 }
 
+function primaryNavActive(pathname: string, href: string) {
+  if (href === "/habla-ai") return pathname === "/habla-ai";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function SiteHeader() {
+  const pathname = usePathname();
   const { m } = useMarketingCopy();
   const header = m.header;
+  const footer = m.footer;
 
-  const NAV = [
+  const PRIMARY = [
+    { href: "/analizar-siembra", label: header.flowAnalyze },
+    { href: "/mapa-incendios", label: header.flowMap },
+    { href: "/habla-ai", label: header.flowAi },
+  ] as const;
+
+  const SHEET_SECONDARY = [
+    { href: "/", label: header.navHome },
     { href: "/#por-que", label: header.navWhy },
     { href: "/#capacidades", label: header.navFeatures },
     { href: "/#empresas", label: header.navBusiness },
+    { href: "/insights", label: footer.linkInsights },
   ] as const;
 
-  const FLOWS = [
-    { href: "/habla-ai", label: header.flowAi },
-    { href: "/analizar-siembra", label: header.flowAnalyze },
-    { href: "/mapa-incendios", label: header.flowMap },
-  ] as const;
+  const subMeta = FLOW_SUBROWS[pathname];
+  const subTitle = subMeta
+    ? subMeta.titleKey === "subResultado"
+      ? header.subResultado
+      : header.subMapSelection
+    : undefined;
 
   return (
-    <header className="sticky top-0 z-30">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-6">
-        <div className="glass flex w-full items-center justify-between gap-4 rounded-full px-4 py-2 md:gap-6">
-          <Logo />
+    <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="flex h-14 items-center justify-between gap-3 md:h-16 md:gap-4">
+          <div className="flex min-w-0 shrink-0 items-center">
+            <Logo className="text-[1.15rem]" />
+          </div>
+
           <nav
             aria-label="Principal"
-            className="hidden items-center gap-1 lg:flex"
+            className="hidden items-center gap-0.5 lg:flex lg:flex-1 lg:justify-center"
           >
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {PRIMARY.map((item) => {
+              const active = primaryNavActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "rounded-full px-3 py-2 text-sm transition-colors",
+                    active
+                      ? "bg-accent/45 text-foreground"
+                      : "text-muted-foreground hover:bg-accent/25 hover:text-foreground",
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
-          <div className="flex items-center gap-1 md:gap-2">
-            <div className="hidden items-center gap-1 md:flex">
-              <LangToggle />
-              {FLOWS.map((item) => (
-                <Button key={item.href} asChild variant="ghost" size="sm">
-                  <Link
-                    href={item.href}
-                    className="rounded-full text-muted-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                </Button>
-              ))}
-            </div>
-            <div className="md:hidden">
-              <LangToggle />
-            </div>
+
+          <div className="flex shrink-0 items-center gap-1 md:gap-2">
+            <LangToggle />
             <ThemeToggle />
             <Sheet>
               <SheetTrigger asChild>
@@ -129,22 +158,28 @@ export function SiteHeader() {
                   aria-label="Navegación móvil"
                   className="mt-4 flex flex-col gap-1"
                 >
-                  {NAV.map((item) => (
+                  <p className="eyebrow px-3 pb-1 pt-2 text-[0.65rem] text-muted-foreground">
+                    {footer.columnProduct}
+                  </p>
+                  {PRIMARY.map((item) => (
                     <SheetClose asChild key={item.href}>
                       <Link
                         href={item.href}
-                        className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                        className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-accent/50"
                       >
                         {item.label}
                       </Link>
                     </SheetClose>
                   ))}
-                  <hr className="my-2 border-border/60" />
-                  {FLOWS.map((item) => (
-                    <SheetClose asChild key={item.href}>
+                  <hr className="my-3 border-border/60" />
+                  <p className="eyebrow px-3 pb-1 text-[0.65rem] text-muted-foreground">
+                    {footer.columnSite}
+                  </p>
+                  {SHEET_SECONDARY.map((item) => (
+                    <SheetClose asChild key={`${item.href}-${item.label}`}>
                       <Link
                         href={item.href}
-                        className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-accent/50"
+                        className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground hover:bg-accent/50 hover:text-foreground"
                       >
                         {item.label}
                       </Link>
@@ -155,6 +190,19 @@ export function SiteHeader() {
             </Sheet>
           </div>
         </div>
+
+        {subMeta ? (
+          <div className="flex items-center gap-2 border-t border-border/40 py-2 md:py-2.5">
+            <Button variant="ghost" size="icon" className="shrink-0 rounded-full" asChild>
+              <Link href={subMeta.backHref} aria-label={header.backLabel}>
+                <ArrowLeft className="size-4" aria-hidden />
+              </Link>
+            </Button>
+            <p className="min-w-0 truncate font-[family-name:var(--font-display)] text-base tracking-tight text-foreground md:text-lg">
+              {subTitle}
+            </p>
+          </div>
+        ) : null}
       </div>
     </header>
   );

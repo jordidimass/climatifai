@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { FlowHeader } from "@/components/layout/flow-header";
 import { FireMapChrome } from "@/components/map/fire-map-chrome";
 
 export const metadata: Metadata = {
@@ -8,10 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function MapaIncendiosPage() {
-  return (
-    <>
-      <FlowHeader title="Mapa de incendios" />
-      <FireMapChrome phase="browse" className="flex-1" />
-    </>
-  );
+  return <FireMapChrome phase="browse" className="flex-1" />;
 }

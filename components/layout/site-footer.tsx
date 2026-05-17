@@ -8,6 +8,7 @@ import { useMarketingCopy } from "@/components/marketing/marketing-locale-provid
 export function SiteFooter() {
   const { m } = useMarketingCopy();
   const f = m.footer;
+  const h = m.header;
 
   return (
     <footer className="mt-24 border-t border-border/60">
@@ -22,20 +23,25 @@ export function SiteFooter() {
             { href: "/analizar-siembra", label: f.linkAnalyze },
             { href: "/mapa-incendios", label: f.linkMap },
             { href: "/habla-ai", label: f.linkAi },
+            { href: "/insights", label: f.linkInsights },
             { href: "/#capacidades", label: f.linkFeatures },
           ]}
         />
         <FooterColumn
-          title={f.columnCompany}
+          title={f.columnSite}
           links={[
-            { href: "/#about", label: f.linkAbout },
+            { href: "/#por-que", label: h.navWhy },
+            { href: "/#empresas", label: h.navBusiness },
             { href: "/#contact", label: f.linkContact },
             { href: "/#privacy", label: f.linkPrivacy },
           ]}
         />
       </div>
 
-      <div className="border-t border-border/60 bg-muted/15">
+      <div
+        id="privacy"
+        className="scroll-mt-28 border-t border-border/60 bg-muted/15"
+      >
         <div className="mx-auto max-w-7xl px-6 py-8 md:py-10">
           <p className="eyebrow mb-2 text-foreground/80">{f.dataSourcesEyebrow}</p>
           <p className="max-w-4xl text-xs leading-relaxed text-muted-foreground md:text-[0.8125rem]">
@@ -68,7 +74,7 @@ function FooterColumn({
       <h3 className="eyebrow mb-3 text-foreground/80">{title}</h3>
       <ul className="space-y-2 text-sm">
         {links.map((l) => (
-          <li key={l.href}>
+          <li key={`${l.href}-${l.label}`}>
             <Link
               href={l.href}
               className="text-muted-foreground transition-colors hover:text-foreground"

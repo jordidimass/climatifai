@@ -69,16 +69,42 @@ export const useFireStore = create<FireState>((set) => ({
         : [...state.sources, s];
       return { sources: next.length ? next : state.sources };
     }),
-  setPlayhead: (playhead) => set({ playhead }),
-  setWindowHours: (windowHours) => set({ windowHours }),
-  setPlaying: (playing) => set({ playing }),
-  setOpacity: (opacity) => set({ opacity }),
+  setPlayhead: (playhead) =>
+    set((state) =>
+      state.playhead === playhead ? state : { playhead },
+    ),
+  setWindowHours: (windowHours) =>
+    set((state) =>
+      state.windowHours === windowHours ? state : { windowHours },
+    ),
+  setPlaying: (playing) =>
+    set((state) => (state.playing === playing ? state : { playing })),
+  setOpacity: (opacity) =>
+    set((state) => (state.opacity === opacity ? state : { opacity })),
   setViewMode: (viewMode) =>
     set(viewMode === "live"
       ? { viewMode, playing: false, playhead: null }
       : { viewMode }),
-  selectHotspot: (selectedHotspot) => set({ selectedHotspot }),
-  setDataSpan: (dataSpan) => set({ dataSpan }),
+  selectHotspot: (selectedHotspot) =>
+    set((state) =>
+      state.selectedHotspot === selectedHotspot
+        ? state
+        : { selectedHotspot },
+    ),
+  setDataSpan: (dataSpan) =>
+    set((state) => {
+      if (dataSpan === state.dataSpan) return state;
+      if (
+        dataSpan &&
+        state.dataSpan &&
+        dataSpan.from === state.dataSpan.from &&
+        dataSpan.to === state.dataSpan.to
+      ) {
+        return state;
+      }
+      if (dataSpan == null && state.dataSpan == null) return state;
+      return { dataSpan };
+    }),
   setReportOpen: (reportOpen) => set({ reportOpen }),
   setError: (error) => set({ error }),
   setLoading: (loading) => set({ loading }),
