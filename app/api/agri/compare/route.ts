@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { compareTwoCropsStub } from "@/lib/agri/compare-stub";
 import { getCrop, isCropId } from "@/lib/api/crops";
 import { getRegion } from "@/lib/api/regions";
 import { getCropSuitability } from "@/lib/agri/crop-suitability";
+import { gqlFetch } from "@/lib/api/gql-client";
 import { serverEnv } from "@/lib/env";
 import type { CropId } from "@/types/crop";
 
@@ -24,6 +24,25 @@ const bodySchema = z.preprocess(
   }),
 );
 
+interface AdvisorBrief {
+  cropId: string;
+  score: number;
+  aptitude: string;
+  recommendationText: string;
+  season: string;
+}
+
+interface CompareGql {
+  compare: {
+    lat: number;
+    lon: number;
+    season: string;
+    winner: string | null;
+    cropA: AdvisorBrief;
+    cropB: AdvisorBrief;
+  };
+}
+
 export async function POST(request: Request) {
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
@@ -41,20 +60,46 @@ export async function POST(request: Request) {
     return Response.json({ error: "región o cultivo no encontrado" }, { status: 404 });
   }
 
-  const stub = compareTwoCropsStub(regionId, crops[0]!, crops[1]!);
-
-  if (serverEnv.AGRI_API_BASE_URL) {
-    const upstream = await fetch(`${serverEnv.AGRI_API_BASE_URL}/agri/compare`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ regionId, cropIds }),
-    });
-    const data: unknown = await upstream.json().catch(() => ({}));
-    const merged =
-      typeof data === "object" && data !== null
-        ? { ...stub, ...(data as Record<string, unknown>) }
-        : stub;
-    return Response.json(merged, { status: upstream.status });
+  if (serverEnv.AGRI_GRAPHQL_URL) {
+    try {
+      const { compare } = await gqlFetch<CompareGql>(
+        `query Compare($lat: Float!, $lon: Float!, $cropIdA: String!, $cropIdB: String!) {
+          compare(lat: $lat, lon: $lon, cropIdA: $cropIdA, cropIdB: $cropIdB) {
+            lat lon season winner
+            cropA { cropId score aptitude recommendationText season }
+            cropB { cropId score aptitude recommendationText season }
+          }
+        }`,
+        { lat: region.center.lat, lon: region.center.lng, cropIdA: cropIds[0], cropIdB: cropIds[1] },
+        { next: { revalidate: 3600 } },
+      );
+      return Response.json({
+        regionId,
+        cropIds,
+        generatedAt: new Date().toISOString(),
+        sourceLabel: "Intelligence API",
+        summary: `${crops[0]?.name} y ${crops[1]?.name} comparados para ${region.name}.`,
+        winner: compare.winner,
+        comparison: [
+          {
+            cropId: compare.cropA.cropId,
+            name: crops[0]?.name,
+            score: Math.round(compare.cropA.score),
+            aptitude: compare.cropA.aptitude,
+            recommendationText: compare.cropA.recommendationText,
+          },
+          {
+            cropId: compare.cropB.cropId,
+            name: crops[1]?.name,
+            score: Math.round(compare.cropB.score),
+            aptitude: compare.cropB.aptitude,
+            recommendationText: compare.cropB.recommendationText,
+          },
+        ],
+      });
+    } catch {
+      // fall through to local fallback
+    }
   }
 
   const suitability = await getCropSuitability({
@@ -68,7 +113,6 @@ export async function POST(request: Request) {
   });
 
   return Response.json({
-    ...stub,
     regionId,
     cropIds,
     generatedAt: new Date().toISOString(),
@@ -83,7 +127,6 @@ export async function POST(request: Request) {
         suitability: cropSuitability,
         heatStressC: crop?.heatStressC,
         idealPrecipMm: crop?.idealPrecipMm,
-        note: "Comparación compatible con la futura Intelligence API.",
       };
     }),
   });
