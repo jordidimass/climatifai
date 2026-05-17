@@ -23,7 +23,6 @@ const CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate";
 const CLIMATE_MODELS = [
   "EC_Earth3P_HR",
   "MPI_ESM1_2_XR",
-  "MRI_AGCM3_2_S",
   "CMCC_CM2_VHR4",
 ] as const;
 

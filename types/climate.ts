@@ -41,6 +41,8 @@ export type ClimateMetricTriple = {
   historical: number;
   actual: number | null;
   projected: number;
+  /** % deviation of `actual` vs `historical`: (actual - historical) / historical * 100. Null when historical is 0 or actual is null. */
+  deviationPct?: number | null;
 };
 
 /** Una fila del gráfico comparativo mensual por variable. */
