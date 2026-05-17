@@ -1,42 +1,55 @@
+"use client";
+
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 
 export function SiteFooter() {
+  const { m } = useMarketingCopy();
+  const f = m.footer;
+
   return (
     <footer className="mt-24 border-t border-border/60">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-3">
         <div className="space-y-3">
           <Logo />
-          <p className="max-w-sm text-sm text-muted-foreground">
-            Inteligencia climática para quienes alimentan al mundo. Hecho para
-            productores, agrónomos y cooperativas de Latinoamérica.
-          </p>
+          <p className="max-w-sm text-sm text-muted-foreground">{f.blurb}</p>
         </div>
         <FooterColumn
-          title="Producto"
+          title={f.columnProduct}
           links={[
-            { href: "/analizar-siembra", label: "Analizar siembra" },
-            { href: "/mapa-incendios", label: "Mapa de incendios" },
-            { href: "/habla-ai", label: "Habla AI" },
-            { href: "/#capacidades", label: "Capacidades" },
+            { href: "/analizar-siembra", label: f.linkAnalyze },
+            { href: "/mapa-incendios", label: f.linkMap },
+            { href: "/habla-ai", label: f.linkAi },
+            { href: "/#capacidades", label: f.linkFeatures },
           ]}
         />
         <FooterColumn
-          title="Compañía"
+          title={f.columnCompany}
           links={[
-            { href: "/#about", label: "Acerca de" },
-            { href: "/#contact", label: "Contacto" },
-            { href: "/#privacy", label: "Privacidad" },
+            { href: "/#about", label: f.linkAbout },
+            { href: "/#contact", label: f.linkContact },
+            { href: "/#privacy", label: f.linkPrivacy },
           ]}
         />
       </div>
+
+      <div className="border-t border-border/60 bg-muted/15">
+        <div className="mx-auto max-w-7xl px-6 py-8 md:py-10">
+          <p className="eyebrow mb-2 text-foreground/80">{f.dataSourcesEyebrow}</p>
+          <p className="max-w-4xl text-xs leading-relaxed text-muted-foreground md:text-[0.8125rem]">
+            {f.dataSourcesBody}
+          </p>
+        </div>
+      </div>
+
       <div className="border-t border-border/60">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 text-xs text-muted-foreground">
           <span className="eyebrow !text-[0.65rem]">
-            © {new Date().getFullYear()} · Climatifai
+            © {new Date().getFullYear()} {f.copyrightSuffix}
           </span>
-          <span className="numeric">v0.1 · base inicial</span>
+          <span className="numeric">{f.versionStub}</span>
         </div>
       </div>
     </footer>

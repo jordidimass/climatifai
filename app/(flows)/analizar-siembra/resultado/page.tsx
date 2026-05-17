@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Sparkles } from "lucide-react";
 
 import { HarvestChart } from "@/components/harvest/harvest-chart";
 import { HarvestExtras } from "@/components/harvest/harvest-extras";
@@ -8,6 +9,7 @@ import { HarvestSummaryHeader } from "@/components/harvest/harvest-summary-heade
 import { FlowHeader } from "@/components/layout/flow-header";
 import { RiskCirclesLayer } from "@/components/map/layers/risk-circles-layer";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Resultado del análisis",
@@ -39,6 +41,20 @@ export default function AnalizarSiembraResultadoPage() {
           </ol>
         </nav>
 
+        <div className="flex flex-col gap-3 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm leading-relaxed text-foreground">
+            <span className="font-medium">¿Interpretación agrícola?</span> Abre{" "}
+            <span className="whitespace-nowrap">Hallazgos con IA</span> con tu
+            región y cultivo ya en contexto.
+          </p>
+          <Button size="sm" className="shrink-0 rounded-full shadow-none" asChild>
+            <Link href="/insights" className="gap-2">
+              <Sparkles className="size-4 shrink-0" aria-hidden />
+              Ir a Hallazgos
+            </Link>
+          </Button>
+        </div>
+
         <HarvestSummaryHeader />
 
         <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(280px,420px)_minmax(0,1fr)] lg:items-start">
@@ -46,6 +62,7 @@ export default function AnalizarSiembraResultadoPage() {
             <p className="eyebrow">Indicadores</p>
             <HarvestStats />
             <HarvestExtras />
+            <CropTimeline />
           </div>
           <div className="flex min-w-0 flex-col gap-6">
             <RegionMapPanel>

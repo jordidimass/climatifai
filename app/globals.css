@@ -314,3 +314,293 @@
     color: var(--muted-foreground);
   }
 }
+
+/* ── Hallazgos (/insights): micro-motion (global reduce overrides al final) */
+.cf-insights-hero-orbit-bg {
+  background:
+    radial-gradient(ellipse 70% 56% at 28% 10%, color-mix(in oklch, var(--primary) 20%, transparent) 0%, transparent 52%),
+    radial-gradient(ellipse 62% 50% at 82% 50%, color-mix(in oklch, var(--chart-2) 18%, transparent) 0%, transparent 55%);
+}
+
+.cf-insights-hero-line {
+  height: 2px;
+  width: min(320px, 72%);
+}
+
+@keyframes cf-insights-card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cf-insights-card-wrap {
+  animation: cf-insights-card-rise 0.76s cubic-bezier(0.22, 1, 0.36, 1) 0.16s backwards;
+}
+
+@keyframes cf-insights-spark-pulse {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--primary) 0%, transparent);
+  }
+  45% {
+    transform: scale(1.052) rotate(-5deg);
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--primary) 26%, transparent),
+      0 0 24px color-mix(in oklch, var(--primary) 15%, transparent);
+  }
+}
+
+.cf-insights-spark-icon {
+  animation: cf-insights-spark-pulse 4.4s ease-in-out infinite;
+}
+
+@keyframes cf-insights-context-move {
+  0% {
+    background-position: -90% center;
+  }
+  100% {
+    background-position: 190% center;
+  }
+}
+
+.cf-insights-context-shine {
+  background-image: linear-gradient(
+    100deg,
+    color-mix(in oklch, var(--muted-foreground) 10%, transparent) 0%,
+    color-mix(in oklch, var(--primary) 42%, transparent) 46%,
+    color-mix(in oklch, var(--chart-4) 34%, transparent) 54%,
+    color-mix(in oklch, var(--muted-foreground) 9%, transparent) 100%
+  );
+  background-size: 268% 100%;
+  animation: cf-insights-context-move 13s linear infinite;
+}
+
+@keyframes cf-insights-msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(11px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cf-insights-msg-in {
+  animation: cf-insights-msg-in 0.48s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+@keyframes cf-insights-hint-breathe {
+  0%,
+  100% {
+    border-color: color-mix(in oklch, var(--border) 94%, transparent);
+    background-color: color-mix(in oklch, var(--muted) 16%, transparent);
+  }
+  50% {
+    border-color: color-mix(in oklch, var(--primary) 46%, transparent);
+    background-color: color-mix(in oklch, var(--primary) 13%, transparent);
+  }
+}
+
+.cf-insights-hint-breathe {
+  animation: cf-insights-hint-breathe 5.5s ease-in-out infinite;
+}
+
+/* ── CropTimeline · ciclo mensual con micro-motion */
+.cf-crop-timeline-wrap {
+  animation: cf-crop-panel-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cf-crop-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cf-crop-track-gleam {
+  0% {
+    background-position: -40% center;
+  }
+  100% {
+    background-position: 140% center;
+  }
+}
+
+.cf-crop-track-gleam {
+  background-image: linear-gradient(
+    104deg,
+    transparent 18%,
+    color-mix(in oklch, var(--foreground) 6%, transparent) 44%,
+    color-mix(in oklch, var(--primary) 18%, transparent) 52%,
+    transparent 74%
+  );
+  background-size: 220% 100%;
+  animation: cf-crop-track-gleam 9s linear infinite;
+}
+
+@keyframes cf-crop-seg-pop {
+  from {
+    opacity: 0;
+    transform: scaleY(0.28);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.cf-crop-segment-fill {
+  transform-origin: bottom center;
+  animation: cf-crop-seg-pop 0.55s cubic-bezier(0.34, 1.25, 0.62, 1) backwards;
+}
+
+.cf-crop-segment-cell:focus-within .cf-crop-segment-fill,
+.cf-crop-segment-cell:hover .cf-crop-segment-fill {
+  filter: brightness(1.1) saturate(1.06);
+}
+
+@media (hover: none) {
+  .cf-crop-segment-cell:hover .cf-crop-segment-fill {
+    filter: none;
+  }
+}
+
+@keyframes cf-crop-risk-pulse {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.94;
+    box-shadow: 0 0 0 0 transparent;
+  }
+  52% {
+    transform: translateY(-1px) scale(1.04);
+    opacity: 1;
+    box-shadow: 0 0 14px color-mix(in oklch, var(--destructive) 28%, transparent);
+  }
+}
+
+.cf-crop-risk-marker {
+  animation: cf-crop-risk-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes cf-crop-today-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    box-shadow:
+      0 0 0 0 transparent,
+      0 -2px 0 0 transparent;
+    border-left-color: color-mix(in oklch, var(--foreground) 38%, transparent);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 18px color-mix(in oklch, var(--primary) 26%, transparent),
+      0 -3px 0 0 color-mix(in oklch, var(--primary) 42%, transparent);
+    border-left-color: color-mix(in oklch, var(--primary) 76%, transparent);
+  }
+}
+
+.cf-crop-today-line {
+  width: 0;
+  border-left-width: 2px;
+  border-left-style: dashed;
+  animation: cf-crop-today-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes cf-crop-mini-rise {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cf-crop-mini-rise {
+  animation: cf-crop-mini-rise 0.45s cubic-bezier(0.33, 1, 0.68, 1) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cf-insights-card-wrap,
+  .cf-insights-spark-icon,
+  .cf-insights-context-shine,
+  .cf-insights-msg-in,
+  .cf-insights-hint-breathe {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .cf-insights-context-shine {
+    background-position: center;
+  }
+
+  .cf-insights-msg-in {
+    opacity: 1;
+  }
+
+  .cf-insights-card-wrap {
+    opacity: 1;
+  }
+
+  .cf-crop-timeline-wrap,
+  .cf-crop-track-gleam,
+  .cf-crop-segment-fill,
+  .cf-crop-risk-marker,
+  .cf-crop-today-line,
+  .cf-crop-mini-rise {
+    animation: none !important;
+    transition: none;
+  }
+
+  .cf-crop-timeline-wrap {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cf-crop-track-gleam {
+    display: none;
+  }
+
+  .cf-crop-segment-fill {
+    opacity: 1;
+    transform: scaleY(1);
+    filter: none;
+  }
+
+  .cf-crop-risk-marker {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    box-shadow: none;
+  }
+
+  .cf-crop-today-line {
+    opacity: 1;
+    box-shadow: none;
+    animation: none !important;
+    border-left-color: color-mix(in oklch, var(--foreground) 55%, transparent);
+  }
+
+  .cf-crop-mini-rise {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cf-crop-segment-cell:hover .cf-crop-segment-fill,
+  .cf-crop-segment-cell:focus-within .cf-crop-segment-fill {
+    filter: none;
+  }
+}

@@ -21,6 +21,7 @@ interface ChartShellProps {
   data: { month: string; historical: number; projected: number }[];
   kind?: "line" | "area";
   className?: string;
+  chartHeightClass?: string;
 }
 
 const subscribe = () => () => {};
@@ -39,6 +40,7 @@ export function ChartShell({
   data,
   kind = "area",
   className,
+  chartHeightClass = "h-56",
 }: ChartShellProps) {
   const mounted = useMounted();
   const stroke1 = "var(--chart-1)";
@@ -55,7 +57,13 @@ export function ChartShell({
         </div>
         <Legend />
       </header>
-      <div className="h-56 w-full">
+      <div
+        className={cn(
+          "w-full",
+          chartHeightClass,
+          !mounted && "animate-pulse rounded-lg bg-muted/40",
+        )}
+      >
         {mounted ? (
           <ResponsiveContainer width="100%" height="100%">
             {kind === "area" ? (

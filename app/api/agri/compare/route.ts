@@ -1,17 +1,28 @@
 import { z } from "zod";
 
+import { compareTwoCropsStub } from "@/lib/agri/compare-stub";
 import { getCrop, isCropId } from "@/lib/api/crops";
 import { getRegion } from "@/lib/api/regions";
 import { getCropSuitability } from "@/lib/agri/crop-suitability";
 import { serverEnv } from "@/lib/env";
 import type { CropId } from "@/types/crop";
 
-const bodySchema = z.object({
-  regionId: z.string().min(1),
-  cropIds: z
-    .array(z.string().refine(isCropId, "cultivo inválido"))
-    .length(2, "selecciona exactamente 2 cultivos"),
-});
+const bodySchema = z.preprocess(
+  (raw) => {
+    if (typeof raw !== "object" || raw === null) return raw;
+    const o = { ...(raw as Record<string, unknown>) };
+    if (!("cropIds" in o) && Array.isArray(o.crops)) {
+      o.cropIds = o.crops;
+    }
+    return o;
+  },
+  z.object({
+    regionId: z.string().min(1),
+    cropIds: z
+      .array(z.string().refine(isCropId, "cultivo inválido"))
+      .length(2, "selecciona exactamente 2 cultivos"),
+  }),
+);
 
 export async function POST(request: Request) {
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
@@ -30,13 +41,20 @@ export async function POST(request: Request) {
     return Response.json({ error: "región o cultivo no encontrado" }, { status: 404 });
   }
 
+  const stub = compareTwoCropsStub(regionId, crops[0]!, crops[1]!);
+
   if (serverEnv.AGRI_API_BASE_URL) {
     const upstream = await fetch(`${serverEnv.AGRI_API_BASE_URL}/agri/compare`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ regionId, cropIds }),
     });
-    return Response.json(await upstream.json(), { status: upstream.status });
+    const data: unknown = await upstream.json().catch(() => ({}));
+    const merged =
+      typeof data === "object" && data !== null
+        ? { ...stub, ...(data as Record<string, unknown>) }
+        : stub;
+    return Response.json(merged, { status: upstream.status });
   }
 
   const suitability = await getCropSuitability({
@@ -50,6 +68,7 @@ export async function POST(request: Request) {
   });
 
   return Response.json({
+    ...stub,
     regionId,
     cropIds,
     generatedAt: new Date().toISOString(),

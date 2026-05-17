@@ -35,3 +35,26 @@ export interface Anomaly {
   /** Human label rendered in badges. */
   label: string;
 }
+
+/** Triple histórico / actual (solo meses hasta hoy · año corrido) / CMIP6. */
+export type ClimateMetricTriple = {
+  historical: number;
+  actual: number | null;
+  projected: number;
+};
+
+/** Una fila del gráfico comparativo mensual por variable. */
+export type ClimateComparisonMonthRow = {
+  monthIndex: number;
+  monthLabel: string;
+  temperature: ClimateMetricTriple;
+  precipitation: ClimateMetricTriple;
+  soilMoisture: ClimateMetricTriple;
+  optimalTemp: { min: number; max: number };
+  optimalPrecipMmMonthly: { min: number; max: number };
+  optimalSoilMoisture: { min: number; max: number };
+};
+
+/** Dataset consumido por ClimateChart (`/agri/climate` cuando exista). */
+export type ClimateComparison = ClimateComparisonMonthRow[];
+
