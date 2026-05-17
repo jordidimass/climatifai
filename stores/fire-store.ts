@@ -18,18 +18,18 @@ const DEFAULT_SOURCES: FirmsSource[] = [
 interface FireState {
   dayRange: FireDayRange;
   sources: FirmsSource[];
-  /** Selected window center, epoch ms. `null` = no filter (show all in range). */
+
   playhead: number | null;
-  /** Half-width in hours around playhead used to filter visible features. */
+
   windowHours: number;
   playing: boolean;
   opacity: number;
   viewMode: FireViewMode;
   selectedHotspot: HotspotFeature | null;
-  /** Last-fetched bbox window (epoch ms) so the timeline knows the data span. */
+
   dataSpan: { from: number; to: number } | null;
   reportOpen: boolean;
-  /** Latest BFF error (e.g. missing FIRMS_MAP_KEY). `null` when the last fetch succeeded. */
+
   error: { message: string; hint?: string } | null;
   loading: boolean;
 

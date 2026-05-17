@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 type Tone = "warm" | "cool" | "neutral";
 
 interface AnomalyBadgeProps {
-  /** Signed value. Positive → warm tone, negative → cool, zero → neutral. */
+
   value: number;
   unit?: string;
-  /** Override the tone autocomputed from the sign. */
+
   tone?: Tone;
   className?: string;
 }

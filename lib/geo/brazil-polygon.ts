@@ -1,12 +1,3 @@
-/**
- * Hand-built coarse polygon of Brazil's national outline. ~24 vertices,
- * clockwise from the NW Amazon. Used to filter Brazil features out of the
- * FIRMS feed without pulling in turf or a country tileset. Border zones
- * have ~50–100 km of slop; if the product later needs pixel-exact
- * exclusion, swap this for Natural Earth admin-0 + a real PiP library.
- *
- * Format: [lng, lat]
- */
 export const BRAZIL_POLYGON: ReadonlyArray<readonly [number, number]> = [
   [-69.96, -4.2], // Tabatinga (triple border CO/PE/BR)
   [-67.0, 1.1], // Amazonas NW border w/ Colombia
@@ -38,11 +29,6 @@ export const BRAZIL_POLYGON: ReadonlyArray<readonly [number, number]> = [
   [-72.0, -7.5], // Amazonas SW
 ];
 
-/**
- * Ray-casting point-in-polygon. Returns true if (lng, lat) is inside the
- * polygon. The Brazil polygon is small enough (no antimeridian crossing)
- * that we can ignore great-circle subtleties.
- */
 export function pointInPolygon(
   lng: number,
   lat: number,

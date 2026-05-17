@@ -13,12 +13,6 @@ import type {
   MonthlyStat,
 } from "@/types/open-meteo";
 
-/**
- * Full Open-Meteo client (CVA-56). Wraps Archive, Climate (CMIP6),
- * Forecast, Seasonal, Air-Quality, Flood, and Geocoding endpoints.
- * All endpoints are key-less; per-tag Next cache hints control TTL.
- */
-
 const ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive";
 const CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate";
 const FORECAST_URL = "https://api.open-meteo.com/v1/forecast";
@@ -33,7 +27,6 @@ const CMIP6_MODELS = [
   "CMCC_CM2_VHR4",
 ] as const;
 
-/** 30-yr archive split into ≤10-yr chunks; API rejects longer ranges. */
 const BASELINE_DECADES: ReadonlyArray<readonly [string, string]> = [
   ["1994-01-01", "2003-12-31"],
   ["2004-01-01", "2013-12-31"],
@@ -74,10 +67,6 @@ interface OpenMeteoResponse {
   reason?: string;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Low-level fetch                                                            */
-/* -------------------------------------------------------------------------- */
-
 const TAG_REVALIDATE_SECONDS: Record<string, number> = {
   baseline: 86_400 * 30, // 30d — 30-yr climatology shifts slowly
   current: 86_400, // 1d — month-to-month observations
@@ -109,10 +98,6 @@ async function fetchOpenMeteo(
   }
   return json;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Helpers                                                                    */
-/* -------------------------------------------------------------------------- */
 
 function numAt(
   payload: DailyPayload | HourlyPayload | undefined,
@@ -214,10 +199,6 @@ async function fetchArchiveChunk(
   }));
 }
 
-/* -------------------------------------------------------------------------- */
-/* 1. Historical baseline (1994–2024, decade-batched)                          */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchHistoricalBaseline(
   lat: number,
   lon: number,
@@ -229,9 +210,6 @@ export async function fetchHistoricalBaseline(
   );
   const rows = chunks.flat();
 
-  // Bucket per month-of-year. For temp/soil/et0 we average daily values per
-  // month-year first (climatological practice), then take across-year stats.
-  // For precip we sum daily → monthly, then stats across years.
   const monthYearBuckets = new Map<
     string,
     {
@@ -246,7 +224,7 @@ export async function fetchHistoricalBaseline(
   >();
 
   for (const r of rows) {
-    const key = r.date.slice(0, 7); // YYYY-MM
+    const key = r.date.slice(0, 7);
     const m = monthKey(r.date);
     const b =
       monthYearBuckets.get(key) ??
@@ -268,7 +246,6 @@ export async function fetchHistoricalBaseline(
     monthYearBuckets.set(key, b);
   }
 
-  // Collapse each month-year bucket into per-month-of-year arrays.
   const byMonth = new Map<
     number,
     {
@@ -323,23 +300,18 @@ export async function fetchHistoricalBaseline(
   return baseline;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 2. Current year (Jan 1 → last completed month)                              */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchCurrentYear(
   lat: number,
   lon: number,
   today: Date = new Date(),
 ): Promise<MonthlyData[]> {
   const year = today.getUTCFullYear();
-  // Include months strictly before the current calendar month (0-indexed →
-  // 1-indexed count). If it's March 17 UTC, lastCompletedMonth = 2 (Feb).
+
   const lastCompletedMonth = today.getUTCMonth();
   if (lastCompletedMonth === 0) return [];
 
   const start = `${year}-01-01`;
-  const endMonth = lastCompletedMonth; // 1..11
+  const endMonth = lastCompletedMonth;
   const endDay = new Date(Date.UTC(year, endMonth, 0)).getUTCDate();
   const end = `${year}-${String(endMonth).padStart(2, "0")}-${String(endDay).padStart(2, "0")}`;
 
@@ -395,10 +367,6 @@ export async function fetchCurrentYear(
   return out;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. CMIP6 projection (2026–2030, ensemble mean of 3 models)                  */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchCmip6Projection(
   lat: number,
   lon: number,
@@ -447,10 +415,6 @@ export async function fetchCmip6Projection(
     });
 }
 
-/* -------------------------------------------------------------------------- */
-/* 4. 16-day forecast                                                          */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchForecast16d(
   lat: number,
   lon: number,
@@ -474,10 +438,6 @@ export async function fetchForecast16d(
   }));
 }
 
-/* -------------------------------------------------------------------------- */
-/* 5. Seasonal forecast (6 months, monthly granularity)                        */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchSeasonalForecast(
   lat: number,
   lon: number,
@@ -492,7 +452,6 @@ export async function fetchSeasonalForecast(
   url.searchParams.set("forecast_days", "180");
   url.searchParams.set("timezone", "UTC");
 
-  // Seasonal API returns six-hourly arrays; aggregate to monthly.
   type SeasonalResponse = {
     six_hourly?: {
       time?: string[];
@@ -522,7 +481,6 @@ export async function fetchSeasonalForecast(
   const six = json.six_hourly;
   if (!six?.time?.length) return [];
 
-  // Average across all ensemble members for each timestep.
   const tempKeys = Object.keys(six).filter((k) =>
     k.startsWith("temperature_2m_member"),
   );
@@ -580,10 +538,6 @@ export async function fetchSeasonalForecast(
     });
 }
 
-/* -------------------------------------------------------------------------- */
-/* 6. Air quality (current snapshot)                                           */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchAirQuality(
   lat: number,
   lon: number,
@@ -628,10 +582,6 @@ export async function fetchAirQuality(
   };
 }
 
-/* -------------------------------------------------------------------------- */
-/* 7. Flood risk (river discharge)                                             */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchFloodRisk(
   lat: number,
   lon: number,
@@ -673,17 +623,11 @@ export async function fetchFloodRisk(
   };
 }
 
-/* -------------------------------------------------------------------------- */
-/* 8. Geocoding — thin adapter over existing searchLatamPlaces                 */
-/* -------------------------------------------------------------------------- */
-
 export async function fetchGeocoding(
   query: string,
   language: "es" | "en" | "pt" = "es",
 ): Promise<GeoLocation[]> {
-  // `searchLatamPlaces` currently hardcodes language=es to scope LATAM
-  // results. Keep the parameter so callers can request other languages
-  // once that helper is extended without churning the public signature.
+
   void language;
   const places = await searchLatamPlaces(query);
   return places.map<GeoLocation>((p) => ({

@@ -46,7 +46,6 @@ function jitter(
   return ((seed * 7919 + monthIndex * 997) % 1000) / 1000 - 0.5;
 }
 
-/** Contenido volumétrico de humedad (m³/m³) derivado hasta haber campo real. */
 export function syntheticSoilMoisture(
   tempMeanC: number,
   precipMm: number,

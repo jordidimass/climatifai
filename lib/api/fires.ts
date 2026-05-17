@@ -11,15 +11,6 @@ import type {
   HotspotProperties,
 } from "@/types/fires";
 
-/**
- * NASA FIRMS area API fetcher. Returns near-real-time thermal anomaly
- * (hotspot) points for a bounding box and look-back window, converted
- * from CSV to GeoJSON. Free tier requires a MAP_KEY from
- * https://firms.modaps.eosdis.nasa.gov/api/map_key/. The NRT feeds keep
- * roughly the last ~60 days; for deeper history a separate archive
- * pipeline is required.
- */
-
 const FIRMS_BASE = "https://firms.modaps.eosdis.nasa.gov/api/area/csv";
 
 export class FirmsKeyMissingError extends Error {
@@ -32,9 +23,9 @@ export class FirmsKeyMissingError extends Error {
 interface FetchHotspotsInput {
   source: FirmsSource;
   bbox: BBox;
-  /** 1..5 — FIRMS area/csv hard cap. Longer ranges must be split into windows. */
+
   dayRange: number;
-  /** YYYY-MM-DD; when set FIRMS returns the dayRange ending at this date. */
+
   date?: string;
 }
 
@@ -65,11 +56,6 @@ export async function fetchFirmsHotspots(
   return parseFirmsCsv(csv, source);
 }
 
-/**
- * FIRMS `/area/csv` caps each call at 5 days. For longer windows we split
- * into back-to-back 5-day chunks ending at staggered dates. Boundary rows
- * land in two chunks, so we dedupe on (lat, lng, ts, source).
- */
 const FIRMS_MAX_WINDOW_DAYS = 5;
 
 export async function fetchFirmsHotspotsMulti(
@@ -111,9 +97,9 @@ export async function fetchFirmsHotspotsMulti(
 }
 
 interface FirmsWindow {
-  /** Days of look-back, 1..5. */
+
   dayRange: number;
-  /** YYYY-MM-DD end date. When undefined the API treats it as "now". */
+
   date?: string;
 }
 
@@ -148,10 +134,6 @@ function isoDateMinusDays(
   return base.toISOString().slice(0, 10);
 }
 
-/**
- * FIRMS CSV header (varies slightly per source). We index by name not
- * position because order is not guaranteed across sources.
- */
 function parseFirmsCsv(csv: string, source: FirmsSource): HotspotFeature[] {
   const lines = csv.trim().split(/\r?\n/);
   if (lines.length < 2) return [];
@@ -219,7 +201,7 @@ function readNumber(cells: string[], i: number): number | null {
 }
 
 function toEpochMs(acqDate: string, acqTime: string): number {
-  // acqDate "YYYY-MM-DD", acqTime "HHMM" (UTC).
+
   const hh = acqTime.slice(0, 2);
   const mm = acqTime.slice(2, 4);
   const iso = `${acqDate}T${hh}:${mm}:00Z`;
@@ -230,11 +212,11 @@ function toEpochMs(acqDate: string, acqTime: string): number {
 function normalizeConfidence(raw: string | undefined): FireConfidenceBand {
   const v = (raw ?? "").trim().toLowerCase();
   if (!v) return "nominal";
-  // VIIRS letter: l/n/h.
+
   if (v === "l" || v === "low") return "low";
   if (v === "h" || v === "high") return "high";
   if (v === "n" || v === "nominal") return "nominal";
-  // MODIS numeric 0-100.
+
   const n = Number(v);
   if (Number.isFinite(n)) {
     if (n < 30) return "low";

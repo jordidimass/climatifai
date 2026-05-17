@@ -8,7 +8,7 @@ type RiskTone = "ok" | "warn" | "bad" | "neutral";
 interface RiskBadgeProps {
   status: CropSuitabilityStatus;
   className?: string;
-  /** When true, only renders the dot — use inside dense tables. */
+
   compact?: boolean;
 }
 

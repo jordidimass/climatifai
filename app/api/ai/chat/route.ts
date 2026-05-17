@@ -16,7 +16,7 @@ type SelectionContextPayload = {
   compareCropId?: string;
   compareCropName?: string;
   regionSummary?: string;
-  /** Punto elegido en el buscador (Open-Meteo); la región de catálogo sigue siendo la más cercana. */
+
   geocodedLabel?: string;
   latitude?: number;
   longitude?: number;

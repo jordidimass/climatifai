@@ -1,13 +1,5 @@
 import { z } from "zod";
 
-/**
- * Validated environment access. Server-only — never import from a Client
- * Component or the secrets in `serverEnv` will be inlined into the bundle.
- *
- * Reads are tolerant in development (warn) and strict in production
- * (throw on the first server module that imports a missing required key).
- */
-
 const serverSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])

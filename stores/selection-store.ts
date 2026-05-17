@@ -15,11 +15,11 @@ import {
 export interface CustomLocation {
   lat: number;
   lng: number;
-  /** Metres above sea level, when the geocoder provides it. */
+
   elevation?: number;
-  /** Human label rendered next to coordinates ("Guadalajara, Jalisco · MX"). */
+
   label: string;
-  /** ISO-3166-1 alpha-2. */
+
   countryCode: string;
 }
 
@@ -30,11 +30,7 @@ interface SelectionState {
   comparisonMode: boolean;
   sowingPresetId: SowingPresetId;
   sowingDate: string;
-  /**
-   * Pin from LocationPicker / shareable URLs that include coordinates.
-   * `setCustomLocation` also snaps catalog `region` to the preset closest to
-   * those coordinates so climate routes stay coherent with the chosen point.
-   */
+
   customLocation: CustomLocation | null;
   setRegion: (region: Region) => void;
   setCrop: (crop: Crop) => void;
@@ -57,12 +53,6 @@ function defaultSowingDate(): string {
   return d.toISOString().slice(0, 10);
 }
 
-/**
- * Holds the user's current focus — which region and which crop are
- * driving every downstream query (map viewport, climate series, AI
- * prompts). Deliberately not persisted: every session opens with the
- * defaults so the dashboard is never in a stale state.
- */
 export const useSelectionStore = create<SelectionState>((set) => ({
   region: DEFAULT_REGION,
   crop: DEFAULT_CROP,

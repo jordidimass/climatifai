@@ -15,8 +15,8 @@ const RANGE_CHIPS: { value: FireDayRange; label: string }[] = [
   { value: 30, label: "30 d" },
 ];
 
-const PLAY_TICK_MS = 60; // ~16 fps; smooth enough, easy on the eyes.
-const PLAY_STEPS = 480; // playhead crosses span in this many ticks.
+const PLAY_TICK_MS = 60;
+const PLAY_STEPS = 480;
 
 interface FireTimelineProps {
   className?: string;
@@ -33,8 +33,6 @@ export function FireTimeline({ className }: FireTimelineProps) {
   const setWindowHours = useFireStore((s) => s.setWindowHours);
   const dataSpan = useFireStore((s) => s.dataSpan);
 
-  // Stable "now" pinned at mount so the fallback span does not jitter while
-  // the user drags the slider before data arrives.
   const [mountedAt] = React.useState(() => Date.now());
 
   const span = React.useMemo(() => {
@@ -44,7 +42,6 @@ export function FireTimeline({ className }: FireTimelineProps) {
     return { from, to };
   }, [dataSpan, dayRange, mountedAt]);
 
-  /** Keep slider value inside bounds when dataSpan arrives or shrinks. */
   React.useEffect(() => {
     const ph = useFireStore.getState().playhead;
     if (ph == null) return;
@@ -56,7 +53,6 @@ export function FireTimeline({ className }: FireTimelineProps) {
   const rawPlayhead = playhead ?? span.to;
   const effectivePlayhead = clampMs(rawPlayhead, span.from, span.to);
 
-  // Play loop — advance playhead, wrap at the end.
   React.useEffect(() => {
     if (!playing) return;
     const step = Math.max(1, (span.to - span.from) / PLAY_STEPS);

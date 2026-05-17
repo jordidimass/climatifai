@@ -1,4 +1,3 @@
-/** Rangos típicos de temperatura cómoda para la banda de referencia (°C). */
 const OPTIMAL_TEMP_C: Record<string, { min: number; max: number }> = {
   maize: { min: 18, max: 31 },
   wheat: { min: 14, max: 24 },
@@ -16,7 +15,6 @@ export function cropOptimalTempRange(cropId: string): {
   return OPTIMAL_TEMP_C[cropId] ?? DEFAULT_TEMP;
 }
 
-/** Lluvia mensual plausible a partir del rango anual ideal dividido entre 12. */
 export function cropOptimalMonthlyPrecipMm(cropIdealAnnual: {
   min: number;
   max: number;

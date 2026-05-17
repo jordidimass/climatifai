@@ -5,7 +5,7 @@ import { create } from "zustand";
 import type { ClimateSeries, TimeRange } from "@/types/climate";
 
 interface ClimateState {
-  /** Series cache keyed by `${regionId}:${cropId}:${kind}:${from}-${to}`. */
+
   series: Record<string, ClimateSeries>;
   get: (key: string) => ClimateSeries | undefined;
   set: (key: string, series: ClimateSeries) => void;

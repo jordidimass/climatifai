@@ -5,7 +5,6 @@ import { LineChart } from "lucide-react";
 
 import { useSelectionStore } from "@/stores/selection-store";
 
-/** Sidebar item: marca modo comparación y navega (CVA-63). */
 export function CompareSidebarLink() {
   const enterComparisonMode = useSelectionStore((s) => s.enterComparisonMode);
 

@@ -7,20 +7,6 @@ import { getCrop, isCropId } from "@/lib/api/crops";
 import { getRegion } from "@/lib/api/regions";
 import { useSelectionStore } from "@/stores/selection-store";
 
-/**
- * Mounted under layouts that rely on sharable URLs; runs whenever the params
- * string changes (navigation), including `/insights?…` from resultado.
- *
- * Recognised params:
- *   regionId   — catalog preset (solo cuando no hay lat/lng; si hay pin, la
- *                región efectiva viene del preset más cercano a esas coords)
- *   cropId     — catalog crop id  (maize, coffee, …)
- *   date       — sowing date YYYY-MM-DD
- *   lat, lng   — custom-location coordinates (numbers)
- *   elev       — elevation in metres (optional)
- *   label      — human label for the custom location
- *   country    — ISO-3166 α-2 of the custom location
- */
 export function SelectionFromSearchParams() {
   const params = useSearchParams();
   const setRegion = useSelectionStore((s) => s.setRegion);
@@ -77,11 +63,6 @@ export function SelectionFromSearchParams() {
   return null;
 }
 
-/**
- * Build the shareable URL search string from the current selection state.
- * Caller passes the state snapshot so this is callable from event handlers
- * (avoids the `useSelectionStore.getState()` import elsewhere).
- */
 export function buildSelectionSearchParams(state: {
   region: { id: string };
   crop: { id: string };

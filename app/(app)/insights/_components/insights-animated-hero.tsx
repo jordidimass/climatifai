@@ -16,7 +16,7 @@ export function InsightsAnimatedHero({
   title,
   description,
 }: InsightHeroProps) {
-  /** Activa entrada suave; si el usuario pide menos movimiento, se salta aquí */
+
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {

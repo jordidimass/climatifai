@@ -4,9 +4,6 @@ import * as React from "react";
 import dynamic from "next/dynamic";
 import type mapboxgl from "mapbox-gl";
 
-/**
- * The map ships Mapbox GL JS (DOM-only) so we render it client-only.
- */
 const RegionMap = dynamic(
   () => import("@/components/map/region-map").then((m) => m.RegionMap),
   { ssr: false, loading: () => <MapSkeleton /> },
@@ -14,7 +11,7 @@ const RegionMap = dynamic(
 
 interface RegionMapPanelProps {
   variant?: "rounded" | "full";
-  /** Mapbox layer overlays composed on top of the basemap. */
+
   children?: React.ReactNode;
   onMapboxReady?: (map: mapboxgl.Map) => void;
 }

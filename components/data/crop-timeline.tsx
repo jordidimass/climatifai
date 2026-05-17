@@ -13,9 +13,9 @@ import type { Crop } from "@/types/crop";
 import { cn } from "@/lib/utils";
 
 export type CropTimelineProps = {
-  /** Override sidebar cultivo — útil columnas lado a lado. */
+
   crop?: Crop;
-  /** `compact`: sin tutorial largo para duplicar menos en vista comparación. */
+
   variant?: "full" | "compact";
 };
 

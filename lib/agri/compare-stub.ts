@@ -9,9 +9,6 @@ export type AgriCompareResult = {
   scores: Record<string, number>;
 };
 
-/**
- * Comparación lado a lado con métricas deterministas region+cultivo; sustituir por `POST /agri/compare`.
- */
 export function compareTwoCropsStub(
   regionId: string,
   a: Crop,

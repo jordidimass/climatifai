@@ -13,12 +13,6 @@ import type {
 type PointFeature<P extends GeoJSON.GeoJsonProperties> = GeoJSON.Feature<GeoJSON.Point, P>;
 type PointFC<P extends GeoJSON.GeoJsonProperties> = GeoJSON.FeatureCollection<GeoJSON.Point, P>;
 
-/**
- * Renders one circle per region in the catalog, coloured by the current
- * crop's suitability status. Reads from `POST /api/agri/suitability`
- * (one request per region; the catalog is small).
- */
-
 const STATUS_COLOR: Record<CropSuitabilityStatus, string> = {
   suitable: "#3a9d5b",
   moderate: "#d0a13c",

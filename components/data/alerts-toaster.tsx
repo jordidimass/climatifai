@@ -36,14 +36,10 @@ export function AlertsToaster() {
         if (parsed.severity === "alta") toast.error(parsed.title, opts);
         else if (parsed.severity === "media") toast.warning(parsed.title, opts);
         else toast.message(parsed.title, opts);
-      } catch {
-        /* malformed payload — drop */
-      }
+      } catch {}
     };
 
-    source.onerror = () => {
-      /* let the browser handle reconnection backoff */
-    };
+    source.onerror = () => {};
 
     return () => source.close();
   }, []);

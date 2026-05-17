@@ -5,15 +5,10 @@ import { cn } from "@/lib/utils";
 interface LogoProps {
   href?: string;
   className?: string;
-  /** When true, omits the wordmark and renders only the orbit glyph. */
+
   iconOnly?: boolean;
 }
 
-/**
- * Climatifai wordmark. The glyph is a small orbiting dot suggesting a
- * planet + atmosphere — quiet, never shouted. Renders the display serif
- * for the wordmark to anchor the brand voice.
- */
 export function Logo({ href = "/", className, iconOnly = false }: LogoProps) {
   const content = (
     <span
@@ -63,7 +58,6 @@ function OrbitGlyph() {
           <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.55" />
         </radialGradient>
       </defs>
-      {/* orbit ring */}
       <ellipse
         cx="13"
         cy="13"
@@ -75,9 +69,7 @@ function OrbitGlyph() {
         transform="rotate(-22 13 13)"
         fill="none"
       />
-      {/* planet */}
       <circle cx="13" cy="13" r="5.2" fill="url(#cl-orb)" />
-      {/* satellite */}
       <circle
         cx="22.4"
         cy="9.2"

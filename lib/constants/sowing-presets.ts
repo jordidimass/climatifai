@@ -1,6 +1,3 @@
-/**
- * Opciones de “tipo de siembra” para el formulario MVP: combinan cultivo y modalidad.
- */
 export const SOWING_PRESETS = [
   {
     id: "maize-rainfed",

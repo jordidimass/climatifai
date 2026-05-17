@@ -1,9 +1,3 @@
-/**
- * Derives deterministic month rotations for illustrative crop-cycle bars from
- * lat/lng + crop so different pins shift siembra·crece·cosecha in the UI.
- * MVP scaffolding until a crop_calendar backend exists.
- */
-
 import type { CropId } from "@/types/crop";
 
 export type CropPhaseKey =
@@ -17,7 +11,6 @@ export type CropTimelineAnchors = {
   stressRotation: number;
 };
 
-/** Base phase per calendar month (0 = Jan … 11 = Dec); parity with legacy UX. */
 const BASE_MONTH_PHASE: CropPhaseKey[] = [
   "off",
   "off",
@@ -49,10 +42,8 @@ export function getCropTimelineAnchors(
 ): CropTimelineAnchors {
   let cycleRotation = hashCoordsCrop(lat, lng, cropId) % 12;
 
-  /* Southern Hemisphere: coarse half-year flip for illustrative seasons */
   if (lat < -5) cycleRotation = (cycleRotation + 6) % 12;
 
-  /* Northern tropics: small shift by longitude bands (Pacífico vs Atlántico) */
   else if (Math.abs(lat) < 23.5 && lat >= 0) {
     const band = Math.floor(((lng + 180 + 720) % 360) / 30) % 3;
     cycleRotation = (cycleRotation + band) % 12;

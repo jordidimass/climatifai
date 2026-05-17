@@ -4,19 +4,6 @@ import { getCrop } from "@/lib/api/crops";
 import { getRegion } from "@/lib/api/regions";
 import type { ClimatePoint, ClimateSeries, TimeRange } from "@/types/climate";
 
-/**
- * Climate series fetcher backed by Open-Meteo. Historical reads the
- * ERA5-based Archive API; projections read the CMIP6 HighResMIP Climate
- * API (multi-model average). No API key required.
- *
- * Note on scenarios: Open-Meteo's free Climate API surfaces HighResMIP
- * runs that are forced toward SSP5-8.5. The route layer still accepts a
- * `scenario` param and echoes it back in the response wrapper, but the
- * underlying series is the same across scenarios for now. Swap in a
- * scenario-aware provider (Copernicus C3S CDS, NEX-GDDP-CMIP6) when
- * that becomes a requirement.
- */
-
 const ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive";
 const CLIMATE_URL = "https://climate-api.open-meteo.com/v1/climate";
 

@@ -1,13 +1,6 @@
-/**
- * Geocoding helper backed by Open-Meteo's free Geocoding API. Filters
- * results to Latin America (Spanish-, Portuguese- and French-speaking
- * countries), explicitly excluding Brazil per product spec.
- */
-
 const GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const ELEVATION_URL = "https://api.open-meteo.com/v1/elevation";
 
-/** ISO-3166 α-2 codes for Latin America, BR excluded. */
 export const LATAM_COUNTRIES = new Set<string>([
   "MX", // Mexico
   "GT", // Guatemala
@@ -39,7 +32,7 @@ export interface GeocodeResult {
   country: string;
   lat: number;
   lng: number;
-  /** Meters above sea level (Open-Meteo returns 0 when unknown). */
+
   elevation?: number;
 }
 
@@ -102,11 +95,6 @@ interface OpenMeteoElevationResponse {
   elevation?: number[];
 }
 
-/**
- * Server-side digital-elevation lookup via Open-Meteo. Returns metres above
- * sea level, or `undefined` when the API is unreachable or returns 0
- * (treated as "unknown" — open ocean and missing tiles both serialise as 0).
- */
 export async function fetchElevation(
   lat: number,
   lng: number,

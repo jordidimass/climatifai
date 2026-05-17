@@ -1,13 +1,6 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/**
- * Server-Sent Events stream of synthetic advisories. Cycles through a
- * canned list every `TICK_MS`. Swap the timer for a real subscription
- * (Vercel Queues, Redis pub/sub, or a polling job on top of the
- * suitability advisor) when the data source is available.
- */
-
 const TICK_MS = 18_000;
 const HEARTBEAT_MS = 25_000;
 
@@ -59,9 +52,7 @@ export function GET() {
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify(payload)}\n\n`),
           );
-        } catch {
-          /* enqueue after close — ignore */
-        }
+        } catch {}
       };
 
       send({ type: "ready" });
@@ -80,9 +71,7 @@ export function GET() {
       heartbeat = setInterval(() => {
         try {
           controller.enqueue(encoder.encode(`: keep-alive\n\n`));
-        } catch {
-          /* stream closed */
-        }
+        } catch {}
       }, HEARTBEAT_MS);
     },
     cancel() {

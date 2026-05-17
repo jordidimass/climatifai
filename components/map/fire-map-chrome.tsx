@@ -44,8 +44,6 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
   const reportOpen = useFireStore((s) => s.reportOpen);
   const setReportOpen = useFireStore((s) => s.setReportOpen);
 
-  // Stable callback so the layer effect that calls `onData(filtered)` doesn't
-  // re-run every render.
   const handleData = React.useCallback((fc: HotspotFC) => {
     setCurrentFC((prev) => (prev === fc ? prev : fc));
   }, []);
@@ -61,7 +59,6 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
         </RegionMapPanel>
 
         <div className="pointer-events-none absolute inset-0 flex flex-col gap-3 fire-map-chrome-overlay md:gap-4">
-          {/* Top-right: shared column width so search + Capas align flush right */}
           <div className="flex shrink-0 justify-end">
             <div className="pointer-events-auto flex max-h-[min(420px,42svh)] w-full max-w-xs min-w-0 flex-col gap-3 overflow-y-auto overscroll-contain">
               <FireSearch className="max-w-none" />
@@ -71,11 +68,6 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
 
           <div className="min-h-0 flex-1" aria-hidden />
 
-          {/*
-            Bottom chrome shares one baseline (items-end): timeline sits between
-            left/right on xl so its bottom aligns with corners & viewport inset.
-            Mobile: timeline row above the corner row — corners stay bottom-anchored.
-          */}
           <div className="flex w-full shrink-0 flex-col gap-4 xl:flex-row xl:items-end xl:gap-x-4">
             {viewMode === "history" ? (
               <div className="flex justify-center xl:order-2 xl:min-w-0 xl:flex-1 xl:justify-center xl:self-end xl:px-2">

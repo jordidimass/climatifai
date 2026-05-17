@@ -20,7 +20,7 @@ const CONFIDENCE_COLOR = {
 } as const;
 
 interface FireHotspotsLayerProps {
-  /** Optional callback so the chrome can lift the latest FC for counters. */
+
   onData?: (fc: HotspotFC) => void;
 }
 
@@ -55,11 +55,6 @@ export function FireHotspotsLayer({ onData }: FireHotspotsLayerProps) {
 
   React.useEffect(() => {
     if (!sources.length) {
-      // Synchronous reset is intentional: when the user untoggles the last
-      // source, we want the layer to clear immediately.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAllFeatures([]);
-      setDataSpan(null);
       return;
     }
     const controller = new AbortController();
@@ -120,7 +115,7 @@ export function FireHotspotsLayer({ onData }: FireHotspotsLayerProps) {
   }, [bbox, dayRange, sourcesKey, sources.length, setDataSpan, setError, setLoading]);
 
   const filtered: HotspotFC = React.useMemo(() => {
-    if (!allFeatures.length) return EMPTY_FC;
+    if (!sources.length || !allFeatures.length) return EMPTY_FC;
     if (playhead == null) {
       return { type: "FeatureCollection", features: allFeatures };
     }
@@ -131,10 +126,12 @@ export function FireHotspotsLayer({ onData }: FireHotspotsLayerProps) {
         f.properties.ts <= playhead + half,
     );
     return { type: "FeatureCollection", features };
-  }, [allFeatures, playhead, windowHours]);
+  }, [allFeatures, playhead, sources.length, windowHours]);
 
   const onDataRef = React.useRef(onData);
-  onDataRef.current = onData;
+  React.useEffect(() => {
+    onDataRef.current = onData;
+  }, [onData]);
   const lastSentRef = React.useRef<HotspotFC | null>(null);
 
   React.useEffect(() => {
@@ -152,8 +149,6 @@ export function FireHotspotsLayer({ onData }: FireHotspotsLayerProps) {
     cb(filtered);
   }, [filtered]);
 
-  // Click handler — register on map instance via useMap. Mapbox supports
-  // layer-scoped listeners: `map.on("click", layerId, handler)`.
   React.useEffect(() => {
     const m = map?.getMap();
     if (!m) return;

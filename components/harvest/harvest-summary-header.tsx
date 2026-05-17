@@ -51,9 +51,7 @@ function useSuitabilityStatus(
           setCache({ key, status: json.suitability.status });
         }
       })
-      .catch(() => {
-        /* aborted or network error — fall back to "unknown" via key mismatch */
-      });
+      .catch(() => {});
 
     return () => controller.abort();
   }, [regionId, cropId, key]);

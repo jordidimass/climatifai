@@ -1,10 +1,5 @@
 import type { Region } from "@/types/region";
 
-/**
- * Seed region catalog. Centered on Latin America. Replace with a proper
- * geo-source (Natural Earth admin-1 or similar) when the project graduates
- * beyond scaffold. Brazil is intentionally excluded per product spec.
- */
 export const REGIONS: Region[] = [
   {
     id: "mx-bajio",
@@ -58,13 +53,9 @@ export function getRegion(id: string): Region | undefined {
   return REGIONS.find((r) => r.id === id);
 }
 
-/** Default selection used before the user picks anything. */
 export const DEFAULT_REGION =
   REGIONS.find((r) => r.id === "gt-altiplano") ?? REGIONS[0];
 
-/**
- * Haversine distance between two points on Earth, in kilometres.
- */
 function haversineKm(
   aLat: number,
   aLng: number,
@@ -83,11 +74,6 @@ function haversineKm(
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-/**
- * Snaps an arbitrary coordinate to the closest registered region in the
- * seed catalog. Used by the LocationPicker so downstream code that keys on
- * `regionId` keeps working with free-form picks.
- */
 export function findNearestRegion(
   lat: number,
   lng: number,

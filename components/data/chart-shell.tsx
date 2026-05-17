@@ -30,10 +30,6 @@ function useMounted() {
   return React.useSyncExternalStore(subscribe, () => true, () => false);
 }
 
-/**
- * Themed Recharts wrapper. Reads `--chart-*` CSS variables so the chart
- * re-paints automatically when the theme toggles light/dark.
- */
 export function ChartShell({
   title,
   subtitle,

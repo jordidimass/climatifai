@@ -1,10 +1,5 @@
 import { CROP_IDS, type Crop, type CropId } from "@/types/crop";
 
-/**
- * Seed crop catalog. Real implementations will source this from an external
- * database (e.g. FAO ECOCROP) — kept inline for the scaffold so the UI is
- * testable with zero external dependencies.
- */
 export const CROPS: Crop[] = [
   {
     id: "maize",

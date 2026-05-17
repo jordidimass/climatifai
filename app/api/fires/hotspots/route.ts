@@ -7,12 +7,6 @@ import {
 import { pointInPolygon } from "@/lib/geo/brazil-polygon";
 import type { FireDayRange, FirmsSource } from "@/types/fires";
 
-/**
- * Hard LATAM clamp applied to every incoming bbox. The fire map is
- * scoped to Latin America (Brazil excluded by polygon filter further
- * down), so queries that spill into Florida, the western US, the deep
- * Pacific, etc. are trimmed to this rectangle before hitting FIRMS.
- */
 const LATAM_BBOX = {
   west: -118.5, // Baja California Sur
   south: -56.0, // Tierra del Fuego
@@ -115,7 +109,7 @@ export async function GET(request: Request) {
       parsed.data.dayRange,
       parsed.data.date,
     );
-    // Brazil exclusion per product spec.
+
     fc.features = fc.features.filter((f) => {
       const [lng, lat] = f.geometry.coordinates;
       return !pointInPolygon(lng, lat);

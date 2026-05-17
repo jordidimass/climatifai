@@ -30,7 +30,7 @@ const COL = {
 type TabId = "temp" | "precip" | "soil";
 
 export interface ClimateChartProps {
-  /** Contrato cercano al futuro `/agri/climate` (`ClimateComparison`). */
+
   data: ClimateComparisonMonthRow[];
   cropName: string;
   compact?: boolean;

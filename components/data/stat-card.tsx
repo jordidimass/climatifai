@@ -4,9 +4,9 @@ interface StatCardProps {
   label: string;
   value: string;
   unit?: string;
-  /** Optional rendered element — usually an AnomalyBadge — shown bottom-right. */
+
   badge?: React.ReactNode;
-  /** Optional caption rendered under the headline value. */
+
   caption?: string;
   className?: string;
 }

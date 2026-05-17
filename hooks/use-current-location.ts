@@ -30,9 +30,7 @@ export function useCurrentLocation(): UseCurrentLocationResult {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude, altitude } = pos.coords;
-        // Browser GPS altitude is `null` on most desktops and unreliable
-        // (often 0) on phones without a barometric fix. Treat 0 as unknown
-        // and fall back to a server-side DEM lookup.
+
         const browserElevation =
           typeof altitude === "number" &&
           Number.isFinite(altitude) &&

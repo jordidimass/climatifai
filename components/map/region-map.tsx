@@ -17,29 +17,15 @@ import { useSelectionStore } from "@/stores/selection-store";
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 if (TOKEN && typeof window !== "undefined") {
-  // Belt-and-braces: mapbox-gl picks the token at module load even if the
-  // react-map-gl prop arrives later.
+
   mapboxgl.accessToken = TOKEN;
 }
 
-/**
- * Climatifai basemap. Uses legacy v11 styles which every public pk.* token
- * can read regardless of account billing tier. Replace with a bespoke
- * Mapbox Studio style later.
- */
 const STYLES = {
   light: "mapbox://styles/mapbox/light-v11",
   dark: "mapbox://styles/mapbox/dark-v11",
 } as const;
 
-/**
- * Note on heights: mapbox-gl reads `getBoundingClientRect()` once at init.
- * If the container resolves to 0px tall — which happens when only
- * `min-height` is set and the parent has no definite height for `h-full`
- * to compute against — the canvas stays 0×0 and tiles never paint.
- * Both variants ship a definite height so percentage-height children
- * inside <Map> resolve correctly.
- */
 const shellClass = {
   rounded:
     "glass relative h-[480px] w-full overflow-hidden rounded-xl",
@@ -66,9 +52,9 @@ function hasWebGL(): boolean {
 
 interface RegionMapProps {
   variant?: keyof typeof shellClass;
-  /** Mapbox <Source>/<Layer> overlays composed on top of the basemap. */
+
   children?: React.ReactNode;
-  /** Fires once when Mapbox GL map instance is ready (e.g. custom chrome zoom). */
+
   onMapboxReady?: (map: mapboxgl.Map) => void;
 }
 
@@ -81,15 +67,11 @@ export function RegionMap({
   const customLocation = useSelectionStore((s) => s.customLocation);
   const { resolvedTheme } = useTheme();
   const mapRef = React.useRef<MapRef | null>(null);
-  const [phase, setPhase] = React.useState<Phase>("pending");
+  const [phase, setPhase] = React.useState<Phase>(() => {
+    if (typeof window === "undefined") return "pending";
+    return hasWebGL() ? "init" : "no-webgl";
+  });
   const [errMsg, setErrMsg] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    // Browser-only WebGL probe: cannot run during SSR/lazy init because
-    // `document` doesn't exist there. Runs once on mount; idempotent.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPhase(hasWebGL() ? "init" : "no-webgl");
-  }, []);
 
   const focus = customLocation
     ? {
@@ -103,7 +85,6 @@ export function RegionMap({
         zoom: region.zoom,
       };
 
-  // Recenter without remounting whenever the focus identity changes.
   React.useEffect(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
@@ -139,9 +120,6 @@ export function RegionMap({
           requestAnimationFrame(() => map.resize());
           onMapboxReady?.(map);
 
-          // Catch tile-level errors that don't always bubble up to
-          // react-map-gl's onError prop (auth failures, 404s on
-          // individual tile requests, etc.).
           map.on("error", (ev) => {
             const err = (ev as { error?: { message?: string; status?: number } })
               .error;

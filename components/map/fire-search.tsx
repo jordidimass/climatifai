@@ -27,7 +27,6 @@ interface FireSearchProps {
 }
 
 export function FireSearch({ className }: FireSearchProps) {
-  const customLocation = useSelectionStore((s) => s.customLocation);
   const setCustomLocation = useSelectionStore((s) => s.setCustomLocation);
 
   const [query, setQuery] = React.useState("");
@@ -37,16 +36,18 @@ export function FireSearch({ className }: FireSearchProps) {
   const [error, setError] = React.useState<string | null>(null);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
 
-  React.useEffect(() => {
-    const trimmed = query.trim();
-    if (trimmed.length < MIN_QUERY_LENGTH) {
-      // Synchronously clear stale dropdown state when the user deletes
-      // their query below the minimum length — kept inline so there's no
-      // visible flash of old results.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+  const handleQueryChange = React.useCallback((value: string) => {
+    setQuery(value);
+    if (value.trim().length < MIN_QUERY_LENGTH) {
       setResults([]);
       setError(null);
       setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < MIN_QUERY_LENGTH) {
       return;
     }
 
@@ -76,7 +77,6 @@ export function FireSearch({ className }: FireSearchProps) {
     };
   }, [query]);
 
-  // Close dropdown on outside click.
   React.useEffect(() => {
     if (!open) return;
     function onPointerDown(ev: PointerEvent) {
@@ -124,7 +124,7 @@ export function FireSearch({ className }: FireSearchProps) {
         autoComplete="off"
         placeholder="Buscar ciudad o región…"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => handleQueryChange(e.target.value)}
         onFocus={() => results.length && setOpen(true)}
         onKeyDown={(e) => {
           if (e.key === "Escape") {

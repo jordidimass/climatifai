@@ -33,13 +33,6 @@ import type {
   MonthlyProjection,
 } from "@/types/open-meteo";
 
-/**
- * Open-Meteo direct-consumption provider. Stub until the ClimatifaiAPI
- * pipeline (Python ingestion → Postgres → Intelligence → GraphQL) is
- * online. Maps raw Open-Meteo fetchers into the canonical
- * `ClimateAnalysis` contract from `types/climate-analysis.ts`.
- */
-
 const CMIP6_MODELS = ["EC_Earth3P_HR", "MPI_ESM1_2_XR", "CMCC_CM2_VHR4"];
 const DEFAULT_PROJECTION_RANGE = { from: 2026, to: 2030 } as const;
 

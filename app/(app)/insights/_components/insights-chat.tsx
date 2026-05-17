@@ -39,7 +39,7 @@ export function InsightsChat() {
   const customLocation = useSelectionStore((s) => s.customLocation);
   const compareCrop = useSelectionStore((s) => s.compareCrop);
   const comparisonMode = useSelectionStore((s) => s.comparisonMode);
-  /** Solo paralelizamos cuando el modo comparación está encendido (p. ej. desde /dashboard/compare). */
+
   const compareActive =
     comparisonMode &&
     compareCrop.id !== crop.id &&

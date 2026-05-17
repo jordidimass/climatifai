@@ -3,10 +3,6 @@ import type { CropSuitability } from "@/types/agri";
 
 type RegionCropAllowlist = Record<string, readonly CropId[]>;
 
-/**
- * Temporary demo fallback, not an agronomic truth source. Replace with the
- * Intelligence API once the ingestion/normalization layers are live.
- */
 export const MVP_REGION_CROP_ALLOWLIST: RegionCropAllowlist = {
   "mx-bajio": [
     "maize",

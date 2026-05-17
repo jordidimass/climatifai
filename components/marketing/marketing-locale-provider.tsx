@@ -52,9 +52,7 @@ export function MarketingLocaleProvider({ children }: { children: ReactNode }) {
     setLocaleState(l);
     try {
       window.localStorage.setItem(STORAGE_KEY, l);
-    } catch {
-      /* noop */
-    }
+    } catch {}
     document.documentElement.lang = l === "en" ? "en" : "es-419";
   }, []);
 
