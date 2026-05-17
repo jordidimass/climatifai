@@ -5,6 +5,7 @@
  */
 
 const GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search";
+const ELEVATION_URL = "https://api.open-meteo.com/v1/elevation";
 
 /** ISO-3166 α-2 codes for Latin America, BR excluded. */
 export const LATAM_COUNTRIES = new Set<string>([
@@ -95,4 +96,37 @@ export async function searchLatamPlaces(
           ? r.elevation
           : undefined,
     }));
+}
+
+interface OpenMeteoElevationResponse {
+  elevation?: number[];
+}
+
+/**
+ * Server-side digital-elevation lookup via Open-Meteo. Returns metres above
+ * sea level, or `undefined` when the API is unreachable or returns 0
+ * (treated as "unknown" — open ocean and missing tiles both serialise as 0).
+ */
+export async function fetchElevation(
+  lat: number,
+  lng: number,
+  signal?: AbortSignal,
+): Promise<number | undefined> {
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return undefined;
+  const url = new URL(ELEVATION_URL);
+  url.searchParams.set("latitude", lat.toFixed(5));
+  url.searchParams.set("longitude", lng.toFixed(5));
+
+  try {
+    const res = await fetch(url, { signal });
+    if (!res.ok) return undefined;
+    const json = (await res.json()) as OpenMeteoElevationResponse;
+    const value = json.elevation?.[0];
+    if (typeof value !== "number" || !Number.isFinite(value) || value === 0) {
+      return undefined;
+    }
+    return value;
+  } catch {
+    return undefined;
+  }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Loader2, MapPin, Search, X } from "lucide-react";
+import { Loader2, MapPin, Search } from "lucide-react";
 
 import { CurrentLocationButton } from "@/components/selection/current-location-button";
 import { Input } from "@/components/ui/input";
@@ -103,14 +103,6 @@ export function FireSearch({ className }: FireSearchProps) {
     setError(null);
   }
 
-  function handleClear() {
-    setCustomLocation(null);
-    setQuery("");
-    setResults([]);
-    setOpen(false);
-    setError(null);
-  }
-
   const trimmedQuery = query.trim();
   const isQueryValid = trimmedQuery.length >= MIN_QUERY_LENGTH;
 
@@ -144,28 +136,18 @@ export function FireSearch({ className }: FireSearchProps) {
             handlePick(results[0]);
           }
         }}
-        className="h-10 rounded-full bg-card/90 pl-10 pr-10 shadow-sm backdrop-blur-sm"
+        className="h-10 rounded-full bg-card/90 pl-10 pr-10 shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-0 focus-visible:shadow-md"
         aria-expanded={open}
         aria-controls="fire-search-results"
         aria-autocomplete="list"
         role="combobox"
       />
-      {loading && isQueryValid ? (
+      {loading && isQueryValid && (
         <Loader2
           className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground"
           aria-hidden
         />
-      ) : customLocation ? (
-        <button
-          type="button"
-          onClick={handleClear}
-          className="absolute right-2 top-1/2 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent/40 hover:text-foreground"
-          aria-label="Limpiar ubicación"
-          title={`Ubicación: ${customLocation.label}`}
-        >
-          <X className="size-3.5" aria-hidden />
-        </button>
-      ) : null}
+      )}
 
       {open && isQueryValid && (results.length > 0 || error) ? (
         <div

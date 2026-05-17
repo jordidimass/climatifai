@@ -3,6 +3,7 @@
 import * as React from "react";
 import { toast } from "sonner";
 
+import { fetchElevation } from "@/lib/api/geocoding";
 import { useSelectionStore } from "@/stores/selection-store";
 
 interface UseCurrentLocationResult {
@@ -27,12 +28,20 @@ export function useCurrentLocation(): UseCurrentLocationResult {
     }
     setRequesting(true);
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude, longitude, altitude } = pos.coords;
-        const elevation =
-          typeof altitude === "number" && Number.isFinite(altitude)
+        // Browser GPS altitude is `null` on most desktops and unreliable
+        // (often 0) on phones without a barometric fix. Treat 0 as unknown
+        // and fall back to a server-side DEM lookup.
+        const browserElevation =
+          typeof altitude === "number" &&
+          Number.isFinite(altitude) &&
+          altitude !== 0
             ? altitude
             : undefined;
+        const elevation =
+          browserElevation ?? (await fetchElevation(latitude, longitude));
+
         setCustomLocation({
           lat: latitude,
           lng: longitude,
