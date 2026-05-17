@@ -65,52 +65,62 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
 
           <div className="min-h-0 flex-1" aria-hidden />
 
-          {/* Bottom strip — items-end: left + right stacks share baseline */}
-          <div className="flex shrink-0 flex-wrap items-end justify-between gap-x-6 gap-y-4">
-            <div className="pointer-events-auto flex min-w-0 max-w-[min(100%,22rem)] flex-col-reverse items-start gap-3">
-              <RegionFocusCard />
-              {phase === "browse" ? (
-                <Button
-                  type="button"
-                  variant="default"
-                  className="w-fit rounded-full shadow-md"
-                  asChild
-                >
-                  <Link href="/mapa-incendios/seleccion">Selector en mapa</Link>
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-fit rounded-full bg-card/80 backdrop-blur-sm"
-                  asChild
-                >
-                  <Link href="/mapa-incendios">Vista amplia</Link>
-                </Button>
-              )}
-              <div className="flex flex-col gap-2">
-                <FirePrimaryButtons
-                  phase={phase}
-                  viewMode={viewMode}
-                  onReport={() => setReportOpen(true)}
-                  onToggleHistory={() =>
-                    setViewMode(viewMode === "history" ? "live" : "history")
-                  }
-                />
+          {/*
+            Bottom chrome shares one baseline (items-end): timeline sits between
+            left/right on xl so its bottom aligns with corners & viewport inset.
+            Mobile: timeline row above the corner row — corners stay bottom-anchored.
+          */}
+          <div className="flex w-full shrink-0 flex-col gap-4 xl:flex-row xl:items-end xl:gap-x-4">
+            {viewMode === "history" ? (
+              <div className="flex justify-center xl:order-2 xl:min-w-0 xl:flex-1 xl:justify-center xl:self-end xl:px-2">
+                <FireTimeline className="pointer-events-auto w-full max-w-3xl" />
+              </div>
+            ) : (
+              <div
+                className="hidden min-h-0 xl:order-2 xl:block xl:min-w-0 xl:flex-1"
+                aria-hidden
+              />
+            )}
+            <div className="flex w-full flex-wrap items-end justify-between gap-x-6 gap-y-4 xl:contents">
+              <div className="pointer-events-auto flex min-w-0 max-w-[min(100%,22rem)] flex-col-reverse items-start gap-3 xl:order-1 xl:shrink-0">
+                <RegionFocusCard />
+                {phase === "browse" ? (
+                  <Button
+                    type="button"
+                    variant="default"
+                    className="w-fit rounded-full shadow-md"
+                    asChild
+                  >
+                    <Link href="/mapa-incendios/seleccion">Selector en mapa</Link>
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-fit rounded-full bg-card/80 backdrop-blur-sm"
+                    asChild
+                  >
+                    <Link href="/mapa-incendios">Vista amplia</Link>
+                  </Button>
+                )}
+                <div className="flex flex-col gap-2">
+                  <FirePrimaryButtons
+                    phase={phase}
+                    viewMode={viewMode}
+                    onReport={() => setReportOpen(true)}
+                    onToggleHistory={() =>
+                      setViewMode(viewMode === "history" ? "live" : "history")
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="pointer-events-auto flex shrink-0 items-end gap-3 xl:order-3 xl:shrink-0">
+                <FireMapZoomToolbar map={mapbox} />
+                <FireLegend />
               </div>
             </div>
-
-            <div className="pointer-events-auto flex shrink-0 items-end gap-3">
-              <FireMapZoomToolbar map={mapbox} />
-              <FireLegend />
-            </div>
           </div>
-
-          {viewMode === "history" ? (
-            <div className="pointer-events-none flex shrink-0 justify-center">
-              <FireTimeline className="pointer-events-auto w-full max-w-3xl" />
-            </div>
-          ) : null}
         </div>
       </div>
 
