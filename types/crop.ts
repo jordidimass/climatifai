@@ -1,6 +1,26 @@
+export const CROP_IDS = [
+  "maize",
+  "bean",
+  "coffee",
+  "cacao",
+  "rice",
+  "sugarcane",
+  "tomato",
+  "potato",
+  "avocado",
+  "chile",
+  "banana",
+  "sorghum",
+  "cassava",
+  "cardamom",
+] as const;
+
+export type CropId = (typeof CROP_IDS)[number];
+
 export interface Crop {
-  id: string;
+  id: CropId;
   name: string;
+  iconEmoji: string;
   scientificName: string;
   /** Base temperature in °C for Growing Degree Day calculations. */
   gddBaseC: number;

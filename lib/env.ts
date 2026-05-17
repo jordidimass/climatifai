@@ -13,6 +13,8 @@ const serverSchema = z.object({
     .enum(["development", "test", "production"])
     .default("development"),
   AI_GATEWAY_API_KEY: z.string().min(1).optional(),
+  AGRI_API_BASE_URL: z.url().optional(),
+  AGRI_GRAPHQL_URL: z.url().optional(),
 });
 
 const clientSchema = z.object({
@@ -37,6 +39,8 @@ function parse<T extends z.ZodTypeAny>(schema: T, source: Record<string, string 
 export const serverEnv = parse(serverSchema, {
   NODE_ENV: process.env.NODE_ENV,
   AI_GATEWAY_API_KEY: process.env.AI_GATEWAY_API_KEY,
+  AGRI_API_BASE_URL: process.env.AGRI_API_BASE_URL,
+  AGRI_GRAPHQL_URL: process.env.AGRI_GRAPHQL_URL,
 });
 
 export const clientEnv = parse(clientSchema, {
