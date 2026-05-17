@@ -5,12 +5,23 @@ import { create } from "zustand";
 import type { Crop } from "@/types/crop";
 import type { Region } from "@/types/region";
 import { CROPS, getCrop } from "@/lib/api/crops";
-import { DEFAULT_REGION } from "@/lib/api/regions";
+import { DEFAULT_REGION, findNearestRegion } from "@/lib/api/regions";
 import {
   getSowingPreset,
   SOWING_PRESETS,
   type SowingPresetId,
 } from "@/lib/constants/sowing-presets";
+
+export interface CustomLocation {
+  lat: number;
+  lng: number;
+  /** Metres above sea level, when the geocoder provides it. */
+  elevation?: number;
+  /** Human label rendered next to coordinates ("Guadalajara, Jalisco · MX"). */
+  label: string;
+  /** ISO-3166-1 alpha-2. */
+  countryCode: string;
+}
 
 interface SelectionState {
   region: Region;
@@ -19,6 +30,13 @@ interface SelectionState {
   comparisonMode: boolean;
   sowingPresetId: SowingPresetId;
   sowingDate: string;
+  /**
+   * Free-form pick from the LocationPicker. When set, the precise coords
+   * + elevation feed any future ClimatifaiAPI integration; `region` is
+   * always kept in sync with `findNearestRegion(loc)` so the existing
+   * regionId-keyed BFF routes keep working.
+   */
+  customLocation: CustomLocation | null;
   setRegion: (region: Region) => void;
   setCrop: (crop: Crop) => void;
   setCompareCrop: (crop: Crop) => void;
@@ -27,6 +45,7 @@ interface SelectionState {
   setSowingPresetId: (id: SowingPresetId) => void;
   setSowingDate: (isoDate: string) => void;
   applySowingPreset: (id: SowingPresetId) => void;
+  setCustomLocation: (location: CustomLocation | null) => void;
   reset: () => void;
 }
 
@@ -52,6 +71,7 @@ export const useSelectionStore = create<SelectionState>((set) => ({
   comparisonMode: false,
   sowingPresetId: DEFAULT_PRESET.id,
   sowingDate: defaultSowingDate(),
+  customLocation: null,
   setRegion: (region) => set({ region }),
   setCrop: (crop) => set({ crop }),
   setCompareCrop: (compareCrop) => set({ compareCrop }),
@@ -67,6 +87,14 @@ export const useSelectionStore = create<SelectionState>((set) => ({
       ...(crop ? { crop } : {}),
     });
   },
+  setCustomLocation: (location) => {
+    if (!location) {
+      set({ customLocation: null });
+      return;
+    }
+    const snapped = findNearestRegion(location.lat, location.lng).region;
+    set({ customLocation: location, region: snapped });
+  },
   reset: () =>
     set({
       region: DEFAULT_REGION,
@@ -75,5 +103,6 @@ export const useSelectionStore = create<SelectionState>((set) => ({
       comparisonMode: false,
       sowingPresetId: DEFAULT_PRESET.id,
       sowingDate: defaultSowingDate(),
+      customLocation: null,
     }),
 }));

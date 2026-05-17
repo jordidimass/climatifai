@@ -7,6 +7,8 @@ export interface Region {
   subdivision?: string;
   /** Center of the region, used to drive the map viewport. */
   center: { lat: number; lng: number };
+  /** Mean elevation of the region in metres above sea level. Optional. */
+  elevation?: number;
   /** Recommended initial zoom level for the map. */
   zoom: number;
   /** One-line agronomic summary used in headers. */

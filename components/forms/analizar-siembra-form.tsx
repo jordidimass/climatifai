@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 
 import { CropGridPicker } from "@/components/selection/crop-grid-picker";
-import { RegionPicker } from "@/components/selection/region-picker";
+import { LocationPicker } from "@/components/selection/location-picker";
+import { buildSelectionSearchParams } from "@/components/selection/selection-from-search-params";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSelectionStore } from "@/stores/selection-store";
@@ -15,7 +16,8 @@ export function AnalizarSiembraForm() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    router.push("/analizar-siembra/resultado");
+    const params = buildSelectionSearchParams(useSelectionStore.getState());
+    router.push(`/analizar-siembra/resultado?${params.toString()}`);
   }
 
   return (
@@ -24,7 +26,7 @@ export function AnalizarSiembraForm() {
       className="glass mx-auto flex max-w-5xl flex-col gap-6 rounded-2xl p-6 md:p-8"
     >
       <div className="space-y-4">
-        <RegionPicker />
+        <LocationPicker />
         <div className="space-y-2">
           <div>
             <p className="eyebrow">Cultivo</p>

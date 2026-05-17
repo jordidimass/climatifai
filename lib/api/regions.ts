@@ -1,9 +1,9 @@
 import type { Region } from "@/types/region";
 
 /**
- * Seed region catalog. Centered on the Iberian Peninsula as a neutral
- * EU-leaning starting point. Replace with a proper geo-source (Natural
- * Earth admin-1 or similar) when the project graduates beyond scaffold.
+ * Seed region catalog. Centered on Latin America. Replace with a proper
+ * geo-source (Natural Earth admin-1 or similar) when the project graduates
+ * beyond scaffold. Brazil is intentionally excluded per product spec.
  */
 export const REGIONS: Region[] = [
   {
@@ -14,15 +14,6 @@ export const REGIONS: Region[] = [
     center: { lat: 20.6, lng: -101.2 },
     zoom: 6,
     summary: "Corredor agrícola intensivo · maíz, trigo, hortalizas y estrés hídrico creciente.",
-  },
-  {
-    id: "br-cerrado",
-    name: "Cerrado brasileño",
-    country: "BR",
-    subdivision: "Mato Grosso · Goiás · Minas Gerais",
-    center: { lat: -15.8, lng: -47.9 },
-    zoom: 5,
-    summary: "Frontera productiva tropical · soya, maíz safrinha y presión por sequías.",
   },
   {
     id: "ar-pampa",
@@ -59,3 +50,41 @@ export function getRegion(id: string): Region | undefined {
 
 /** Default selection used before the user picks anything. */
 export const DEFAULT_REGION = REGIONS[0];
+
+/**
+ * Haversine distance between two points on Earth, in kilometres.
+ */
+function haversineKm(
+  aLat: number,
+  aLng: number,
+  bLat: number,
+  bLng: number,
+): number {
+  const R = 6371;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(bLat - aLat);
+  const dLng = toRad(bLng - aLng);
+  const lat1 = toRad(aLat);
+  const lat2 = toRad(bLat);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/**
+ * Snaps an arbitrary coordinate to the closest registered region in the
+ * seed catalog. Used by the LocationPicker so downstream code that keys on
+ * `regionId` keeps working with free-form picks.
+ */
+export function findNearestRegion(
+  lat: number,
+  lng: number,
+): { region: Region; distanceKm: number } {
+  let best = { region: REGIONS[0], distanceKm: Infinity };
+  for (const region of REGIONS) {
+    const d = haversineKm(lat, lng, region.center.lat, region.center.lng);
+    if (d < best.distanceKm) best = { region, distanceKm: d };
+  }
+  return best;
+}

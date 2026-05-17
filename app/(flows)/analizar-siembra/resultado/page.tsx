@@ -2,12 +2,12 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
 
-import { CropTimeline } from "@/components/data/crop-timeline";
+import { HarvestChart } from "@/components/harvest/harvest-chart";
 import { HarvestExtras } from "@/components/harvest/harvest-extras";
 import { HarvestStats } from "@/components/harvest/harvest-stats";
 import { HarvestSummaryHeader } from "@/components/harvest/harvest-summary-header";
-import { ResultadoClimatePanel } from "@/components/harvest/resultado-climate-panel";
 import { FlowHeader } from "@/components/layout/flow-header";
+import { RiskCirclesLayer } from "@/components/map/layers/risk-circles-layer";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
 import { Button } from "@/components/ui/button";
 
@@ -65,8 +65,10 @@ export default function AnalizarSiembraResultadoPage() {
             <CropTimeline />
           </div>
           <div className="flex min-w-0 flex-col gap-6">
-            <RegionMapPanel />
-            <ResultadoClimatePanel />
+            <RegionMapPanel>
+              <RiskCirclesLayer />
+            </RegionMapPanel>
+            <HarvestChart className="h-full" />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "mapbox-gl/dist/mapbox-gl.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -34,6 +35,13 @@
   --color-anomaly-warm-foreground: var(--anomaly-warm-foreground);
   --color-anomaly-cool: var(--anomaly-cool);
   --color-anomaly-cool-foreground: var(--anomaly-cool-foreground);
+
+  --color-risk-ok: var(--risk-ok);
+  --color-risk-ok-foreground: var(--risk-ok-foreground);
+  --color-risk-warn: var(--risk-warn);
+  --color-risk-warn-foreground: var(--risk-warn-foreground);
+  --color-risk-bad: var(--risk-bad);
+  --color-risk-bad-foreground: var(--risk-bad-foreground);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -104,6 +112,13 @@
   --anomaly-cool: oklch(0.47 0.11 205);    /* irrigation blue */
   --anomaly-cool-foreground: oklch(0.985 0.018 95);
 
+  --risk-ok: oklch(0.55 0.15 148);         /* RAG · green */
+  --risk-ok-foreground: oklch(0.985 0.018 95);
+  --risk-warn: oklch(0.72 0.16 78);        /* RAG · amber */
+  --risk-warn-foreground: oklch(0.20 0.04 80);
+  --risk-bad: oklch(0.55 0.20 28);         /* RAG · red */
+  --risk-bad-foreground: oklch(0.99 0.005 60);
+
   --chart-1: oklch(0.42 0.13 145);         /* leaf */
   --chart-2: oklch(0.58 0.12 85);          /* harvest olive */
   --chart-3: oklch(0.63 0.14 58);          /* grain */
@@ -166,6 +181,13 @@
   --anomaly-warm-foreground: oklch(0.13 0.035 145);
   --anomaly-cool: oklch(0.72 0.12 205);    /* irrigation glow */
   --anomaly-cool-foreground: oklch(0.13 0.035 145);
+
+  --risk-ok: oklch(0.78 0.18 148);         /* RAG · green glow */
+  --risk-ok-foreground: oklch(0.13 0.035 145);
+  --risk-warn: oklch(0.82 0.17 82);        /* RAG · amber glow */
+  --risk-warn-foreground: oklch(0.15 0.045 78);
+  --risk-bad: oklch(0.72 0.20 30);         /* RAG · red glow */
+  --risk-bad-foreground: oklch(0.13 0.035 145);
 
   --chart-1: oklch(0.76 0.18 142);         /* leaf */
   --chart-2: oklch(0.80 0.14 92);          /* olive */
