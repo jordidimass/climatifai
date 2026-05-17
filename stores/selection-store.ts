@@ -31,10 +31,9 @@ interface SelectionState {
   sowingPresetId: SowingPresetId;
   sowingDate: string;
   /**
-   * Free-form pick from the LocationPicker. When set, the precise coords
-   * + elevation feed any future ClimatifaiAPI integration; `region` is
-   * always kept in sync with `findNearestRegion(loc)` so the existing
-   * regionId-keyed BFF routes keep working.
+   * Pin from LocationPicker / shareable URLs that include coordinates.
+   * `setCustomLocation` also snaps catalog `region` to the preset closest to
+   * those coordinates so climate routes stay coherent with the chosen point.
    */
   customLocation: CustomLocation | null;
   setRegion: (region: Region) => void;

@@ -8,12 +8,12 @@ import { getRegion } from "@/lib/api/regions";
 import { useSelectionStore } from "@/stores/selection-store";
 
 /**
- * Hydrates the selection store from URL search params so /analizar-siembra
- * and its /resultado are shareable. Mounted once per flows subtree; runs
- * whenever the params string changes (i.e. on navigation), then sits idle.
+ * Mounted under layouts that rely on sharable URLs; runs whenever the params
+ * string changes (navigation), including `/insights?…` from resultado.
  *
  * Recognised params:
- *   regionId   — catalog region id (mx-bajio, ar-pampa, …)
+ *   regionId   — catalog preset (solo cuando no hay lat/lng; si hay pin, la
+ *                región efectiva viene del preset más cercano a esas coords)
  *   cropId     — catalog crop id  (maize, coffee, …)
  *   date       — sowing date YYYY-MM-DD
  *   lat, lng   — custom-location coordinates (numbers)
@@ -43,30 +43,34 @@ export function SelectionFromSearchParams() {
       setSowingDate(date);
     }
 
+    const regionIdRaw = sp.get("regionId");
+    const catalogRegion =
+      regionIdRaw && regionIdRaw.trim().length > 0
+        ? getRegion(regionIdRaw)
+        : null;
+
     const latRaw = sp.get("lat");
     const lngRaw = sp.get("lng");
     const lat = latRaw != null ? Number(latRaw) : NaN;
     const lng = lngRaw != null ? Number(lngRaw) : NaN;
+    const hasCoords = Number.isFinite(lat) && Number.isFinite(lng);
 
-    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+    if (hasCoords) {
       const elevRaw = sp.get("elev");
       const elevation =
         elevRaw != null && Number.isFinite(Number(elevRaw))
           ? Number(elevRaw)
           : undefined;
-      setCustomLocation({
+      const loc = {
         lat,
         lng,
         elevation,
         label: sp.get("label") ?? `${lat.toFixed(2)}°, ${lng.toFixed(2)}°`,
         countryCode: sp.get("country") ?? "",
-      });
-    } else {
-      const regionId = sp.get("regionId");
-      if (regionId) {
-        const region = getRegion(regionId);
-        if (region) setRegion(region);
-      }
+      };
+      setCustomLocation(loc);
+    } else if (catalogRegion) {
+      setRegion(catalogRegion);
     }
   }, [paramsKey, setRegion, setCrop, setSowingDate, setCustomLocation]);
 

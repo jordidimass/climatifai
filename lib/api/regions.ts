@@ -16,6 +16,16 @@ export const REGIONS: Region[] = [
     summary: "Corredor agrícola intensivo · maíz, trigo, hortalizas y estrés hídrico creciente.",
   },
   {
+    id: "gt-altiplano",
+    name: "Altiplano y vertiente Pacífico (GT)",
+    country: "GT",
+    subdivision: "Guatemala · altiplano urbano-departamental",
+    center: { lat: 14.65, lng: -90.45 },
+    zoom: 6,
+    summary:
+      "Mix milpa (maíz, frijol, calabaza), hortícola y algunos café agroforestal montano; ciclo corto lluviosa / canícula.",
+  },
+  {
     id: "ar-pampa",
     name: "Pampa húmeda",
     country: "AR",

@@ -1,5 +1,13 @@
 "use client";
 
+import { useMemo } from "react";
+
+import {
+  getCropTimelineAnchors,
+  phaseForCalendarMonth,
+  stressMonthIndices,
+  type CropPhaseKey,
+} from "@/lib/agri/crop-timeline-location";
 import { useSelectionStore } from "@/stores/selection-store";
 import type { Crop } from "@/types/crop";
 import { cn } from "@/lib/utils";
@@ -26,17 +34,7 @@ const MONTH_LABELS = [
   "Dic",
 ] as const;
 
-type Phase = "planting" | "growing" | "harvest" | "off";
-
-/**
- * Ciclo ejemplo con período fuera de temporada · reemplazar con crop_calendar.
- */
-function phaseForMonth(index: number): Phase {
-  if (index === 11 || index === 0 || index === 1) return "off";
-  if (index === 2 || index === 3) return "planting";
-  if (index >= 4 && index <= 8) return "growing";
-  return "harvest";
-}
+type Phase = CropPhaseKey;
 
 const PHASE_STYLES: Record<Phase, string> = {
   planting:
@@ -55,29 +53,31 @@ const PHASE_LABEL_ES: Record<Phase, string> = {
   off: "Fuera de ciclo",
 };
 
-/** Patrón fijo de meses marcados hasta integrar series reales mensuales. */
-function baselineClimateStressMonth(i: number): boolean {
-  return i === 6 || i === 7;
-}
-
-/** Rota meses alerta por `cropId` para que dos columnas no sean idénticas. */
-function rotatedClimateStressForCrop(cropId: string) {
-  const shift =
-    [...cropId].reduce((acc, ch) => acc + ch.charCodeAt(0), 0) % 12;
-  return (i: number): boolean => {
-    const j = (i - shift + 12) % 12;
-    return baselineClimateStressMonth(j);
-  };
-}
-
 export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineProps) {
   const storeCrop = useSelectionStore((s) => s.crop);
+  const region = useSelectionStore((s) => s.region);
+  const customLocation = useSelectionStore((s) => s.customLocation);
   const crop = cropProp ?? storeCrop;
   const dense = variant === "compact";
-  const monthRiskFn =
-    cropProp !== undefined || dense ? rotatedClimateStressForCrop(crop.id) : baselineClimateStressMonth;
+
+  const refLat = customLocation?.lat ?? region.center.lat;
+  const refLng = customLocation?.lng ?? region.center.lng;
+
+  const anchors = useMemo(
+    () => getCropTimelineAnchors(refLat, refLng, crop.id),
+    [refLat, refLng, crop.id],
+  );
+  const stressSet = useMemo(
+    () => stressMonthIndices(anchors.stressRotation),
+    [anchors.stressRotation],
+  );
+
   const today = new Date();
   const todayMonthIdx = Math.min(Math.max(today.getMonth(), 0), 11);
+
+  function monthRiskFn(i: number): boolean {
+    return stressSet.has(i);
+  }
 
   return (
     <section
@@ -94,6 +94,13 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
         <div>
           <p className="eyebrow text-muted-foreground">Ciclo del cultivo</p>
           <p className="font-medium text-foreground">{crop.name}</p>
+          <p className="mt-1 text-[0.65rem] leading-snug text-muted-foreground">
+            Calendario ejemplo alineado a{" "}
+            <span className="font-medium text-foreground">
+              {customLocation?.label ?? region.name}
+            </span>
+            <span className="numeric">{` (${refLat.toFixed(2)}°, ${refLng.toFixed(2)}°)`}</span>
+          </p>
         </div>
         {!dense ? (
           <div className="rounded-lg border border-border/70 bg-muted/25 px-3 py-2.5 text-xs leading-snug text-muted-foreground">
@@ -118,8 +125,9 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
                 <span>
                   El{" "}
                   <strong className="font-medium text-foreground">color alto</strong>{" "}
-                  indica la etapa del cultivo ahí (siembra, crecimiento, cosecha o
-                  tiempo libre según esta plantilla).
+                  indica la etapa del cultivo ahí según ubicación ({PHASE_LABEL_ES.planting},{" "}
+                  {PHASE_LABEL_ES.growing}, {PHASE_LABEL_ES.harvest} o{" "}
+                  {PHASE_LABEL_ES.off} — modelo ilustrativo; integrar datos reales después).
                 </span>
               </li>
               <li className="flex gap-2.5">
@@ -127,16 +135,25 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
                   3
                 </span>
                 <span>
-                  Si ves una{" "}
+                  Una{" "}
                   <strong className="font-medium text-destructive">
-                    franja roja
+                    franja roja en la parte baja del bloque
+                  </strong>
+                  {" "}
+                  y, debajo del nombre corto del mes, un{" "}
+                  <span className="inline-flex size-3 items-center justify-center align-middle">
+                    <span className="size-1.5 rounded-full bg-destructive shadow-sm ring-1 ring-destructive/35" aria-hidden />
+                  </span>
+                  {" "}
+                  apuntan a lo mismo: son{" "}
+                  <strong className="font-medium text-foreground">
+                    meses de ejemplo
                   </strong>{" "}
-                  en la base y dice{" "}
-                  <strong className="font-medium text-destructive">
-                    alerta
-                  </strong>{" "}
-                  bajo el mes, ese mes está marcado como “clima poco habitual”{" "}
-                  <span className="text-muted-foreground">(solo ejemplo).</span>
+                  en los que, en datos de muestra de esta app, el clima aparece muy
+                  poco habitual comparado con el patrón “típico”. Sirven como aviso ilustrativo, no cambian solo por la etapa de siembra o cosecha.{" "}
+                  <span className="text-muted-foreground">
+                    Con datos agrícolas reales se podrá afinar o sustituir.
+                  </span>
                 </span>
               </li>
             </ol>
@@ -147,8 +164,7 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
           </div>
         ) : (
           <p className="text-[0.65rem] leading-snug text-muted-foreground">
-            Franja inferior roja = mes señalado como clima fuera de lo usual
-            (serie ilustrativa de referencia).
+            Franja roja debajo del bloque y punto rojo bajo el mes: ejemplo de mes cuyo clima aparece muy poco habitual en esta demo (serie ilustrativa).
           </p>
         )}
       </div>
@@ -172,7 +188,7 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
               className="cf-crop-track-gleam pointer-events-none absolute inset-0 z-0 rounded-lg motion-reduce:hidden"
             />
             {MONTH_LABELS.map((label, i) => {
-              const phase = phaseForMonth(i);
+              const phase = phaseForCalendarMonth(i, anchors.cycleRotation);
               const risky = monthRiskFn(i);
               const delayMs = 120 + i * 42;
               return (
@@ -223,7 +239,7 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
             />
           </div>
 
-          <div className="mt-1 grid min-w-[320px] grid-cols-12 gap-px text-center tabular-nums">
+          <div className="mt-1 grid min-w-[320px] grid-cols-12 gap-0.5 text-center tabular-nums md:gap-px">
             {MONTH_LABELS.map((m, i) => {
               const risky = monthRiskFn(i);
               return (
@@ -239,10 +255,13 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
                   </span>
                   {risky ? (
                     <span
-                      className="cf-crop-risk-marker rounded px-1 py-px text-[0.52rem] font-bold uppercase leading-none text-destructive ring-1 ring-destructive/35 motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:scale-100"
-                      aria-hidden
+                      className="flex h-[0.6875rem] shrink-0 items-center justify-center"
+                      title="Mes de ejemplo: clima poco habitual según serie ilustrativa (prototipo)"
                     >
-                      alerta
+                      <span
+                        aria-hidden
+                        className="size-2 rounded-full bg-destructive shadow-[0_0_6px_-1px_rgb(239_68_68_/_0.7)] ring-1 ring-destructive/35"
+                      />
                     </span>
                   ) : (
                     <span aria-hidden className="h-[0.6875rem] shrink-0" />
@@ -298,23 +317,30 @@ export function CropTimeline({ crop: cropProp, variant = "full" }: CropTimelineP
               >
                 <span className="pointer-events-none absolute inset-x-0 bottom-0 h-[9px] bg-destructive" />
               </span>
-              <span className="max-w-[16rem] leading-snug text-muted-foreground">
-                <strong className="font-medium text-foreground">Alerta:</strong>{" "}
-                franja roja abajo = “aquí los datos de prueba muestran un mes con
-                clima muy poco habitual” (no solo la etapa del cultivo).
+              <span className="max-w-[17rem] leading-snug text-muted-foreground">
+                <strong className="font-medium text-foreground">
+                  Franja roja sobre el borde inferior del bloque:
+                </strong>{" "}
+                marca un mes ejemplo en que el clima de muestra se ve muy poco habitual
+                frente al patrón normal; va aparte del color de siembra, crecimiento o
+                cosecha del bloque principal.
               </span>
             </li>
             <li
-              className="cf-crop-mini-rise flex items-start gap-2 motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:translate-y-0"
+              className="cf-crop-mini-rise flex items-start gap-2 motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:translate-y-0 sm:items-center sm:gap-3"
               style={{ animationDelay: "935ms" }}
             >
-              <span className="mt-px inline-flex h-5 shrink-0 items-center rounded px-1.5 py-0 text-[0.52rem] font-bold uppercase text-destructive ring-1 ring-destructive/35">
-                alerta
+              <span className="mt-1 inline-flex shrink-0 items-center justify-center" aria-hidden>
+                <span className="size-2 rounded-full bg-destructive shadow-sm ring-1 ring-destructive/35" />
               </span>
               <span className="leading-snug text-muted-foreground">
-                <strong className="font-medium text-foreground">Palabra:</strong>{" "}
-                queda pegada al mes que corresponde, para ubicar rápido en el
-                calendario abajo del gráfico.
+                <strong className="font-medium text-foreground">
+                  Punto rojo bajo las tres letras del mes:
+                </strong>{" "}
+                señala el mismo caso que la franja: ese mes aparece destacado porque
+                en esta demo los datos muestran un agregado mensual muy desviado respecto del
+                patrón histórico habitual. No tiene el mismo significado que el color de la
+                etapa del cultivo en el rectángulo (siembra, crecimiento, cosecha o descanso).
               </span>
             </li>
             <li

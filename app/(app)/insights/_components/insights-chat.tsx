@@ -36,6 +36,7 @@ function messageText(m: UIMessage): string {
 export function InsightsChat() {
   const region = useSelectionStore((s) => s.region);
   const crop = useSelectionStore((s) => s.crop);
+  const customLocation = useSelectionStore((s) => s.customLocation);
   const compareCrop = useSelectionStore((s) => s.compareCrop);
   const comparisonMode = useSelectionStore((s) => s.comparisonMode);
   /** Solo paralelizamos cuando el modo comparación está encendido (p. ej. desde /dashboard/compare). */
@@ -91,6 +92,14 @@ export function InsightsChat() {
       cropId: crop.id,
       cropName: crop.name,
       regionSummary: region.summary,
+      ...(customLocation && {
+        geocodedLabel: customLocation.label,
+        latitude: customLocation.lat,
+        longitude: customLocation.lng,
+        ...(typeof customLocation.elevation === "number"
+          ? { elevationMeters: customLocation.elevation }
+          : {}),
+      }),
       ...(compareActive && {
         compareCropId: compareCrop.id,
         compareCropName: compareCrop.name,
@@ -143,8 +152,9 @@ export function InsightsChat() {
           <div>
             <CardTitle className="font-heading text-lg">Hallazgos</CardTitle>
             <CardDescription>
-              Preguntá en castellano. El modelo recibe la región y el cultivo del
-              panel lateral.
+              Preguntá en castellano. La región y el cultivo del panel definen la
+              base; si abriste desde Resultado de Analizar siembra, la URL también
+              aportó el punto geocodificado al prompt.
               {compareActive
                 ? " Con el modo comparación activo, también el segundo cultivo para contrastarlos."
                 : null}
@@ -158,7 +168,28 @@ export function InsightsChat() {
           )}
         >
             <span className="relative z-[1]">
-              <span className="font-medium text-foreground/90">{region.name}</span>
+              {customLocation ? (
+                <>
+                  <span className="font-medium text-primary/95">
+                    {customLocation.label}
+                  </span>
+                  <span className="numeric text-muted-foreground">
+                    {" "}
+                    ({customLocation.lat.toFixed(3)}°, {customLocation.lng.toFixed(3)}
+                    °)
+                  </span>
+                  <span className="mx-2 text-[0.6rem] text-muted-foreground">
+                    → catálogo
+                  </span>
+                  <span className="font-medium text-foreground/90">
+                    {region.name}
+                  </span>
+                </>
+              ) : (
+                <span className="font-medium text-foreground/90">
+                  {region.name}
+                </span>
+              )}
               {" · "}
               <span className="font-medium text-foreground/90">{crop.name}</span>
               {compareActive ? (
