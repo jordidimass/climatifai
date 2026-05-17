@@ -59,7 +59,8 @@ export function getRegion(id: string): Region | undefined {
 }
 
 /** Default selection used before the user picks anything. */
-export const DEFAULT_REGION = REGIONS[0];
+export const DEFAULT_REGION =
+  REGIONS.find((r) => r.id === "gt-altiplano") ?? REGIONS[0];
 
 /**
  * Haversine distance between two points on Earth, in kilometres.

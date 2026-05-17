@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Loader2, MapPin, Mountain, Search, X } from "lucide-react";
 
+import { CurrentLocationButton } from "@/components/selection/current-location-button";
 import { Input } from "@/components/ui/input";
 import { findNearestRegion } from "@/lib/api/regions";
 import {
@@ -108,31 +109,37 @@ export function LocationPicker({ className }: { className?: string }) {
         <label htmlFor="location-search" className="eyebrow">
           Ubicación
         </label>
-        <div className="relative">
-          <Search
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-            aria-hidden
-          />
-          <Input
-            id="location-search"
-            type="search"
-            autoComplete="off"
-            placeholder="Buscar ciudad o municipio en Latinoamérica…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => results.length && setOpen(true)}
-            className="h-10 w-full rounded-full pl-10 pr-10"
-            aria-expanded={open}
-            aria-controls="location-results"
-            aria-autocomplete="list"
-            role="combobox"
-          />
-          {loading && isQueryValid && (
-            <Loader2
-              className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground"
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
               aria-hidden
             />
-          )}
+            <Input
+              id="location-search"
+              type="search"
+              autoComplete="off"
+              placeholder="Buscar ciudad o municipio en Latinoamérica…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => results.length && setOpen(true)}
+              className="h-10 w-full rounded-full pl-10 pr-10"
+              aria-expanded={open}
+              aria-controls="location-results"
+              aria-autocomplete="list"
+              role="combobox"
+            />
+            {loading && isQueryValid && (
+              <Loader2
+                className="absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-muted-foreground"
+                aria-hidden
+              />
+            )}
+          </div>
+          <CurrentLocationButton
+            label="Usar mi ubicación"
+            className="h-10 shrink-0"
+          />
         </div>
         {open && isQueryValid && (results.length > 0 || error) && (
           <div

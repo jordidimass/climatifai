@@ -1,16 +1,20 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { FileWarning, History, MapPinned, X } from "lucide-react";
 
 import { FireDetailPopover } from "@/components/map/fire-detail-popover";
+import { FireMapLink } from "@/components/map/fire-map-link";
 import { FireMapZoomToolbar } from "@/components/map/fire-map-zoom-toolbar";
 import { FireHotspotsLayer } from "@/components/map/layers/fire-hotspots-layer";
 import { FireLayerPanel } from "@/components/map/fire-layer-panel";
 import { FireLegend } from "@/components/map/fire-legend";
 import { FireSearch } from "@/components/map/fire-search";
 import { FireTimeline } from "@/components/map/fire-timeline";
+import {
+  FireParamsHydrator,
+  FireUrlMirror,
+} from "@/components/map/fire-url-sync";
 import { RegionFocusCard } from "@/components/map/region-focus-card";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
 import { Button } from "@/components/ui/button";
@@ -48,6 +52,8 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
 
   return (
     <div className={cn("relative flex min-h-0 flex-1 flex-col", className)}>
+      <FireParamsHydrator />
+      <FireUrlMirror />
       <div className="relative min-h-0 flex-1">
         <RegionMapPanel variant="full" onMapboxReady={setMapbox}>
           <FireHotspotsLayer onData={handleData} />
@@ -91,7 +97,9 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
                     className="w-fit rounded-full shadow-md"
                     asChild
                   >
-                    <Link href="/mapa-incendios/seleccion">Selector en mapa</Link>
+                    <FireMapLink pathname="/mapa-incendios/seleccion">
+                      Selector en mapa
+                    </FireMapLink>
                   </Button>
                 ) : (
                   <Button
@@ -100,7 +108,9 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
                     className="w-fit rounded-full bg-card/80 backdrop-blur-sm"
                     asChild
                   >
-                    <Link href="/mapa-incendios">Vista amplia</Link>
+                    <FireMapLink pathname="/mapa-incendios">
+                      Vista amplia
+                    </FireMapLink>
                   </Button>
                 )}
                 <div className="flex flex-col gap-2">

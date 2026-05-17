@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Loader2, MapPin, Search, X } from "lucide-react";
 
+import { CurrentLocationButton } from "@/components/selection/current-location-button";
 import { Input } from "@/components/ui/input";
 import {
   searchLatamPlaces,
@@ -207,6 +208,11 @@ export function FireSearch({ className }: FireSearchProps) {
           )}
         </div>
       ) : null}
+
+      <CurrentLocationButton
+        className="mt-2 w-full justify-center bg-card/90 shadow-sm backdrop-blur-sm"
+        label="Usar mi ubicación"
+      />
     </div>
   );
 }

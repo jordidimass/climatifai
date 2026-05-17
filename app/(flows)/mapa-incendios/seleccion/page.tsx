@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 
 import { FireMapChrome } from "@/components/map/fire-map-chrome";
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function MapaIncendiosSeleccionPage() {
-  return <FireMapChrome phase="select" className="flex-1" />;
+  return (
+    <Suspense fallback={null}>
+      <FireMapChrome phase="select" className="flex-1" />
+    </Suspense>
+  );
 }

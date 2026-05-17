@@ -35,6 +35,7 @@ interface FireState {
 
   setDayRange: (dr: FireDayRange) => void;
   toggleSource: (s: FirmsSource) => void;
+  setSources: (sources: FirmsSource[]) => void;
   setPlayhead: (ms: number | null) => void;
   setWindowHours: (h: number) => void;
   setPlaying: (playing: boolean) => void;
@@ -68,6 +69,17 @@ export const useFireStore = create<FireState>((set) => ({
         ? state.sources.filter((x) => x !== s)
         : [...state.sources, s];
       return { sources: next.length ? next : state.sources };
+    }),
+  setSources: (sources) =>
+    set((state) => {
+      if (!sources.length) return state;
+      if (
+        state.sources.length === sources.length &&
+        [...state.sources].sort().join(",") === [...sources].sort().join(",")
+      ) {
+        return state;
+      }
+      return { sources };
     }),
   setPlayhead: (playhead) =>
     set((state) =>
