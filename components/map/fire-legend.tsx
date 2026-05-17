@@ -2,7 +2,7 @@
 
 export function FireLegend() {
   return (
-    <div className="glass pointer-events-none flex flex-col gap-1.5 rounded-lg px-3 py-2 text-[10px] shadow-sm">
+    <div className="glass pointer-events-none flex flex-col gap-1.5 rounded-xl px-3 py-2 text-[10px] shadow-md ring-1 ring-border/55 backdrop-blur-xl">
       <p className="eyebrow text-foreground/80">Intensidad FRP</p>
       <div
         className="h-1.5 w-32 rounded-full"

@@ -286,6 +286,29 @@
     -webkit-backdrop-filter: blur(20px) saturate(140%);
   }
 
+  /**
+   * Full-screen fire map floating chrome: one inset from viewport edges.
+   * Bottom adds a band for Mapbox attribution so panels clear the logo.
+   */
+  .fire-map-chrome-overlay {
+    --fm-edge: 1rem;
+    --fm-attribution-band: 1.75rem;
+    padding-top: max(var(--fm-edge), env(safe-area-inset-top, 0px));
+    padding-right: max(var(--fm-edge), env(safe-area-inset-right, 0px));
+    padding-left: max(var(--fm-edge), env(safe-area-inset-left, 0px));
+    padding-bottom: max(
+      calc(var(--fm-edge) + var(--fm-attribution-band)),
+      env(safe-area-inset-bottom, 0px)
+    );
+  }
+
+  @media (min-width: 768px) {
+    .fire-map-chrome-overlay {
+      --fm-edge: 1.5rem;
+      --fm-attribution-band: 2rem;
+    }
+  }
+
   /* Subtle hairline used for cartographic/data dividers */
   .hairline {
     background: linear-gradient(

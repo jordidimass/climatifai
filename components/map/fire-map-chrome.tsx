@@ -5,11 +5,13 @@ import Link from "next/link";
 import { FileWarning, History, MapPinned, X } from "lucide-react";
 
 import { FireDetailPopover } from "@/components/map/fire-detail-popover";
+import { FireMapZoomToolbar } from "@/components/map/fire-map-zoom-toolbar";
 import { FireHotspotsLayer } from "@/components/map/layers/fire-hotspots-layer";
 import { FireLayerPanel } from "@/components/map/fire-layer-panel";
 import { FireLegend } from "@/components/map/fire-legend";
 import { FireSearch } from "@/components/map/fire-search";
 import { FireTimeline } from "@/components/map/fire-timeline";
+import { RegionFocusCard } from "@/components/map/region-focus-card";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +25,7 @@ import { useFireStore } from "@/stores/fire-store";
 import { useSelectionStore } from "@/stores/selection-store";
 import type { HotspotFC } from "@/types/fires";
 import { cn } from "@/lib/utils";
+import type mapboxgl from "mapbox-gl";
 
 type FireMapChromeProps = {
   phase: "browse" | "select";
@@ -31,6 +34,7 @@ type FireMapChromeProps = {
 
 export function FireMapChrome({ phase, className }: FireMapChromeProps) {
   const [currentFC, setCurrentFC] = React.useState<HotspotFC | null>(null);
+  const [mapbox, setMapbox] = React.useState<mapboxgl.Map | null>(null);
   const viewMode = useFireStore((s) => s.viewMode);
   const setViewMode = useFireStore((s) => s.setViewMode);
   const reportOpen = useFireStore((s) => s.reportOpen);
@@ -45,35 +49,31 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
   return (
     <div className={cn("relative flex min-h-0 flex-1 flex-col", className)}>
       <div className="relative min-h-0 flex-1">
-        <RegionMapPanel variant="full">
+        <RegionMapPanel variant="full" onMapboxReady={setMapbox}>
           <FireHotspotsLayer onData={handleData} />
           <FireDetailPopover />
         </RegionMapPanel>
 
-        <div className="pointer-events-none absolute inset-0 flex flex-col gap-4 p-4 md:p-6">
-          <div className="flex flex-wrap items-start justify-end gap-3">
-            <FireSearch />
+        <div className="pointer-events-none absolute inset-0 flex flex-col gap-3 fire-map-chrome-overlay md:gap-4">
+          {/* Top-right: shared column width so search + Capas align flush right */}
+          <div className="flex shrink-0 justify-end">
+            <div className="pointer-events-auto flex max-h-[min(420px,42svh)] w-full max-w-xs min-w-0 flex-col gap-3 overflow-y-auto overscroll-contain">
+              <FireSearch className="max-w-none" />
+              <FireLayerPanel currentFC={currentFC} />
+            </div>
           </div>
 
-          <div className="flex flex-1 items-start justify-end">
-            <FireLayerPanel currentFC={currentFC} />
-          </div>
+          <div className="min-h-0 flex-1" aria-hidden />
 
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div className="pointer-events-auto flex flex-col gap-2">
-              <FirePrimaryButtons
-                phase={phase}
-                viewMode={viewMode}
-                onReport={() => setReportOpen(true)}
-                onToggleHistory={() =>
-                  setViewMode(viewMode === "history" ? "live" : "history")
-                }
-              />
+          {/* Bottom strip — items-end: left + right stacks share baseline */}
+          <div className="flex shrink-0 flex-wrap items-end justify-between gap-x-6 gap-y-4">
+            <div className="pointer-events-auto flex min-w-0 max-w-[min(100%,22rem)] flex-col-reverse items-start gap-3">
+              <RegionFocusCard />
               {phase === "browse" ? (
                 <Button
                   type="button"
                   variant="default"
-                  className="mt-1 rounded-full shadow-md"
+                  className="w-fit rounded-full shadow-md"
                   asChild
                 >
                   <Link href="/mapa-incendios/seleccion">Selector en mapa</Link>
@@ -82,21 +82,32 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
                 <Button
                   type="button"
                   variant="outline"
-                  className="mt-1 rounded-full bg-card/80 backdrop-blur-sm"
+                  className="w-fit rounded-full bg-card/80 backdrop-blur-sm"
                   asChild
                 >
                   <Link href="/mapa-incendios">Vista amplia</Link>
                 </Button>
               )}
+              <div className="flex flex-col gap-2">
+                <FirePrimaryButtons
+                  phase={phase}
+                  viewMode={viewMode}
+                  onReport={() => setReportOpen(true)}
+                  onToggleHistory={() =>
+                    setViewMode(viewMode === "history" ? "live" : "history")
+                  }
+                />
+              </div>
             </div>
 
-            <div className="pointer-events-auto self-end">
+            <div className="pointer-events-auto flex shrink-0 items-end gap-3">
+              <FireMapZoomToolbar map={mapbox} />
               <FireLegend />
             </div>
           </div>
 
           {viewMode === "history" ? (
-            <div className="pointer-events-none flex justify-center">
+            <div className="pointer-events-none flex shrink-0 justify-center">
               <FireTimeline className="pointer-events-auto w-full max-w-3xl" />
             </div>
           ) : null}

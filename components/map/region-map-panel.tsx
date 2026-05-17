@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import dynamic from "next/dynamic";
+import type mapboxgl from "mapbox-gl";
 
 /**
  * The map ships Mapbox GL JS (DOM-only) so we render it client-only.
@@ -15,13 +16,19 @@ interface RegionMapPanelProps {
   variant?: "rounded" | "full";
   /** Mapbox layer overlays composed on top of the basemap. */
   children?: React.ReactNode;
+  onMapboxReady?: (map: mapboxgl.Map) => void;
 }
 
 export function RegionMapPanel({
   variant = "rounded",
   children,
+  onMapboxReady,
 }: RegionMapPanelProps) {
-  return <RegionMap variant={variant}>{children}</RegionMap>;
+  return (
+    <RegionMap variant={variant} onMapboxReady={onMapboxReady}>
+      {children}
+    </RegionMap>
+  );
 }
 
 function MapSkeleton() {

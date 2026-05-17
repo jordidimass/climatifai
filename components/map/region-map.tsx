@@ -11,6 +11,7 @@ import Map, {
 import mapboxgl from "mapbox-gl";
 import { toast } from "sonner";
 
+import { RegionFocusCard } from "@/components/map/region-focus-card";
 import { useSelectionStore } from "@/stores/selection-store";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -67,9 +68,15 @@ interface RegionMapProps {
   variant?: keyof typeof shellClass;
   /** Mapbox <Source>/<Layer> overlays composed on top of the basemap. */
   children?: React.ReactNode;
+  /** Fires once when Mapbox GL map instance is ready (e.g. custom chrome zoom). */
+  onMapboxReady?: (map: mapboxgl.Map) => void;
 }
 
-export function RegionMap({ variant = "rounded", children }: RegionMapProps) {
+export function RegionMap({
+  variant = "rounded",
+  children,
+  onMapboxReady,
+}: RegionMapProps) {
   const region = useSelectionStore((s) => s.region);
   const customLocation = useSelectionStore((s) => s.customLocation);
   const { resolvedTheme } = useTheme();
@@ -130,6 +137,7 @@ export function RegionMap({ variant = "rounded", children }: RegionMapProps) {
           const map = e.target;
           setPhase("style-loaded");
           requestAnimationFrame(() => map.resize());
+          onMapboxReady?.(map);
 
           // Catch tile-level errors that don't always bubble up to
           // react-map-gl's onError prop (auth failures, 404s on
@@ -157,7 +165,9 @@ export function RegionMap({ variant = "rounded", children }: RegionMapProps) {
           toast.error("Mapa", { description: msg });
         }}
       >
-        <NavigationControl position="top-right" showCompass={false} />
+        {variant !== "full" ? (
+          <NavigationControl position="top-right" showCompass={false} />
+        ) : null}
         <Marker longitude={focus.lng} latitude={focus.lat} anchor="center">
           <span
             className="block size-3 rounded-full ring-4 ring-primary/30"
@@ -167,7 +177,9 @@ export function RegionMap({ variant = "rounded", children }: RegionMapProps) {
         </Marker>
         {children}
       </Map>
-      <RegionTag />
+      {variant !== "full" ? (
+        <RegionFocusCard className="absolute bottom-3 left-3 max-w-xs" />
+      ) : null}
       <MapPhasePill phase={phase} err={errMsg} />
     </div>
   );
@@ -208,33 +220,6 @@ function MapPhasePill({ phase, err }: { phase: Phase; err: string | null }) {
       role="status"
     >
       {label}
-    </div>
-  );
-}
-
-function RegionTag() {
-  const region = useSelectionStore((s) => s.region);
-  const customLocation = useSelectionStore((s) => s.customLocation);
-
-  const title = customLocation?.label ?? `${region.name} · ${region.country}`;
-  const lat = customLocation?.lat ?? region.center.lat;
-  const lng = customLocation?.lng ?? region.center.lng;
-  const elevation = customLocation?.elevation;
-
-  return (
-    <div className="glass pointer-events-none absolute bottom-3 left-3 max-w-xs rounded-lg px-3 py-2 text-xs">
-      <p className="eyebrow">Área de enfoque</p>
-      <p className="mt-0.5 font-medium text-foreground">{title}</p>
-      <p className="numeric mt-0.5 text-[10px] text-muted-foreground">
-        {lat.toFixed(2)}°, {lng.toFixed(2)}°
-        {typeof elevation === "number" ? ` · ${Math.round(elevation)} m` : ""}
-      </p>
-      {customLocation && (
-        <p className="mt-0.5 text-[10px] text-muted-foreground">
-          Región registrada:{" "}
-          <span className="font-medium text-foreground">{region.name}</span>
-        </p>
-      )}
     </div>
   );
 }

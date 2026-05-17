@@ -36,7 +36,7 @@ export function FireLayerPanel({ currentFC, className }: FireLayerPanelProps) {
   return (
     <div
       className={cn(
-        "glass pointer-events-auto flex w-64 flex-col gap-3 rounded-xl px-3 py-3 text-xs shadow-sm",
+        "glass pointer-events-auto flex w-full min-w-0 flex-col gap-3 rounded-xl px-3 py-3 text-xs shadow-sm",
         className,
       )}
     >
