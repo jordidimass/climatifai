@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
 
+import { CropTimeline } from "@/components/data/crop-timeline";
 import { HarvestChart } from "@/components/harvest/harvest-chart";
 import { HarvestExtras } from "@/components/harvest/harvest-extras";
 import { HarvestStats } from "@/components/harvest/harvest-stats";
