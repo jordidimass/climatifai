@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FileWarning, History, MapPinned, Search } from "lucide-react";
 import { toast } from "sonner";
 
+import { FirePerimetersLayer } from "@/components/map/layers/fire-perimeters-layer";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +30,9 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
   return (
     <div className={cn("relative flex flex-1 flex-col", className)}>
       <div className="relative min-h-[calc(100svh-3.5rem)] flex-1">
-        <RegionMapPanel variant="full" />
+        <RegionMapPanel variant="full">
+          <FirePerimetersLayer />
+        </RegionMapPanel>
 
         <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-4 md:p-6">
           <div className="pointer-events-auto flex justify-end">

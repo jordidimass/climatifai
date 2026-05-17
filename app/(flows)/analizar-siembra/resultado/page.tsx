@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-import { ChartShell } from "@/components/data/chart-shell";
+import { HarvestChart } from "@/components/harvest/harvest-chart";
 import { HarvestExtras } from "@/components/harvest/harvest-extras";
 import { HarvestStats } from "@/components/harvest/harvest-stats";
 import { HarvestSummaryHeader } from "@/components/harvest/harvest-summary-header";
-import { SAMPLE_CLIMATE_SERIES } from "@/components/harvest/sample-climate-series";
 import { FlowHeader } from "@/components/layout/flow-header";
+import { RiskCirclesLayer } from "@/components/map/layers/risk-circles-layer";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
 
 export const metadata: Metadata = {
@@ -48,14 +48,10 @@ export default function AnalizarSiembraResultadoPage() {
             <HarvestExtras />
           </div>
           <div className="flex min-w-0 flex-col gap-6">
-            <RegionMapPanel />
-            <ChartShell
-              title="Temperatura media · mensual"
-              subtitle="Línea base histórica (1991–2020) vs. proyección SSP3-7.0 (2031–2050)"
-              data={SAMPLE_CLIMATE_SERIES}
-              kind="area"
-              className="h-full"
-            />
+            <RegionMapPanel>
+              <RiskCirclesLayer />
+            </RegionMapPanel>
+            <HarvestChart className="h-full" />
           </div>
         </div>
       </div>

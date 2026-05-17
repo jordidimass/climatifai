@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { useTheme } from "next-themes";
 import { Map as MapIcon } from "lucide-react";
 import Map, { Marker, NavigationControl } from "react-map-gl/mapbox";
@@ -9,9 +10,21 @@ import { useSelectionStore } from "@/stores/selection-store";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
+/**
+ * Climatifai basemap. We use Mapbox Standard (v3) and switch its
+ * `lightPreset` via `setConfigProperty` on load so day/night follow the
+ * app theme. To swap in a fully bespoke Studio style aligned with the
+ * bone/indigo palette later, replace the two URLs below with
+ * `mapbox://styles/<user>/<style-id>`.
+ */
 const STYLES = {
-  light: "mapbox://styles/mapbox/light-v11",
-  dark: "mapbox://styles/mapbox/dark-v11",
+  light: "mapbox://styles/mapbox/standard",
+  dark: "mapbox://styles/mapbox/standard",
+} as const;
+
+const LIGHT_PRESETS = {
+  light: "day",
+  dark: "night",
 } as const;
 
 const shellClass = {
@@ -20,7 +33,13 @@ const shellClass = {
   full: "relative h-full min-h-[420px] overflow-hidden rounded-none border-y border-border/40 bg-muted/15 md:border-x-0",
 } as const;
 
-export function RegionMap({ variant = "rounded" }: { variant?: keyof typeof shellClass }) {
+interface RegionMapProps {
+  variant?: keyof typeof shellClass;
+  /** Mapbox <Source>/<Layer> overlays composed on top of the basemap. */
+  children?: React.ReactNode;
+}
+
+export function RegionMap({ variant = "rounded", children }: RegionMapProps) {
   const region = useSelectionStore((s) => s.region);
   const { resolvedTheme } = useTheme();
 
@@ -43,6 +62,18 @@ export function RegionMap({ variant = "rounded" }: { variant?: keyof typeof shel
         mapStyle={STYLES[styleKey]}
         style={{ width: "100%", height: "100%" }}
         attributionControl={false}
+        onLoad={(e) => {
+          const map = e.target;
+          try {
+            map.setConfigProperty(
+              "basemap",
+              "lightPreset",
+              LIGHT_PRESETS[styleKey],
+            );
+          } catch {
+            /* style does not expose `basemap` config — Studio styles may differ */
+          }
+        }}
       >
         <NavigationControl position="top-right" showCompass={false} />
         <Marker
@@ -56,6 +87,7 @@ export function RegionMap({ variant = "rounded" }: { variant?: keyof typeof shel
             aria-hidden="true"
           />
         </Marker>
+        {children}
       </Map>
       <RegionTag />
     </div>

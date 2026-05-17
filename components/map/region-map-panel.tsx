@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import dynamic from "next/dynamic";
 
 /**
@@ -10,12 +11,17 @@ const RegionMap = dynamic(
   { ssr: false, loading: () => <MapSkeleton /> },
 );
 
+interface RegionMapPanelProps {
+  variant?: "rounded" | "full";
+  /** Mapbox layer overlays composed on top of the basemap. */
+  children?: React.ReactNode;
+}
+
 export function RegionMapPanel({
   variant = "rounded",
-}: {
-  variant?: "rounded" | "full";
-}) {
-  return <RegionMap variant={variant} />;
+  children,
+}: RegionMapPanelProps) {
+  return <RegionMap variant={variant}>{children}</RegionMap>;
 }
 
 function MapSkeleton() {
