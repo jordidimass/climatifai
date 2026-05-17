@@ -23,6 +23,7 @@ export function HarvestSummaryHeader() {
   const sowingPresetId = useSelectionStore((s) => s.sowingPresetId);
   const sowingDate = useSelectionStore((s) => s.sowingDate);
   const preset = getSowingPreset(sowingPresetId);
+  const matchingPreset = preset?.cropId === crop.id ? preset : undefined;
 
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
@@ -41,11 +42,11 @@ export function HarvestSummaryHeader() {
           <span className="numeric font-medium text-foreground">
             {formatDate(sowingDate)}
           </span>
-          {preset && (
+          {matchingPreset && (
             <>
               {" "}
               ·{" "}
-              <span className="font-medium text-foreground">{preset.label}</span>
+              <span className="font-medium text-foreground">{matchingPreset.label}</span>
             </>
           )}
         </p>

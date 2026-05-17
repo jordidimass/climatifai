@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Flame, Sparkles, Sprout } from "lucide-react";
+import { Flame, Sprout } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -30,34 +30,6 @@ export function Hero() {
       </div>
 
       <div className="mx-auto mt-12 grid max-w-3xl gap-4 md:gap-5">
-        <Link
-          href="/habla-ai"
-          className="glass group relative flex flex-col gap-3 rounded-2xl p-8 text-left transition-transform hover:-translate-y-0.5 md:flex-row md:items-center md:justify-between md:p-10"
-        >
-          <div className="flex items-start gap-4">
-            <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-              <Sparkles className="size-6" aria-hidden />
-            </span>
-            <div>
-              <p className="eyebrow">Habla AI</p>
-              <p className="mt-1 font-[family-name:var(--font-display)] text-2xl tracking-tight md:text-3xl">
-                Describe tu cosecha en lenguaje natural
-              </p>
-              <p className="mt-2 max-w-md text-sm text-muted-foreground">
-                Objetivos de siembra, riesgos y ventanas — conversación guiada
-                por contexto agrícola.
-              </p>
-            </div>
-          </div>
-          <span className="inline-flex items-center gap-1 text-sm font-medium text-primary md:flex-col md:items-end">
-            Abrir
-            <ArrowUpRight
-              className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              aria-hidden
-            />
-          </span>
-        </Link>
-
         <div className="grid gap-3 sm:grid-cols-2">
           <Button asChild size="lg" className="h-auto rounded-2xl py-6">
             <Link href="/analizar-siembra" className="flex flex-col gap-1 px-6">

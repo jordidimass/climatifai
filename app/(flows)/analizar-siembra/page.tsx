@@ -20,7 +20,7 @@ export default function AnalizarSiembraPage() {
           Ajusta los datos de tu siembra y abre el panel de lecturas climáticas
           para esa combinación.
         </p>
-        <div className="mx-auto mt-10 max-w-lg">
+        <div className="mx-auto mt-10 max-w-5xl">
           <AnalizarSiembraForm />
         </div>
       </div>

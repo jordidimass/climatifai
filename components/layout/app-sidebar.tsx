@@ -2,7 +2,6 @@ import Link from "next/link";
 import { BarChart3, LineChart, Map, Sparkles } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
-import { CropPicker } from "@/components/selection/crop-picker";
 import { RegionPicker } from "@/components/selection/region-picker";
 import { Separator } from "@/components/ui/separator";
 
@@ -43,7 +42,6 @@ export function AppSidebar() {
 
       <div className="space-y-4 px-2 pb-6">
         <RegionPicker />
-        <CropPicker />
       </div>
 
       <Separator className="bg-sidebar-border/80" />

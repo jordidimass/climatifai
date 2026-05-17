@@ -17,18 +17,18 @@ export const SOWING_PRESETS = [
     modalityLabel: "Riego",
   },
   {
-    id: "soybean-rainfed",
-    label: "Soya · secano",
-    cropId: "soybean",
+    id: "bean-rainfed",
+    label: "Frijol · secano",
+    cropId: "bean",
     modalityId: "rainfed",
     modalityLabel: "Secano",
   },
   {
-    id: "wheat-standard",
-    label: "Trigo · siembra estándar",
-    cropId: "wheat",
+    id: "rice-irrigated",
+    label: "Arroz · con riego",
+    cropId: "rice",
     modalityId: "standard",
-    modalityLabel: "Estándar",
+    modalityLabel: "Riego",
   },
   {
     id: "coffee-altitude",
@@ -38,11 +38,11 @@ export const SOWING_PRESETS = [
     modalityLabel: "Altitud media",
   },
   {
-    id: "vineyard-dry",
-    label: "Vid · viticultura seca",
-    cropId: "vineyard",
-    modalityId: "dry_farmed",
-    modalityLabel: "Seca",
+    id: "cacao-shade",
+    label: "Cacao · sombra húmeda",
+    cropId: "cacao",
+    modalityId: "shade",
+    modalityLabel: "Sombra",
   },
 ] as const;
 
