@@ -4,7 +4,21 @@ import {
   FirmsKeyMissingError,
   fetchFirmsHotspotsMulti,
 } from "@/lib/api/fires";
+import { pointInPolygon } from "@/lib/geo/brazil-polygon";
 import type { FireDayRange, FirmsSource } from "@/types/fires";
+
+/**
+ * Hard LATAM clamp applied to every incoming bbox. The fire map is
+ * scoped to Latin America (Brazil excluded by polygon filter further
+ * down), so queries that spill into Florida, the western US, the deep
+ * Pacific, etc. are trimmed to this rectangle before hitting FIRMS.
+ */
+const LATAM_BBOX = {
+  west: -118.5, // Baja California Sur
+  south: -56.0, // Tierra del Fuego
+  east: -34.0, // Easternmost Caribbean / Argentina
+  north: 33.0, // Northern Mexico / US border
+} as const;
 
 const SOURCES: readonly FirmsSource[] = [
   "VIIRS_SNPP_NRT",
@@ -76,7 +90,24 @@ export async function GET(request: Request) {
     );
   }
 
-  const [west, south, east, north] = parsed.data.bbox;
+  const [rawWest, rawSouth, rawEast, rawNorth] = parsed.data.bbox;
+  const west = Math.max(LATAM_BBOX.west, rawWest);
+  const south = Math.max(LATAM_BBOX.south, rawSouth);
+  const east = Math.min(LATAM_BBOX.east, rawEast);
+  const north = Math.min(LATAM_BBOX.north, rawNorth);
+
+  if (west >= east || south >= north) {
+    return Response.json(
+      { type: "FeatureCollection", features: [] },
+      {
+        headers: {
+          "content-type": "application/geo+json",
+          "cache-control": "public, s-maxage=300",
+        },
+      },
+    );
+  }
+
   try {
     const fc = await fetchFirmsHotspotsMulti(
       parsed.data.sources,
@@ -84,6 +115,11 @@ export async function GET(request: Request) {
       parsed.data.dayRange,
       parsed.data.date,
     );
+    // Brazil exclusion per product spec.
+    fc.features = fc.features.filter((f) => {
+      const [lng, lat] = f.geometry.coordinates;
+      return !pointInPolygon(lng, lat);
+    });
     return new Response(JSON.stringify(fc), {
       status: 200,
       headers: {

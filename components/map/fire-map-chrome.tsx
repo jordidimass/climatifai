@@ -2,16 +2,16 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { FileWarning, History, MapPinned, Search, X } from "lucide-react";
+import { FileWarning, History, MapPinned, X } from "lucide-react";
 
 import { FireDetailPopover } from "@/components/map/fire-detail-popover";
 import { FireHotspotsLayer } from "@/components/map/layers/fire-hotspots-layer";
 import { FireLayerPanel } from "@/components/map/fire-layer-panel";
 import { FireLegend } from "@/components/map/fire-legend";
+import { FireSearch } from "@/components/map/fire-search";
 import { FireTimeline } from "@/components/map/fire-timeline";
 import { RegionMapPanel } from "@/components/map/region-map-panel";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
@@ -50,21 +50,7 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
 
         <div className="pointer-events-none absolute inset-0 flex flex-col gap-4 p-4 md:p-6">
           <div className="flex flex-wrap items-start justify-end gap-3">
-            <div className="pointer-events-auto relative w-full max-w-xs shadow-sm">
-              <label className="sr-only" htmlFor="fire-map-search">
-                Buscar en el mapa
-              </label>
-              <Search
-                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                aria-hidden
-              />
-              <Input
-                id="fire-map-search"
-                placeholder="Buscar zona…"
-                className="h-10 rounded-full bg-card/90 pl-10 shadow-sm backdrop-blur-sm"
-                disabled
-              />
-            </div>
+            <FireSearch />
           </div>
 
           <div className="flex flex-1 items-start justify-end">
