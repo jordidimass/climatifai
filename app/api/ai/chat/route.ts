@@ -5,6 +5,8 @@ import {
   DEFAULT_MODEL_ID,
   gatewayClient,
 } from "@/lib/ai/gateway";
+import { gqlFetch } from "@/lib/api/gql-client";
+import { serverEnv } from "@/lib/env";
 
 export const maxDuration = 30;
 
@@ -22,6 +24,39 @@ type SelectionContextPayload = {
   longitude?: number;
   elevationMeters?: number;
 };
+
+interface RagPassage {
+  text: string;
+  source: string;
+  score: number;
+}
+
+interface RagGql {
+  ragContext: RagPassage[];
+}
+
+async function fetchRagContext(query: string): Promise<RagPassage[]> {
+  if (!serverEnv.AGRI_GRAPHQL_URL || !query.trim()) return [];
+  try {
+    const { ragContext } = await gqlFetch<RagGql>(
+      `query RagContext($query: String!, $limit: Int!) {
+        ragContext(query: $query, limit: $limit) { text source score }
+      }`,
+      { query, limit: 3 },
+    );
+    return ragContext.filter((p) => p.score >= 0.3);
+  } catch {
+    return [];
+  }
+}
+
+function buildRagBlock(passages: RagPassage[]): string {
+  if (!passages.length) return "";
+  const items = passages
+    .map((p, i) => `[${i + 1}] (${p.source})\n${p.text}`)
+    .join("\n\n");
+  return `\n\n## Contexto agroclimático recuperado (RAG)\n${items}`;
+}
 
 function withSelectionContext(
   base: string,
@@ -68,7 +103,6 @@ function withSelectionContext(
   }
 
   return `${base}
-
 ## Contexto seleccionado en la app (no inventes ubicaciones fuera de esto)
 - Región (catálogo, más cercana al punto): ${ctx.regionName ?? "—"} · id: ${ctx.regionId ?? "—"}${geoLine}
 ${block}
@@ -93,11 +127,18 @@ export async function POST(request: Request) {
     );
   }
 
+  const lastUserParts = payload.messages.findLast((m) => m.role === "user")?.parts ?? [];
+  const queryText = lastUserParts
+    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .map((p) => p.text)
+    .join(" ");
+
+  const [ragPassages] = await Promise.all([fetchRagContext(queryText)]);
+
   const messages = await convertToModelMessages(payload.messages);
-  const system = withSelectionContext(
-    CLIMATIFAI_SYSTEM_PROMPT,
-    payload.context ?? undefined,
-  );
+  const system =
+    withSelectionContext(CLIMATIFAI_SYSTEM_PROMPT, payload.context ?? undefined) +
+    buildRagBlock(ragPassages);
 
   const result = streamText({
     model: gatewayClient(DEFAULT_MODEL_ID),

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getCrop, isCropId } from "@/lib/api/crops";
 import { getRegion } from "@/lib/api/regions";
 import { getCropSuitability } from "@/lib/agri/crop-suitability";
+import { gqlFetch } from "@/lib/api/gql-client";
 import { serverEnv } from "@/lib/env";
 import type { CropId } from "@/types/crop";
 
@@ -10,6 +11,26 @@ const bodySchema = z.object({
   regionId: z.string().min(1),
   cropId: z.string().refine(isCropId, "cultivo inválido"),
 });
+
+interface AdvisorGql {
+  advisor: {
+    cropId: string;
+    score: number;
+    aptitude: string;
+    recommendationText: string;
+    factors: { label: string; score: number; weight: number; status: string; description?: string | null }[];
+    season: string;
+    lat: number;
+    lon: number;
+  };
+}
+
+function aptitudeToStatus(aptitude: string) {
+  if (aptitude === "Alta") return "suitable" as const;
+  if (aptitude === "Media") return "moderate" as const;
+  if (aptitude === "Baja") return "risky" as const;
+  return "not_recommended" as const;
+}
 
 export async function POST(request: Request) {
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
@@ -28,13 +49,44 @@ export async function POST(request: Request) {
     return Response.json({ error: "región o cultivo no encontrado" }, { status: 404 });
   }
 
-  if (serverEnv.AGRI_API_BASE_URL) {
-    const upstream = await fetch(`${serverEnv.AGRI_API_BASE_URL}/agri/advisor`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ regionId, cropId }),
-    });
-    return Response.json(await upstream.json(), { status: upstream.status });
+  if (serverEnv.AGRI_GRAPHQL_URL) {
+    try {
+      const { advisor: a } = await gqlFetch<AdvisorGql>(
+        `query Advisor($lat: Float!, $lon: Float!, $cropId: String!) {
+          advisor(lat: $lat, lon: $lon, cropId: $cropId) {
+            cropId score aptitude recommendationText season lat lon
+            factors { label score weight status description }
+          }
+        }`,
+        { lat: region.center.lat, lon: region.center.lng, cropId },
+        { next: { revalidate: 3600 } },
+      );
+      const status = aptitudeToStatus(a.aptitude);
+      return Response.json({
+        regionId,
+        cropId,
+        generatedAt: new Date().toISOString(),
+        suitability: {
+          cropId,
+          status,
+          score: Math.round(a.score),
+          confidence: "high",
+          reasons: [a.recommendationText],
+          constraints: [],
+          source: "intelligence-api",
+        },
+        sourceLabel: "Intelligence API",
+        advisories: [
+          {
+            title: `${crop.name} en ${region.name}`,
+            severity: status === "not_recommended" || status === "risky" ? "alta" : "media",
+            message: a.recommendationText,
+          },
+        ],
+      });
+    } catch {
+      // fall through to local fallback
+    }
   }
 
   const suitability = await getCropSuitability({
@@ -58,7 +110,9 @@ export async function POST(request: Request) {
       {
         title: `${crop.name} en ${region.name}`,
         severity: cropSuitability?.status === "not_recommended" ? "alta" : "media",
-        message: cropSuitability?.reasons[0] ?? `Monitorea temperatura máxima sobre ${crop.heatStressC}°C y ajusta riego si la precipitación cae fuera de ${crop.idealPrecipMm.min}-${crop.idealPrecipMm.max} mm anuales.`,
+        message:
+          cropSuitability?.reasons[0] ??
+          `Monitorea temperatura máxima sobre ${crop.heatStressC}°C y ajusta riego si la precipitación cae fuera de ${crop.idealPrecipMm.min}-${crop.idealPrecipMm.max} mm anuales.`,
       },
       {
         title: "Fuente de datos",
