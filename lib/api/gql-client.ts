@@ -11,6 +11,11 @@ export async function gqlFetch<T>(
   variables?: Record<string, unknown>,
   fetchOptions?: RequestInit,
 ): Promise<T> {
+  const operation = query.trim().match(/(?:query|mutation)\s+(\w+)/)?.[1]
+    ?? query.trim().match(/\{\s*(\w+)/)?.[1]
+    ?? "unknown";
+  console.log(`[gql] ${operation} → ${GQL_URL}`);
+
   const res = await fetch(GQL_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
