@@ -47,7 +47,7 @@ const FALLBACK_ALERTS: AlertItem[] = [
 ];
 
 async function fetchAlerts(): Promise<AlertItem[]> {
-  if (!serverEnv.AGRI_GRAPHQL_URL) return FALLBACK_ALERTS;
+  if (!serverEnv.CLIMATIFAI_API_URL) return FALLBACK_ALERTS;
   try {
     const { alerts } = await gqlFetch<AlertsGql>(
       `query {

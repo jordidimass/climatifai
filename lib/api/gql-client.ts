@@ -2,8 +2,9 @@ import "server-only";
 
 import { serverEnv } from "@/lib/env";
 
-const GQL_URL =
-  serverEnv.AGRI_GRAPHQL_URL ?? "http://localhost:8000/graphql";
+const GQL_URL = serverEnv.CLIMATIFAI_API_URL
+  ? `${serverEnv.CLIMATIFAI_API_URL}/graphql`
+  : "http://localhost:8000/graphql";
 
 export async function gqlFetch<T>(
   query: string,

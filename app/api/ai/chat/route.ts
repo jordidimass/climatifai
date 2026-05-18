@@ -36,7 +36,7 @@ interface RagGql {
 }
 
 async function fetchRagContext(query: string): Promise<RagPassage[]> {
-  if (!serverEnv.AGRI_GRAPHQL_URL || !query.trim()) return [];
+  if (!serverEnv.CLIMATIFAI_API_URL || !query.trim()) return [];
   try {
     const { ragContext } = await gqlFetch<RagGql>(
       `query RagContext($query: String!, $limit: Int!) {

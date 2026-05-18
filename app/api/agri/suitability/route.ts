@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     cropIds: CropId[];
   };
 
-  if (serverEnv.AGRI_GRAPHQL_URL) {
+  if (serverEnv.CLIMATIFAI_API_URL) {
     try {
       const results = await Promise.all(
         cropIds.map((cropId) =>

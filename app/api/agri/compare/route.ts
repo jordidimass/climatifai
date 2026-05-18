@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "región o cultivo no encontrado" }, { status: 404 });
   }
 
-  if (serverEnv.AGRI_GRAPHQL_URL) {
+  if (serverEnv.CLIMATIFAI_API_URL) {
     try {
       const { compare } = await gqlFetch<CompareGql>(
         `query Compare($lat: Float!, $lon: Float!, $cropIdA: String!, $cropIdB: String!) {

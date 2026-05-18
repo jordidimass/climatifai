@@ -53,7 +53,7 @@ export async function GET(request: Request) {
 
   const { regionId, cropId, from, to } = parsed.data;
 
-  if (serverEnv.AGRI_GRAPHQL_URL) {
+  if (serverEnv.CLIMATIFAI_API_URL) {
     const region = getRegion(regionId);
     if (region) {
       try {

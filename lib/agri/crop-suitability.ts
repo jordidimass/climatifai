@@ -25,7 +25,7 @@ const SOURCE_LABELS = {
 export async function getCropSuitability(
   input: CropSuitabilityInput,
 ): Promise<CropSuitabilityResponse> {
-  if (serverEnv.AGRI_GRAPHQL_URL) {
+  if (serverEnv.CLIMATIFAI_API_URL) {
     const apiResponse = await fetchIntelligenceApi(input).catch(() => null);
     if (apiResponse) return apiResponse;
   }
@@ -61,9 +61,9 @@ export async function getCropSuitability(
 async function fetchIntelligenceApi(
   input: CropSuitabilityInput,
 ): Promise<CropSuitabilityResponse | null> {
-  if (!serverEnv.AGRI_GRAPHQL_URL) return null;
+  if (!serverEnv.CLIMATIFAI_API_URL) return null;
 
-  const response = await fetch(serverEnv.AGRI_GRAPHQL_URL, {
+  const response = await fetch(`${serverEnv.CLIMATIFAI_API_URL}/graphql`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
