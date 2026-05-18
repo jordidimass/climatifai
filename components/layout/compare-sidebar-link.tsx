@@ -3,9 +3,13 @@
 import Link from "next/link";
 import { LineChart } from "lucide-react";
 
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { useSelectionStore } from "@/stores/selection-store";
 
 export function CompareSidebarLink() {
+  const { m } = useMarketingCopy();
+  const p = m.product;
+
   const enterComparisonMode = useSelectionStore((s) => s.enterComparisonMode);
 
   return (
@@ -19,10 +23,8 @@ export function CompareSidebarLink() {
         aria-hidden="true"
       />
       <span className="flex flex-col leading-tight">
-        <span className="font-medium">Comparar</span>
-        <span className="text-xs text-muted-foreground">
-          Dos cultivos · misma región
-        </span>
+        <span className="font-medium">{p.compareLinkLabel}</span>
+        <span className="text-xs text-muted-foreground">{p.compareLinkHint}</span>
       </span>
     </Link>
   );

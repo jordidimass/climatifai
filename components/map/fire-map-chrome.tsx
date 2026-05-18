@@ -89,7 +89,7 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
                     className="w-fit rounded-full shadow-md"
                     asChild
                   >
-                    <FireMapLink pathname="/mapa-incendios/seleccion">
+                    <FireMapLink pathname="/fires/select">
                       Selector en mapa
                     </FireMapLink>
                   </Button>
@@ -100,7 +100,7 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
                     className="w-fit rounded-full bg-card/80 backdrop-blur-sm"
                     asChild
                   >
-                    <FireMapLink pathname="/mapa-incendios">
+                    <FireMapLink pathname="/fires">
                       Vista amplia
                     </FireMapLink>
                   </Button>

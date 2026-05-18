@@ -25,8 +25,15 @@ export const metadata: Metadata = {
     template: "%s · Climatifai",
   },
   description:
-    "Compara patrones climáticos históricos con condiciones actuales y proyectadas para los cultivos y regiones que te importan.",
+    "Plataforma abierta LATAM-first: historia y proyección CMIP6, mapa de incendios y advisor agrícola con fuentes citadas y API pública. · Open LATAM-first climate intelligence.",
   metadataBase: new URL("https://climatifai.example"),
+  openGraph: {
+    title: "Climatifai",
+    description:
+      "Contrasta histórico, presente público y proyecciones para cultivos y regiones prioritarias.",
+    locale: "es_LA",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

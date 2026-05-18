@@ -150,7 +150,7 @@ export default function CompareDashboardPage() {
             className="shrink-0 gap-2 rounded-full"
             onClick={() => {
               leaveComparisonMode();
-              router.push("/analizar-siembra/resultado");
+              router.push("/advisor/results");
             }}
           >
             <ArrowLeftFromLine className="size-4" aria-hidden />

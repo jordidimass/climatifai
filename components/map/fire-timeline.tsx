@@ -42,6 +42,16 @@ export function FireTimeline({ className }: FireTimelineProps) {
     return { from, to };
   }, [dataSpan, dayRange, mountedAt]);
 
+  const viewMode = useFireStore((s) => s.viewMode);
+
+  /** Con historial activo sin playhead guardado (p. ej. primera visita), anclamos al fin del intervalo visible. */
+  React.useEffect(() => {
+    if (viewMode !== "history") return;
+    const st = useFireStore.getState();
+    if (st.playhead != null) return;
+    setPlayhead(clampMs(span.to, span.from, span.to));
+  }, [viewMode, span.from, span.to, setPlayhead]);
+
   React.useEffect(() => {
     const ph = useFireStore.getState().playhead;
     if (ph == null) return;

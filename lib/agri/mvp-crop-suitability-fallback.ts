@@ -56,13 +56,13 @@ export function getMvpFallbackSuitability(
       score: 62,
       confidence: "low",
       reasons: [
-        "Coincidencia MVP basada en plausibilidad agroecológica regional.",
-        "Debe validarse con datos territoriales reales cuando el backend esté disponible.",
+        "Coincidencia basada en plausibilidad agroecológica regional declarada.",
+        "Validar con datos territoriales antes de usar en campo.",
       ],
       constraints: [
         {
           type: "data",
-          label: "Fuente temporal MVP",
+          label: "Fuente provisional hasta API completa",
           severity: "info",
         },
       ],
@@ -75,11 +75,11 @@ export function getMvpFallbackSuitability(
     status: "unknown",
     score: null,
     confidence: "low",
-    reasons: ["Sin datos suficientes para esta región en el fallback MVP."],
+    reasons: ["Sin datos suficientes para esta combinación region‑cultivo con el método provisional vigente."],
     constraints: [
       {
         type: "data",
-        label: "Sin cobertura regional MVP",
+        label: "Sin cobertura regional en provisional",
         severity: "warning",
       },
     ],

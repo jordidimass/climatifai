@@ -4,9 +4,13 @@ import { Bell, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { useSelectionStore } from "@/stores/selection-store";
 
 export function AppTopbar() {
+  const { m } = useMarketingCopy();
+  const p = m.product;
+
   const region = useSelectionStore((s) => s.region);
   const crop = useSelectionStore((s) => s.crop);
   const compareCrop = useSelectionStore((s) => s.compareCrop);
@@ -36,7 +40,7 @@ export function AppTopbar() {
           />
           <Input
             type="search"
-            placeholder="Buscar regiones, cultivos..."
+            placeholder={p.topbarSearchPlaceholder}
             className="w-72 pl-9"
           />
         </div>
@@ -44,7 +48,7 @@ export function AppTopbar() {
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Notificaciones"
+          aria-label={p.notificationsAria}
           className="rounded-full"
         >
           <Bell className="size-4" aria-hidden="true" />

@@ -59,7 +59,7 @@ export function CropPicker() {
             className="h-8 rounded-full px-3 text-xs"
             onClick={() => {
               leaveComparisonMode();
-              router.push("/analizar-siembra/resultado");
+              router.push("/advisor/results");
             }}
           >
             Salir del modo comparación

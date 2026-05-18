@@ -4,15 +4,50 @@ import * as React from "react";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { CROPS, getCrop } from "@/lib/api/crops";
 import { cn } from "@/lib/utils";
 import { useCropPickerStore } from "@/stores/crop-picker-store";
 import { useSelectionStore } from "@/stores/selection-store";
 import type { CropSuitability, CropSuitabilityResponse } from "@/types/agri";
 import type { Crop, CropId } from "@/types/crop";
+import type { MarketingCopy } from "@/lib/marketing-copy";
 import { Button } from "@/components/ui/button";
 
+type ProductCopy = MarketingCopy["product"];
+
+function scoreTxt(score?: number | null) {
+  return typeof score === "number" ? String(Math.round(score)) : "—";
+}
+
+function suitabilityBadgeLabel(suitability: CropSuitability | undefined, p: ProductCopy) {
+  if (!suitability) return null;
+  const s = scoreTxt(suitability.score);
+  switch (suitability.status) {
+    case "suitable":
+      return {
+        label: p.cropGridBadgeSuitable.replace("{{score}}", s),
+        className: "bg-primary/15 text-primary",
+      };
+    case "moderate":
+      return {
+        label: p.cropGridBadgeModerate.replace("{{score}}", s),
+        className: "bg-accent text-accent-foreground",
+      };
+    case "risky":
+      return {
+        label: p.cropGridBadgeRisky.replace("{{score}}", s),
+        className: "bg-anomaly-warm/15 text-anomaly-warm",
+      };
+    default:
+      return null;
+  }
+}
+
 export function CropGridPicker() {
+  const { m } = useMarketingCopy();
+  const p = m.product;
+
   const region = useSelectionStore((s) => s.region);
   const setCrop = useSelectionStore((s) => s.setCrop);
   const mode = useCropPickerStore((s) => s.mode);
@@ -48,7 +83,7 @@ export function CropGridPicker() {
       }),
     })
       .then(async (response) => {
-        if (!response.ok) throw new Error("No se pudo consultar suitability");
+        if (!response.ok) throw new Error(p.cropGridFetchSuitabilityFailed);
         return response.json() as Promise<CropSuitabilityResponse>;
       })
       .then((data) => {
@@ -57,11 +92,19 @@ export function CropGridPicker() {
       })
       .catch((error) => {
         if (error instanceof DOMException && error.name === "AbortError") return;
-        setSuitabilityError(error instanceof Error ? error.message : "Error inesperado");
+        setSuitabilityError(error instanceof Error ? error.message : p.cropGridUnexpected);
       });
 
     return () => controller.abort();
-  }, [region.center.lat, region.center.lng, region.country, region.id, region.name]);
+  }, [
+    region.center.lat,
+    region.center.lng,
+    region.country,
+    region.id,
+    region.name,
+    p.cropGridFetchSuitabilityFailed,
+    p.cropGridUnexpected,
+  ]);
 
   const suitabilityByCrop = React.useMemo(() => {
     return new Map(suitability?.crops.map((item) => [item.cropId, item]));
@@ -92,7 +135,7 @@ export function CropGridPicker() {
   }
 
   function showUnavailableToast() {
-    toast.warning("Sin datos suficientes para esta ubicación");
+    toast.warning(p.cropGridToastUnavailable);
   }
 
   const canCompare = compareSelection.length === 2;
@@ -101,17 +144,17 @@ export function CropGridPicker() {
     <div className="space-y-3">
       <div className="flex rounded-full border border-border bg-muted/40 p-1">
         <ModeButton active={mode === "advisor"} onClick={() => setMode("advisor")}>
-          Asesor
+          {p.cropGridAdvisor}
         </ModeButton>
         <ModeButton active={mode === "compare"} onClick={() => setMode("compare")}>
-          Comparar
+          {p.cropGridCompare}
         </ModeButton>
       </div>
 
       <div
         className="grid grid-cols-2 gap-3 md:grid-cols-4"
         role={mode === "advisor" ? "radiogroup" : "group"}
-        aria-label="Cultivos MVP"
+        aria-label={p.cropGridAria}
       >
         {CROPS.map((crop) => {
           const cropSuitability = suitabilityByCrop.get(crop.id);
@@ -129,10 +172,9 @@ export function CropGridPicker() {
               selected={selected}
               disabled={blocked}
               suitability={cropSuitability}
+              copy={p}
               onClick={() =>
-                mode === "advisor"
-                  ? handleAdvisorSelect(crop)
-                  : handleCompareToggle(crop)
+                mode === "advisor" ? handleAdvisorSelect(crop) : handleCompareToggle(crop)
               }
             />
           );
@@ -146,16 +188,17 @@ export function CropGridPicker() {
           disabled={loading}
           onClick={() => void fetchCompare(region.id)}
         >
-          {loading ? "Comparando..." : "Comparar"}
+          {loading ? p.cropGridCompareRunning : p.cropGridCompareRun}
         </Button>
       )}
 
       <p className="text-xs text-muted-foreground">
-        Fuente: {suitability?.sourceLabel ?? "consultando..."}
+        {`${p.cropGridSourcePrefix}: ${suitability?.sourceLabel ?? p.cropGridSourcePending}`}
         {suitabilityError ? ` · ${suitabilityError}` : null}
       </p>
 
       <StatusLine
+        copy={p}
         loading={loading}
         error={error}
         mode={mode}
@@ -198,6 +241,7 @@ function CropCard({
   selected,
   disabled,
   suitability,
+  copy: p,
   onClick,
 }: {
   crop: Crop;
@@ -205,9 +249,10 @@ function CropCard({
   selected: boolean;
   disabled: boolean;
   suitability?: CropSuitability;
+  copy: ProductCopy;
   onClick: () => void;
 }) {
-  const badge = suitabilityBadge(suitability);
+  const badge = suitabilityBadgeLabel(suitability, p);
   return (
     <button
       type="button"
@@ -236,7 +281,9 @@ function CropCard({
       )}
       {disabled && (
         <span className="numeric mt-1 text-[10px] text-muted-foreground">
-          {suitability?.status === "not_recommended" ? "No recomendado" : "Sin datos"}
+          {suitability?.status === "not_recommended"
+            ? p.cropGridDisabledNotRecommended
+            : p.cropGridDisabledNoData}
         </span>
       )}
       {!disabled && badge && (
@@ -252,20 +299,8 @@ function isCropBlocked(suitability?: CropSuitability) {
   return suitability?.status === "unknown" || suitability?.status === "not_recommended";
 }
 
-function suitabilityBadge(suitability?: CropSuitability) {
-  switch (suitability?.status) {
-    case "suitable":
-      return { label: `${suitability.score ?? ""}% viable`, className: "bg-primary/15 text-primary" };
-    case "moderate":
-      return { label: `${suitability.score ?? ""}% moderado`, className: "bg-accent text-accent-foreground" };
-    case "risky":
-      return { label: `${suitability.score ?? ""}% riesgo`, className: "bg-anomaly-warm/15 text-anomaly-warm" };
-    default:
-      return null;
-  }
-}
-
 function StatusLine({
+  copy: p,
   loading,
   error,
   mode,
@@ -273,6 +308,7 @@ function StatusLine({
   compareSummary,
   compareSelection,
 }: {
+  copy: ProductCopy;
   loading: boolean;
   error: string | null;
   mode: "advisor" | "compare";
@@ -281,24 +317,27 @@ function StatusLine({
   compareSelection: CropId[];
 }) {
   if (loading) {
-    return <p className="text-xs text-muted-foreground">Consultando datos...</p>;
+    return <p className="text-xs text-muted-foreground">{p.cropGridStatusConsulting}</p>;
   }
   if (error) {
     return <p className="text-xs text-destructive">{error}</p>;
   }
   if (mode === "advisor" && advisorTitle) {
-    return <p className="text-xs text-muted-foreground">Asesor listo: {advisorTitle}</p>;
+    return (
+      <p className="text-xs text-muted-foreground">
+        {`${p.cropGridPanelReadyPrefix} ${advisorTitle}`}
+      </p>
+    );
   }
   if (mode === "compare" && compareSummary) {
     return <p className="text-xs text-muted-foreground">{compareSummary}</p>;
   }
   if (mode === "compare" && compareSelection.length === 1) {
     const crop = getCrop(compareSelection[0]);
-    return (
-      <p className="text-xs text-muted-foreground">
-        Selecciona otro cultivo para comparar con {crop?.name}.
-      </p>
-    );
+    const tmpl = crop
+      ? p.cropGridCompareSelectAnother.replace("{{crop}}", crop.name)
+      : p.cropGridCompareSelectAnother.replace("{{crop}}", "").trim();
+    return <p className="text-xs text-muted-foreground">{tmpl}</p>;
   }
   return null;
 }

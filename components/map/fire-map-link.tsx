@@ -8,7 +8,7 @@ type FireMapLinkProps = Omit<
   React.ComponentPropsWithoutRef<typeof Link>,
   "href"
 > & {
-  pathname: "/mapa-incendios" | "/mapa-incendios/seleccion";
+  pathname: "/fires" | "/fires/select";
 };
 
 export function FireMapLink({ pathname, ...rest }: FireMapLinkProps) {

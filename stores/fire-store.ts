@@ -49,13 +49,13 @@ interface FireState {
 }
 
 export const useFireStore = create<FireState>((set) => ({
-  dayRange: 1,
+  dayRange: 30,
   sources: DEFAULT_SOURCES,
   playhead: null,
   windowHours: 6,
   playing: false,
   opacity: 0.85,
-  viewMode: "live",
+  viewMode: "history",
   selectedHotspot: null,
   dataSpan: null,
   reportOpen: false,

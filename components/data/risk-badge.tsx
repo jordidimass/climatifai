@@ -1,5 +1,8 @@
+"use client";
+
 import { AlertTriangle, CheckCircle2, HelpCircle, ShieldAlert } from "lucide-react";
 
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { cn } from "@/lib/utils";
 import type { CropSuitabilityStatus } from "@/types/agri";
 
@@ -12,18 +15,20 @@ interface RiskBadgeProps {
   compact?: boolean;
 }
 
-interface ToneMeta {
-  tone: RiskTone;
-  label: string;
-  Icon: typeof CheckCircle2;
-}
+const STATUS_ICONS = {
+  suitable: CheckCircle2,
+  moderate: AlertTriangle,
+  risky: ShieldAlert,
+  not_recommended: ShieldAlert,
+  unknown: HelpCircle,
+};
 
-const STATUS_META: Record<CropSuitabilityStatus, ToneMeta> = {
-  suitable: { tone: "ok", label: "Apto", Icon: CheckCircle2 },
-  moderate: { tone: "warn", label: "Moderado", Icon: AlertTriangle },
-  risky: { tone: "bad", label: "Riesgo", Icon: ShieldAlert },
-  not_recommended: { tone: "bad", label: "No recomendado", Icon: ShieldAlert },
-  unknown: { tone: "neutral", label: "Sin datos", Icon: HelpCircle },
+const STATUS_TONE: Record<CropSuitabilityStatus, RiskTone> = {
+  suitable: "ok",
+  moderate: "warn",
+  risky: "bad",
+  not_recommended: "bad",
+  unknown: "neutral",
 };
 
 const TONE_CLASSES: Record<RiskTone, string> = {
@@ -41,29 +46,48 @@ const DOT_CLASSES: Record<RiskTone, string> = {
 };
 
 export function RiskBadge({ status, className, compact = false }: RiskBadgeProps) {
-  const meta = STATUS_META[status];
+  const { m } = useMarketingCopy();
+  const product = m.product;
+
+  function label(): string {
+    switch (status) {
+      case "suitable":
+        return product.riskSuitable;
+      case "moderate":
+        return product.riskModerate;
+      case "risky":
+        return product.riskRisky;
+      case "not_recommended":
+        return product.riskNotRecommended;
+      default:
+        return product.riskUnknown;
+    }
+  }
+
+  const tone = STATUS_TONE[status];
+  const text = label();
 
   if (compact) {
     return (
       <span
-        className={cn("inline-flex size-2.5 rounded-full", DOT_CLASSES[meta.tone], className)}
-        aria-label={meta.label}
+        className={cn("inline-flex size-2.5 rounded-full", DOT_CLASSES[tone], className)}
+        aria-label={text}
         role="img"
       />
     );
   }
 
-  const { Icon } = meta;
+  const Icon = STATUS_ICONS[status];
   return (
     <span
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium",
-        TONE_CLASSES[meta.tone],
+        TONE_CLASSES[tone],
         className,
       )}
     >
       <Icon className="size-3.5" aria-hidden="true" />
-      {meta.label}
+      {text}
     </span>
   );
 }

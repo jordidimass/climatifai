@@ -10,12 +10,7 @@ export function CtaSection() {
   const { m } = useMarketingCopy();
   const c = m.cta;
   return (
-    <section id="empresas" className="mx-auto max-w-7xl px-6 py-20">
-      <div
-        id="contact"
-        tabIndex={-1}
-        className="scroll-mt-28 outline-none"
-      />
+    <section className="mx-auto max-w-7xl px-6 py-20">
       <div className="glass relative overflow-hidden rounded-3xl px-8 py-16 md:px-16 md:py-24">
         <div className="relative z-10 mx-auto max-w-2xl text-center">
           <p className="eyebrow">{c.eyebrow}</p>
@@ -26,9 +21,9 @@ export function CtaSection() {
           <p className="mx-auto mt-5 max-w-lg text-balance text-muted-foreground">{c.body}</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button asChild size="lg" className="rounded-full px-6">
-              <Link href="/analizar-siembra">
+              <Link href="/advisor">
                 {c.primarySowing}
-                <ArrowUpRight className="ml-1 size-4" aria-hidden="true" />
+                <ArrowUpRight className="ml-1 size-4" aria-hidden={true} />
               </Link>
             </Button>
             <Button
@@ -37,7 +32,7 @@ export function CtaSection() {
               variant="outline"
               className="rounded-full bg-background/60 px-6 backdrop-blur"
             >
-              <Link href="/#contact">{c.secondaryContact}</Link>
+              <Link href="/contact">{c.secondaryContact}</Link>
             </Button>
           </div>
         </div>

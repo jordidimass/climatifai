@@ -8,6 +8,7 @@ import {
   type UIMessage,
 } from "ai";
 
+import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,9 @@ function messageText(m: UIMessage): string {
 }
 
 export function HablaAiChat() {
+  const { m } = useMarketingCopy();
+  const p = m.product;
+
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
@@ -54,7 +58,7 @@ export function HablaAiChat() {
     try {
       const stream = await transport.sendMessages({
         trigger: "submit-message",
-        chatId: "habla-ai-mvp",
+        chatId: "climatifai-chat-session",
         messageId: undefined,
         messages: history,
         abortSignal: undefined,
@@ -66,10 +70,10 @@ export function HablaAiChat() {
         setMessages([...history, partial]);
       }
       if (!lastAssistant) {
-        setError("No hubo respuesta del modelo.");
+        setError(p.hablaAiNoResponse);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al consultar la IA.");
+      setError(err instanceof Error ? err.message : p.hablaAiErrorGeneric);
       setMessages(history);
     } finally {
       setBusy(false);
@@ -89,7 +93,7 @@ export function HablaAiChat() {
               )}
             >
               <span className="eyebrow block text-[0.65rem] text-foreground/70">
-                {m.role === "user" ? "Tú" : "Climatifai"}
+                {m.role === "user" ? p.hablaAiYou : p.hablaAiAssistant}
               </span>
               <p className="mt-1 whitespace-pre-wrap">{messageText(m)}</p>
             </li>
@@ -104,15 +108,15 @@ export function HablaAiChat() {
       ) : null}
 
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <label htmlFor="habla-ai-input" className="eyebrow">
-          Tu mensaje
+        <label htmlFor="climatifai-chat-input" className="eyebrow">
+          {p.hablaAiMessageLabel}
         </label>
         <textarea
-          id="habla-ai-input"
+          id="climatifai-chat-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={6}
-          placeholder="Ej.: Quiero planificar la cosecha de soya en Misiones considerando olas de calor…"
+          placeholder={p.hablaAiPlaceholder}
           className={cn(
             "min-h-[140px] w-full resize-y rounded-xl border border-input bg-transparent px-4 py-3 text-base outline-none transition-colors",
             "placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
@@ -126,7 +130,7 @@ export function HablaAiChat() {
           className="rounded-full"
           disabled={busy || !input.trim()}
         >
-          {busy ? "Generando…" : "Enviar"}
+          {busy ? p.hablaAiGenerating : p.hablaAiSubmit}
         </Button>
       </form>
     </div>

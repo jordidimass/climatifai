@@ -8,11 +8,10 @@ import { useMarketingCopy } from "@/components/marketing/marketing-locale-provid
 export function SiteFooter() {
   const { m } = useMarketingCopy();
   const f = m.footer;
-  const h = m.header;
 
   return (
     <footer className="mt-24 border-t border-border/60">
-      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-3">
+      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-4">
         <div className="space-y-3">
           <Logo />
           <p className="max-w-sm text-sm text-muted-foreground">{f.blurb}</p>
@@ -20,28 +19,34 @@ export function SiteFooter() {
         <FooterColumn
           title={f.columnProduct}
           links={[
-            { href: "/analizar-siembra", label: f.linkAnalyze },
-            { href: "/mapa-incendios", label: f.linkMap },
-            { href: "/habla-ai", label: f.linkAi },
-            { href: "/insights", label: f.linkInsights },
-            { href: "/#capacidades", label: f.linkFeatures },
+            { href: "/advisor", label: f.linkAdvisor },
+            { href: "/fires", label: f.linkWildfires },
+            { href: "/capabilities", label: f.linkFeatures },
           ]}
         />
         <FooterColumn
           title={f.columnSite}
           links={[
-            { href: "/#por-que", label: h.navWhy },
-            { href: "/#empresas", label: h.navBusiness },
-            { href: "/#contact", label: f.linkContact },
-            { href: "/#privacy", label: f.linkPrivacy },
+            { href: "/why", label: f.linkWhy },
+            { href: "/enterprise", label: f.linkEnterprise },
+            { href: "/capabilities", label: f.linkCapabilities },
+            { href: "/about", label: f.linkAbout },
+            { href: "/contact", label: f.linkContact },
+            { href: "/privacy", label: f.linkPrivacy },
+          ]}
+        />
+        <FooterColumn
+          title={f.columnBuild}
+          links={[
+            { href: "/build", label: f.linkBuild },
+            { href: "/build#api", label: f.linkViewApi },
+            { href: "/build#docs", label: f.linkDocs },
+            { href: "/build#contribute", label: f.linkContribute },
           ]}
         />
       </div>
 
-      <div
-        id="privacy"
-        className="scroll-mt-28 border-t border-border/60 bg-muted/15"
-      >
+      <div className="scroll-mt-28 border-t border-border/60 bg-muted/15">
         <div className="mx-auto max-w-7xl px-6 py-8 md:py-10">
           <p className="eyebrow mb-2 text-foreground/80">{f.dataSourcesEyebrow}</p>
           <p className="max-w-4xl text-xs leading-relaxed text-muted-foreground md:text-[0.8125rem]">

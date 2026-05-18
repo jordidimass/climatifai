@@ -15,9 +15,9 @@ const VALID_SOURCES: FirmsSource[] = [
 const VALID_VIEW_MODES: FireViewMode[] = ["live", "history"];
 
 export const FIRE_URL_DEFAULTS = {
-  dayRange: 1 as FireDayRange,
+  dayRange: 30 as FireDayRange,
   sources: ["VIIRS_NOAA20_NRT", "VIIRS_SNPP_NRT"] as FirmsSource[],
-  viewMode: "live" as FireViewMode,
+  viewMode: "history" as FireViewMode,
   opacity: 0.85,
   windowHours: 6,
   playhead: null as number | null,

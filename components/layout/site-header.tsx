@@ -23,12 +23,12 @@ const FLOW_SUBROWS: Record<
   string,
   { backHref: string; titleKey: "subResultado" | "subMapSelection" }
 > = {
-  "/analizar-siembra/resultado": {
-    backHref: "/analizar-siembra",
+  "/advisor/results": {
+    backHref: "/advisor",
     titleKey: "subResultado",
   },
-  "/mapa-incendios/seleccion": {
-    backHref: "/mapa-incendios",
+  "/fires/select": {
+    backHref: "/fires",
     titleKey: "subMapSelection",
   },
 };
@@ -40,7 +40,7 @@ function LangToggle({ compact }: { compact?: boolean }) {
   return (
     <div
       role="group"
-      aria-label="Language"
+      aria-label={h.languageLabel}
       className={cn(
         "flex items-center gap-px rounded-full border border-border/70 bg-muted/40 p-0.5 text-[0.7rem] font-semibold",
         compact && "scale-95",
@@ -67,7 +67,6 @@ function LangToggle({ compact }: { compact?: boolean }) {
 }
 
 function primaryNavActive(pathname: string, href: string) {
-  if (href === "/habla-ai") return pathname === "/habla-ai";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -78,17 +77,18 @@ export function SiteHeader() {
   const footer = m.footer;
 
   const PRIMARY = [
-    { href: "/analizar-siembra", label: header.flowAnalyze },
-    { href: "/mapa-incendios", label: header.flowMap },
-    { href: "/habla-ai", label: header.flowAi },
+    { href: "/advisor", label: header.flowAdvisor },
+    { href: "/fires", label: header.flowWildfires },
   ] as const;
 
   const SHEET_SECONDARY = [
     { href: "/", label: header.navHome },
-    { href: "/#por-que", label: header.navWhy },
-    { href: "/#capacidades", label: header.navFeatures },
-    { href: "/#empresas", label: header.navBusiness },
-    { href: "/insights", label: footer.linkInsights },
+    { href: "/why", label: header.navWhy },
+    { href: "/capabilities", label: header.navFeatures },
+    { href: "/enterprise", label: header.navBusiness },
+    { href: "/build", label: footer.linkBuild },
+    { href: "/about", label: footer.linkAbout },
+    { href: "/contact", label: footer.linkContact },
   ] as const;
 
   const subMeta = FLOW_SUBROWS[pathname];

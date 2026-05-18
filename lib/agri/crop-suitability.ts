@@ -19,7 +19,7 @@ interface NasaPowerClimate {
 const SOURCE_LABELS = {
   "intelligence-api": "Intelligence API",
   "nasa-power": "NASA POWER · climatología agroclimática",
-  "mvp-fallback": "Estimación MVP local",
+  "mvp-fallback": "Catálogo región‑cultivo (provisional)",
 } as const;
 
 export async function getCropSuitability(

@@ -76,15 +76,15 @@ function withSelectionContext(
 
   if (dual) {
     block = `
-## Cultivo principal
+## Cultivo en foco
 - Cultivo actual: ${ctx.cropName ?? "—"} · id: ${ctx.cropId ?? "—"}
 
-## Cultivo comparado
+## Cultivo de comparación
 - Comparar con: ${ctx.compareCropName ?? "—"} · id: ${ctx.compareCropId ?? "—"}
-- Respondé situaciones contrastando aptitudes, ventanas agronómicas y riesgos entre **ambos** cultivos dentro de esta región. Si son equivalentes por catálogo, aclaralo.`;
+- Contrastá aptitudes referenciales, ventanas típicas y riesgos entre **ambos** cultivos en esta misma región catalogada; si los catálogo los trata equivalente para este polígono, decilo`;
   } else {
     block = `
-- Cultivo: ${ctx.cropName ?? "—"} · id: ${ctx.cropId ?? "—"}`;
+- Cultivo seleccionado: ${ctx.cropName ?? "—"} · id: ${ctx.cropId ?? "—"}`;
   }
 
   let geoLine = "";
@@ -99,14 +99,14 @@ function withSelectionContext(
         : "";
     geoLine = `
 - **Ubicación geocodificada (buscador):** ${ctx.geocodedLabel.trim()} · coordenadas aprox. ${ctx.latitude.toFixed(4)}, ${ctx.longitude.toFixed(4)}${elev}
-- Usá este punto como referencia espacial; los datos operativos del MVP siguen anclados a la región de catálogo indicada abajo.`;
+- Este punto aclara ubicación solicitada por el usuario; las series agroclimáticas operativas siguen ligadas al polígono de la región de catálogo indicada abajo.`;
   }
 
   return `${base}
-## Contexto seleccionado en la app (no inventes ubicaciones fuera de esto)
-- Región (catálogo, más cercana al punto): ${ctx.regionName ?? "—"} · id: ${ctx.regionId ?? "—"}${geoLine}
+## Contexto elegido por el usuario en la aplicación (no inventes ubicaciones fuera de esto)
+- Región catalogada (${ctx.regionName ?? "—"} · id ${ctx.regionId ?? "—"})${geoLine}
 ${block}
-- Resumen de región disponible para el MVP: ${ctx.regionSummary ?? "—"}`;
+- Extracto público conocido hasta ahora sobre la región: ${ctx.regionSummary ?? "—"}`;
 }
 
 export async function POST(request: Request) {
@@ -117,12 +117,19 @@ export async function POST(request: Request) {
   try {
     payload = await request.json();
   } catch {
-    return Response.json({ error: "cuerpo JSON inválido" }, { status: 400 });
+    return Response.json(
+      {
+        error: "No pudimos leer la petición: el cuerpo no es JSON válido.",
+      },
+      { status: 400 },
+    );
   }
 
   if (!Array.isArray(payload.messages)) {
     return Response.json(
-      { error: "se esperaba { messages: UIMessage[] }" },
+      {
+        error: 'Esperamos un JSON como { "messages": [...] } siguiendo UIMessage.',
+      },
       { status: 400 },
     );
   }

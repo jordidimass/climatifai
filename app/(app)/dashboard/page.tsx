@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function DashboardPage() {
-  redirect("/analizar-siembra/resultado");
+  redirect("/advisor/results");
 }
