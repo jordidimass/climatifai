@@ -63,7 +63,7 @@ async function fetchIntelligenceApi(
 ): Promise<CropSuitabilityResponse | null> {
   if (!serverEnv.CLIMATIFAI_API_URL) return null;
 
-  const response = await fetch(`${serverEnv.CLIMATIFAI_API_URL}/graphql`, {
+  const response = await fetch(serverEnv.CLIMATIFAI_API_URL, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
