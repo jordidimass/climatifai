@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FileWarning, History, MapPinned, X } from "lucide-react";
+import { ChevronDown, ChevronUp, FileWarning, History, Layers, MapPinned, X } from "lucide-react";
 
 import { FireDetailPopover } from "@/components/map/fire-detail-popover";
 import { FireMapLink } from "@/components/map/fire-map-link";
@@ -39,6 +39,7 @@ type FireMapChromeProps = {
 export function FireMapChrome({ phase, className }: FireMapChromeProps) {
   const [currentFC, setCurrentFC] = React.useState<HotspotFC | null>(null);
   const [mapbox, setMapbox] = React.useState<mapboxgl.Map | null>(null);
+  const [layerOpen, setLayerOpen] = React.useState(false);
   const viewMode = useFireStore((s) => s.viewMode);
   const setViewMode = useFireStore((s) => s.setViewMode);
   const reportOpen = useFireStore((s) => s.reportOpen);
@@ -62,7 +63,23 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
           <div className="flex shrink-0 justify-end">
             <div className="pointer-events-auto flex max-h-[min(420px,42svh)] w-full max-w-xs min-w-0 flex-col gap-3 overflow-y-auto overscroll-contain">
               <FireSearch className="max-w-none" />
-              <FireLayerPanel currentFC={currentFC} />
+              <button
+                type="button"
+                onClick={() => setLayerOpen((o) => !o)}
+                className="md:hidden flex items-center justify-between gap-2 rounded-xl bg-card/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm"
+              >
+                <span className="eyebrow flex items-center gap-1.5 text-foreground/80">
+                  <Layers className="size-3.5" aria-hidden /> Capas satelitales
+                </span>
+                {layerOpen ? (
+                  <ChevronUp className="size-3.5 text-muted-foreground" aria-hidden />
+                ) : (
+                  <ChevronDown className="size-3.5 text-muted-foreground" aria-hidden />
+                )}
+              </button>
+              <div className={cn("md:block", layerOpen ? "block" : "hidden")}>
+                <FireLayerPanel currentFC={currentFC} />
+              </div>
             </div>
           </div>
 
@@ -119,7 +136,9 @@ export function FireMapChrome({ phase, className }: FireMapChromeProps) {
 
               <div className="pointer-events-auto flex shrink-0 items-end gap-3 xl:order-3 xl:shrink-0">
                 <FireMapZoomToolbar map={mapbox} />
-                <FireLegend />
+                <div className="hidden md:block">
+                  <FireLegend />
+                </div>
               </div>
             </div>
           </div>
@@ -155,7 +174,8 @@ function FirePrimaryButtons({
           className="glass justify-start gap-2 rounded-full shadow-md"
           onClick={onReport}
         >
-          <MapPinned className="size-4" aria-hidden /> Descripción
+          <MapPinned className="size-4" aria-hidden />
+          <span className="hidden sm:inline">Descripción</span>
         </Button>
         <Button
           type="button"
@@ -163,7 +183,8 @@ function FirePrimaryButtons({
           className="glass justify-start gap-2 rounded-full shadow-md"
           onClick={onReport}
         >
-          <FileWarning className="size-4" aria-hidden /> Informe
+          <FileWarning className="size-4" aria-hidden />
+          <span className="hidden sm:inline">Informe</span>
         </Button>
       </>
     );
@@ -177,7 +198,8 @@ function FirePrimaryButtons({
         className="glass justify-start gap-2 rounded-full shadow-md"
         onClick={onReport}
       >
-        <FileWarning className="size-4" aria-hidden /> Informe
+        <FileWarning className="size-4" aria-hidden />
+        <span className="hidden sm:inline">Informe</span>
       </Button>
       <Button
         type="button"
@@ -189,7 +211,9 @@ function FirePrimaryButtons({
         onClick={onToggleHistory}
       >
         <History className="size-4" aria-hidden />
-        {viewMode === "history" ? "Cerrar historial" : "Historial"}
+        <span className="hidden sm:inline">
+          {viewMode === "history" ? "Cerrar historial" : "Historial"}
+        </span>
       </Button>
     </>
   );

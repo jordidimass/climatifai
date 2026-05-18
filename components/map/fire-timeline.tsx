@@ -161,13 +161,14 @@ export function FireTimeline({ className }: FireTimelineProps) {
           className="flex-1 accent-[var(--risk-bad)]"
           aria-label="Línea temporal"
         />
-        <div className="numeric min-w-[120px] text-right text-[10px] text-muted-foreground">
+        <div className="numeric hidden min-w-[120px] text-right text-[10px] text-muted-foreground sm:block">
           {label}
         </div>
       </div>
-      <div className="numeric flex justify-between text-[10px] text-muted-foreground">
+      <div className="numeric flex items-center justify-between text-[10px] text-muted-foreground">
         <span>{new Date(span.from).toLocaleDateString("es-ES")}</span>
-        <span>{sliderPct.toFixed(0)}%</span>
+        <span className="sm:hidden">{label}</span>
+        <span className="hidden sm:inline">{sliderPct.toFixed(0)}%</span>
         <span>{new Date(span.to).toLocaleDateString("es-ES")}</span>
       </div>
     </div>
