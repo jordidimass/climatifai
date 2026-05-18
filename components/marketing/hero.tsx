@@ -5,6 +5,7 @@ import { Flame, Sprout } from "lucide-react";
 
 import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { Button } from "@/components/ui/button";
+import { CLIMATIFAI_API_DOCS_URL } from "@/lib/site-urls";
 
 export function Hero() {
   const { m } = useMarketingCopy();
@@ -24,7 +25,16 @@ export function Hero() {
         </h1>
 
         <p className="mx-auto mt-6 max-w-xl text-balance text-base leading-relaxed text-muted-foreground md:text-lg">
-          {h.body}
+          {h.bodyPrefix}
+          <Link
+            href={CLIMATIFAI_API_DOCS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            {h.apiLinkLabel}
+          </Link>
+          {h.bodySuffix}
         </p>
       </div>
 

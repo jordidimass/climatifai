@@ -1,3 +1,5 @@
+import { CLIMATIFAI_API_DOCS_URL } from "@/lib/site-urls";
+
 export type MarketingLocale = "es" | "en";
 
 export type StaticPageSlug = keyof MarketingCopy["pages"];
@@ -6,6 +8,9 @@ export type PageAnchorSection = {
   id: "api" | "docs" | "contribute";
   title: string;
   body: string;
+  /** Enlace externo (p. ej. documentación pública de la API). */
+  href?: string;
+  linkLabel?: string;
 };
 
 export type StaticPageCopy = {
@@ -176,7 +181,9 @@ export type MarketingCopy = {
     eyebrow: string;
     line1: string;
     line2: string;
-    body: string;
+    bodyPrefix: string;
+    apiLinkLabel: string;
+    bodySuffix: string;
     sowingTitle: string;
     sowingSub: string;
     firesTitle: string;
@@ -330,7 +337,7 @@ const esPages = {
     eyebrow: "Para desarrolladoras y comunidad OSS",
     title: "Abajo hay una API honesta para que construyás encima",
     paragraphs: [
-      "Cuando la API llegue estable, los payloads reflejarán lo mismo que el UI muestra: mismas etiquetas donde aplique, mismas menciones cuando falla densidad estadística país.",
+      "La referencia pública en docs.climatifai.com describe el esquema y los límites; los payloads apuntan a reflejar lo mismo que el UI muestra: mismas etiquetas donde aplique, mismas menciones cuando falla densidad estadística país.",
       "Documentamos con ejemplos `curl`, advertencias de país sin series públicas suficientes, y changelog honesto ante cambios porque la confianza es infraestructura.",
       "Traducciones, validación campo, mejoras hidrológicas o incorporación de nuevas fuentes upstream están invitadas.",
       "Sostenibilidad: freemium — investigación, extensionismo o volumen alto paga SLA real; público cotidiano y ONGs pueden seguir usando sin tarjeta.",
@@ -339,12 +346,16 @@ const esPages = {
       {
         id: "api",
         title: "Ver la API",
-        body: "Aquí mismo listaremos estado de rutas públicas cuando estén en producción, límites de tasa públicos junto advertencias igual de públicas sobre modelos disponibles ese día.",
+        body: "Esquema GraphQL, límites de tasa y advertencias de cobertura — alineados con lo que muestra el producto. La referencia pública está en docs.climatifai.com.",
+        href: CLIMATIFAI_API_DOCS_URL,
+        linkLabel: "Abrir documentación de la API",
       },
       {
         id: "docs",
         title: "Leer la documentación",
-        body: "Tutoriales reproducibles aparecerán junto al repositorio; donde copiar un comando omita límites nacionales de datos, lo tratamos como error y lo corregimos visiblemente.",
+        body: "Guías reproducibles, ejemplos curl y changelog en el mismo sitio; si un snippet omite límites nacionales de datos, lo tratamos como error y lo corregimos visiblemente.",
+        href: CLIMATIFAI_API_DOCS_URL,
+        linkLabel: "Ir a docs.climatifai.com",
       },
       {
         id: "contribute",
@@ -513,7 +524,11 @@ const es: MarketingCopy = {
     eyebrow: "Inteligencia climática agrícola",
     line1: "El clima cambió.",
     line2: "Tu calendario de siembra no.",
-    body: "Compara datos climáticos históricos, actuales y proyecciones CMIP6 para tomar mejores decisiones agrícolas en LATAM. La API pública organiza estas mismas lecturas cuando esté estable — construimos en abierto desde la base.",
+    bodyPrefix:
+      "Compara datos climáticos históricos, actuales y proyecciones CMIP6 para tomar mejores decisiones agrícolas en LATAM. ",
+    apiLinkLabel: "La API pública",
+    bodySuffix:
+      " organiza estas mismas lecturas — documentación en docs.climatifai.com; construimos en abierto desde la base.",
     sowingTitle: "Analizar siembra",
     sowingSub:
       "Advisor agrícola por región catalogada — aptitud, riesgos y ventana típica con fuentes detrás.",
@@ -665,7 +680,7 @@ const enPages = {
     eyebrow: "For developers & contributors",
     title: "Ship on the same API spine the UI consumes",
     paragraphs: [
-      "Our API is the organising technical layer — map, advisor, assistant are reference apps, not the ceiling.",
+      "Public reference at docs.climatifai.com documents schema and limits; our API is the organising technical layer — map, advisor, assistant are reference apps, not the ceiling.",
       "Docs pair curl recipes with blunt country warnings when station density fails — forgetting to mention coarse grids is ours to fix openly.",
       "Issues welcome for locales, validations, integrations; we spotlight approachable tasks when backlog allows.",
       "Economics stays freemium: cardless entry for NGOs and growers, stabilized commercial SLAs underwriting common infrastructure.",
@@ -674,12 +689,16 @@ const enPages = {
       {
         id: "api",
         title: "View API",
-        body: "We will list publicly routed endpoints alongside rate envelopes and disclaimers matching whatever CMIP/FIRMS/GAEZ slices ride that deployment.",
+        body: "GraphQL schema, rate limits, and coverage disclaimers — aligned with what the product surfaces. The public reference lives at docs.climatifai.com.",
+        href: CLIMATIFAI_API_DOCS_URL,
+        linkLabel: "Open API documentation",
       },
       {
         id: "docs",
         title: "Read documentation",
-        body: "Tutorials track the OSS repo — copy/paste snippets without warnings when coverage is hollow counts as regression we fix visibly.",
+        body: "Reproducible guides, curl examples, and changelog share the same site — snippets that skip country coverage warnings count as regressions we fix openly.",
+        href: CLIMATIFAI_API_DOCS_URL,
+        linkLabel: "Go to docs.climatifai.com",
       },
       {
         id: "contribute",
@@ -849,7 +868,11 @@ const en: MarketingCopy = {
     eyebrow: "Agricultural climate intelligence",
     line1: "The climate has changed.",
     line2: "Your planting calendar hasn't.",
-    body: "Contrast historical and current climate data with CMIP6 projections to make sharper agronomic decisions across Latin America — the open API organizes the same reads as the flagship UI reaches stability.",
+    bodyPrefix:
+      "Contrast historical and current climate data with CMIP6 projections to make sharper agronomic decisions across Latin America — ",
+    apiLinkLabel: "the open API",
+    bodySuffix:
+      " organizes the same reads the flagship UI uses — see docs.climatifai.com; we're building in the open from day one.",
     sowingTitle: "Analyze sowing",
     sowingSub:
       "Regional advisor — suitability cues, climatic risk narration, indicative windows behind visible sources.",

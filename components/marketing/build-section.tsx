@@ -5,6 +5,7 @@ import { ArrowUpRight, BookOpen, Code2, Handshake } from "lucide-react";
 
 import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { Button } from "@/components/ui/button";
+import { CLIMATIFAI_API_DOCS_URL } from "@/lib/site-urls";
 
 export function BuildSection() {
   const { m } = useMarketingCopy();
@@ -23,16 +24,27 @@ export function BuildSection() {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Button asChild size="lg" className="rounded-full px-6">
-              <Link href="/build#api" className="gap-2">
+              <Link
+                href={CLIMATIFAI_API_DOCS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gap-2"
+              >
                 <Code2 className="size-4" aria-hidden />
                 {b.ctaApi}
                 <ArrowUpRight className="size-4 opacity-70" aria-hidden />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full bg-background/60 px-6 backdrop-blur">
-              <Link href="/build#docs" className="gap-2">
+              <Link
+                href={CLIMATIFAI_API_DOCS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gap-2"
+              >
                 <BookOpen className="size-4" aria-hidden />
                 {b.ctaDocs}
+                <ArrowUpRight className="size-4 opacity-70" aria-hidden />
               </Link>
             </Button>
             <Button asChild size="lg" variant="ghost" className="rounded-full px-6">

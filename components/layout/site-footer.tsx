@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
 import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
+import { CLIMATIFAI_API_DOCS_URL } from "@/lib/site-urls";
 
 export function SiteFooter() {
   const { m } = useMarketingCopy();
@@ -39,8 +40,8 @@ export function SiteFooter() {
           title={f.columnBuild}
           links={[
             { href: "/build", label: f.linkBuild },
-            { href: "/build#api", label: f.linkViewApi },
-            { href: "/build#docs", label: f.linkDocs },
+            { href: CLIMATIFAI_API_DOCS_URL, label: f.linkViewApi, external: true },
+            { href: CLIMATIFAI_API_DOCS_URL, label: f.linkDocs, external: true },
             { href: "/build#contribute", label: f.linkContribute },
           ]}
         />
@@ -72,7 +73,7 @@ function FooterColumn({
   links,
 }: {
   title: string;
-  links: { href: string; label: string }[];
+  links: { href: string; label: string; external?: boolean }[];
 }) {
   return (
     <div>
@@ -83,6 +84,9 @@ function FooterColumn({
             <Link
               href={l.href}
               className="text-muted-foreground transition-colors hover:text-foreground"
+              {...(l.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
             >
               {l.label}
             </Link>

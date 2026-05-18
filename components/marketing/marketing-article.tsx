@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+
 import type { MarketingCopy } from "@/lib/marketing-copy";
 import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 
@@ -36,6 +39,17 @@ export function MarketingArticle({ slug }: { slug: MarketingArticleSlug }) {
                 {sec.title}
               </h2>
               <p className="mt-3 text-muted-foreground md:text-[1.0625rem]">{sec.body}</p>
+              {sec.href ? (
+                <Link
+                  href={sec.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-foreground underline-offset-4 hover:underline"
+                >
+                  {sec.linkLabel ?? sec.href}
+                  <ArrowUpRight className="size-3.5 opacity-70" aria-hidden />
+                </Link>
+              ) : null}
             </section>
           ))}
         </div>
