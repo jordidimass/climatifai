@@ -1,4 +1,7 @@
-import { CLIMATIFAI_API_DOCS_URL } from "@/lib/site-urls";
+import {
+  CLIMATIFAI_API_DOCS_URL,
+  CLIMATIFAI_API_REPO_URL,
+} from "@/lib/site-urls";
 
 export type MarketingLocale = "es" | "en";
 
@@ -360,7 +363,9 @@ const esPages = {
       {
         id: "contribute",
         title: "Contribuir",
-        body: "Abrimos issues públicos etiquetados como accesibles para nuevos colaboradores cuando el backlog lo permita — código, datos, traducciones o tutoriales. Tu trabajo puede llegar a quien siembra.",
+        body: "Issues y pull requests en el repositorio público de la API — código, datos, traducciones o tutoriales. Tu trabajo puede llegar a quien siembra.",
+        href: CLIMATIFAI_API_REPO_URL,
+        linkLabel: "github.com/jordidimass/climatifaiAPI",
       },
     ],
   },
@@ -703,7 +708,9 @@ const enPages = {
       {
         id: "contribute",
         title: "Contribute",
-        body: "Open repositories will tag newcomer-friendly fixes — translations, QA, notebooks, infra. Contributions should reach growers, not sit in ornamental roadmaps.",
+        body: "Issues and pull requests on the public API repository — translations, QA, notebooks, infra. Contributions should reach growers, not sit in ornamental roadmaps.",
+        href: CLIMATIFAI_API_REPO_URL,
+        linkLabel: "github.com/jordidimass/climatifaiAPI",
       },
     ],
   },

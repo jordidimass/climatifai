@@ -4,7 +4,10 @@ import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
 import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
-import { CLIMATIFAI_API_DOCS_URL } from "@/lib/site-urls";
+import {
+  CLIMATIFAI_API_DOCS_URL,
+  CLIMATIFAI_API_REPO_URL,
+} from "@/lib/site-urls";
 
 export function SiteFooter() {
   const { m } = useMarketingCopy();
@@ -42,7 +45,11 @@ export function SiteFooter() {
             { href: "/build", label: f.linkBuild },
             { href: CLIMATIFAI_API_DOCS_URL, label: f.linkViewApi, external: true },
             { href: CLIMATIFAI_API_DOCS_URL, label: f.linkDocs, external: true },
-            { href: "/build#contribute", label: f.linkContribute },
+            {
+              href: CLIMATIFAI_API_REPO_URL,
+              label: f.linkContribute,
+              external: true,
+            },
           ]}
         />
       </div>

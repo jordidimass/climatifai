@@ -5,7 +5,10 @@ import { ArrowUpRight, BookOpen, Code2, Handshake } from "lucide-react";
 
 import { useMarketingCopy } from "@/components/marketing/marketing-locale-provider";
 import { Button } from "@/components/ui/button";
-import { CLIMATIFAI_API_DOCS_URL } from "@/lib/site-urls";
+import {
+  CLIMATIFAI_API_DOCS_URL,
+  CLIMATIFAI_API_REPO_URL,
+} from "@/lib/site-urls";
 
 export function BuildSection() {
   const { m } = useMarketingCopy();
@@ -48,9 +51,15 @@ export function BuildSection() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="ghost" className="rounded-full px-6">
-              <Link href="/build#contribute" className="gap-2">
+              <Link
+                href={CLIMATIFAI_API_REPO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gap-2"
+              >
                 <Handshake className="size-4" aria-hidden />
                 {b.ctaContribute}
+                <ArrowUpRight className="size-4 opacity-70" aria-hidden />
               </Link>
             </Button>
           </div>
